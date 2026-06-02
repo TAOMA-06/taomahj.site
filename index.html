@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="tao.ma — Personal Website">
+  <title>tao.ma</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== Spotlight overlay ===== -->
+  <div class="spotlight"></div>
+
+  <!-- ===== Particle canvas background ===== -->
+  <canvas id="particles"></canvas>
+
+  <!-- ===== Navigation ===== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">tao<span class="accent">.ma</span></a>
+      <div class="nav-links">
+        <a href="#projects" data-i18n="nav.projects">Projects</a>
+        <a href="#about" data-i18n="nav.about">About</a>
+        <a href="#contact" data-i18n="nav.contact">Contact</a>
+        <button class="lang-toggle" id="langToggle" aria-label="Switch language">
+          <span class="lang-zh">中</span>
+          <span class="lang-divider">/</span>
+          <span class="lang-en">EN</span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== Hero Section ===== -->
+  <section class="section hero" id="hero">
+    <div class="hero-content">
+      <div class="avatar-wrapper">
+        <img src="assets/avatar.jpg" alt="tao.ma" class="avatar">
+        <div class="avatar-glow"></div>
+      </div>
+      <h1 class="hero-name">tao<span class="accent">.ma</span></h1>
+      <p class="hero-tagline" data-i18n="hero.tagline">Mathematics × Circuits × Automation × Code</p>
+      <p class="hero-sub" data-i18n="hero.sub">Undergraduate exploring the intersection of hardware and software</p>
+      <div class="hero-links">
+        <a href="#projects" class="btn btn-primary" data-i18n="hero.viewWork">View My Work</a>
+        <a href="#contact" class="btn btn-outline" data-i18n="hero.getInTouch">Get In Touch</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <span data-i18n="hero.scroll">Scroll down</span>
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M7 13l5 5 5-5M7 6l5 5 5-5"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- ===== Projects Section ===== -->
+  <section class="section" id="projects">
+    <div class="section-container">
+      <h2 class="section-title" data-i18n="projects.title">Projects</h2>
+      <p class="section-desc" data-i18n="projects.desc">Things I've built and explored</p>
+      <div class="projects-grid" id="projectsGrid">
+        <!-- Placeholder cards — fill in real projects later -->
+        <div class="project-card placeholder">
+          <div class="project-card-image">
+            <div class="placeholder-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <h3 class="project-card-title" data-i18n="projects.placeholder1.title">Coming Soon</h3>
+            <p class="project-card-desc" data-i18n="projects.placeholder1.desc">Project details will be added here. Stay tuned.</p>
+            <div class="project-card-tags">
+              <span class="tag">#placeholder</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card placeholder">
+          <div class="project-card-image">
+            <div class="placeholder-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+              </svg>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <h3 class="project-card-title" data-i18n="projects.placeholder2.title">Coming Soon</h3>
+            <p class="project-card-desc" data-i18n="projects.placeholder2.desc">Project details will be added here. Stay tuned.</p>
+            <div class="project-card-tags">
+              <span class="tag">#placeholder</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="project-card placeholder">
+          <div class="project-card-image">
+            <div class="placeholder-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+              </svg>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <h3 class="project-card-title" data-i18n="projects.placeholder3.title">Coming Soon</h3>
+            <p class="project-card-desc" data-i18n="projects.placeholder3.desc">Project details will be added here. Stay tuned.</p>
+            <div class="project-card-tags">
+              <span class="tag">#placeholder</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== About Section ===== -->
+  <section class="section" id="about">
+    <div class="section-container">
+      <h2 class="section-title" data-i18n="about.title">About</h2>
+      <p class="section-desc" data-i18n="about.desc">Background, skills, and what drives me</p>
+      <div class="about-grid">
+        <div class="about-card glass-card">
+          <h3 class="about-card-title" data-i18n="about.education.title">Education</h3>
+          <div class="about-card-content">
+            <p class="edu-school" data-i18n="about.education.school">Undergraduate Student</p>
+            <p class="edu-major" data-i18n="about.education.major">Mathematics · Electrical Engineering · Automation</p>
+          </div>
+        </div>
+        <div class="about-card glass-card">
+          <h3 class="about-card-title" data-i18n="about.skills.title">Skills</h3>
+          <div class="skills-cloud" id="skillsCloud">
+            <!-- Placeholder — real skills to be added -->
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">C</span>
+            <span class="skill-tag">MATLAB</span>
+            <span class="skill-tag">LaTeX</span>
+            <span class="skill-tag">+ more</span>
+          </div>
+        </div>
+        <div class="about-card glass-card">
+          <h3 class="about-card-title" data-i18n="about.interests.title">Interests</h3>
+          <div class="about-card-content">
+            <p data-i18n="about.interests.content">Exploring the boundary between hardware and software — from circuit design to intelligent systems. Passionate about building things that work in the real world.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Contact Section ===== -->
+  <section class="section" id="contact">
+    <div class="section-container">
+      <h2 class="section-title" data-i18n="contact.title">Get In Touch</h2>
+      <p class="section-desc" data-i18n="contact.desc">Always open to interesting conversations</p>
+      <div class="contact-cards">
+        <a href="mailto:taomahj834225@outlook.com" class="contact-card glass-card">
+          <div class="contact-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4L12 13 2 4"/>
+            </svg>
+          </div>
+          <span class="contact-label">Email</span>
+          <span class="contact-value">taomahj834225@outlook.com</span>
+        </a>
+
+        <a href="#" class="contact-card glass-card" id="githubLink">
+          <div class="contact-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+            </svg>
+          </div>
+          <span class="contact-label">GitHub</span>
+          <span class="contact-value" data-i18n="contact.github">Add GitHub username</span>
+        </a>
+
+        <a href="#" class="contact-card glass-card" id="socialLink">
+          <div class="contact-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/>
+            </svg>
+          </div>
+          <span class="contact-label" data-i18n="contact.more">More</span>
+          <span class="contact-value" data-i18n="contact.moreHint">More ways coming soon</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Footer ===== -->
+  <footer class="footer">
+    <p>&copy; 2026 tao.ma — <span data-i18n="footer.built">Built with curiosity</span></p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
