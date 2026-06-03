@@ -326,6 +326,28 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   });
 });
 
+// ==================== Security Hardening ====================
+
+// Disable console logging in production
+if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+  // Override console methods to prevent info leakage
+  const noop = () => {};
+  console.log = noop;
+  console.info = noop;
+  console.warn = noop;
+  console.debug = noop;
+}
+
+// Prevent clickjacking: ensure we're not in an iframe
+if (window.top !== window.self) {
+  window.top.location = window.self.location;
+}
+
+// Disable right-click on avatar to prevent easy image theft
+document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+});
+
 // ==================== Contact Link Placeholder ====================
 
 // These are interfaces — update href when ready
