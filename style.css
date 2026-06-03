@@ -1,5 +1,5 @@
 /* ========================================================
-   Personal Website — tao.ma
+   Personal Website — taomahj
    Theme: Black + White + Blue + Orange
    Glassmorphism + Spotlight Cursor + Dynamic Particles
    ======================================================== */
@@ -385,7 +385,7 @@ a:hover { color: var(--accent2); }
 /* ---------- Projects Grid ---------- */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
   gap: 24px;
 }
 .project-card {
@@ -417,6 +417,22 @@ a:hover { color: var(--accent2); }
   box-shadow: 0 16px 48px rgba(0,0,0,0.4);
 }
 .project-card:hover::before { opacity: 1; }
+
+/* More Projects card styling */
+.project-card-more {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+.project-card-more .project-icon-wrapper svg {
+  transition: transform 0.3s;
+}
+.project-card-more:hover .project-icon-wrapper svg {
+  transform: translateX(4px);
+}
+
 .project-card-image {
   height: 180px;
   background: rgba(59, 130, 246, 0.05);
@@ -517,7 +533,7 @@ a:hover { color: var(--accent2); }
 /* ---------- Contact ---------- */
 .contact-cards {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 20px;
 }
 .contact-card {
@@ -595,8 +611,11 @@ a:hover { color: var(--accent2); }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
-  .projects-grid, .about-grid, .contact-cards {
+  .projects-grid, .about-grid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .contact-cards {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
   .hero-name { font-size: 2.8rem; }
 }
