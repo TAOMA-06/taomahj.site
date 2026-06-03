@@ -464,9 +464,15 @@ a:hover {
   background: var(--gradient);
   opacity: 0.3;
 }
-.placeholder-icon {
-  color: var(--text-muted);
-  opacity: 0.4;
+.placeholder-icon,
+.project-icon-wrapper {
+  color: var(--accent);
+  opacity: 0.6;
+  transition: opacity 0.3s, color 0.3s;
+}
+.project-card:hover .project-icon-wrapper {
+  opacity: 1;
+  color: var(--accent2);
 }
 .project-card-body {
   padding: 20px;
