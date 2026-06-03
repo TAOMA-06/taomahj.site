@@ -271,12 +271,7 @@ a:hover { color: var(--accent2); }
   letter-spacing: -2px;
   line-height: 1.1;
 }
-.hero-name .accent {
-  background: var(--gradient);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
+
 .hero-tagline {
   font-size: 1.2rem;
   color: var(--text-secondary);
