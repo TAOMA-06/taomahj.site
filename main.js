@@ -405,7 +405,6 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { id:"ollama", group:"ml", label:"Ollama", desc:"Custom Modelfiles for local models", radius:15 },
       { id:"abliteration", group:"ml", label:"Abliteration", desc:"Download→obliterate→GGUF→deploy", radius:13 },
       { id:"profile-default", group:"profile", label:"Default Profile", desc:"Main profile — all skills active", radius:16 },
-      { id:"profile-wen", group:"profile", label:"Wen Profile", desc:"Second profile — independent skills", radius:14 },
       { id:"memory-env", group:"memory", label:"Environment", desc:"M5 Pro 64GB, macOS, Python 3.14", radius:12 },
       { id:"memory-models", group:"memory", label:"Model Config", desc:"DeepSeek v4 Pro, api_key config", radius:12 },
     ];
@@ -432,10 +431,23 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { source:"dspy", target:"ollama", type:"optimizes" },
       { source:"profile-default", target:"hermes-agent", type:"contains" },
       { source:"profile-default", target:"claude-code", type:"contains" },
-      { source:"profile-wen", target:"subagent-dev", type:"contains" },
-      { source:"profile-wen", target:"plan", type:"contains" },
       { source:"memory-env", target:"hermes-agent", type:"informs" },
       { source:"memory-models", target:"ollama", type:"configures" },
+      { source:"hermes-agent", target:"debug-py", type:"uses" },
+      { source:"hermes-agent", target:"github-issues", type:"manages" },
+      { source:"hermes-agent", target:"dspy", type:"uses" },
+      { source:"hermes-agent", target:"ollama", type:"depends" },
+      { source:"hermes-agent", target:"abliteration", type:"uses" },
+      { source:"code-review", target:"github-issues", type:"feeds" },
+      { source:"tdd", target:"debug-py", type:"leads-to" },
+      { source:"plan", target:"kanban", type:"feeds" },
+      { source:"abliteration", target:"dspy", type:"research" },
+      { source:"memory-env", target:"local-agent", type:"informs" },
+      { source:"memory-models", target:"hermes-agent", type:"configures" },
+      { source:"codex", target:"code-review", type:"requires" },
+      { source:"profile-default", target:"codex", type:"contains" },
+      { source:"profile-default", target:"local-agent", type:"contains" },
+      { source:"profile-default", target:"ollama", type:"contains" },
     ];
 
     // === COLOR MAP (matches site blue-orange theme) ===
@@ -480,6 +492,10 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       "contains":   { dash:"2,4", color:"rgba(245,158,11,0.5)", width:1 },
       "informs":    { dash:"8,4", color:"rgba(226,232,240,0.4)", width:1 },
       "configures": { dash:"2,2", color:"rgba(226,232,240,0.4)", width:1.2 },
+      "uses":        { dash:"", color:"rgba(59,130,246,0.45)", width:1.4 },
+      "manages":     { dash:"4,2", color:"rgba(100,116,139,0.45)", width:1.3 },
+      "leads-to":    { dash:"10,4", color:"rgba(239,68,68,0.35)", width:1.1 },
+      "research":    { dash:"3,6", color:"rgba(236,72,153,0.4)", width:1.2 },
     };
 
     // Resolve source/target to node refs
@@ -493,6 +509,39 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
     const svg = d3.select("#knowledge-graph").append("svg")
       .attr("width", W).attr("height", H)
       .attr("viewBox", `0 0 ${W} ${H}`);
+
+    // === DEFS: arrow markers & glow filters ===
+    const defs = svg.append("defs");
+
+    // Arrow markers per link type
+    Object.entries(linkTypes).forEach(([type, style]) => {
+      defs.append("marker")
+        .attr("id", `arrow-${type}`)
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 12)
+        .attr("refY", 0)
+        .attr("markerWidth", 5)
+        .attr("markerHeight", 5)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,-4L8,0L0,4")
+        .attr("fill", style.color)
+        .attr("opacity", 0.6);
+    });
+
+    // Glow filter for nodes
+    const glowFilter = defs.append("filter")
+      .attr("id", "node-glow")
+      .attr("x", "-50%").attr("y", "-50%")
+      .attr("width", "200%").attr("height", "200%");
+    glowFilter.append("feGaussianBlur")
+      .attr("stdDeviation", "3")
+      .attr("result", "blur");
+    glowFilter.append("feMerge")
+      .selectAll("feMergeNode")
+      .data(["blur", "SourceGraphic"])
+      .join("feMergeNode")
+      .attr("in", d => d);
 
     const g = svg.append("g");
 
@@ -513,7 +562,18 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
         .attr("stroke", d => linkTypes[d.type]?.color || "rgba(255,255,255,0.15)")
         .attr("stroke-width", d => linkTypes[d.type]?.width || 1)
         .attr("stroke-dasharray", d => linkTypes[d.type]?.dash || "")
-        .attr("opacity", 0.4);
+        .attr("opacity", 0.35)
+        .attr("marker-end", d => `url(#arrow-${d.type})`);
+
+    // === NODE GLOW (background circles) ===
+    const glowG = g.append("g").attr("class","kg-glows");
+    const glow = glowG.selectAll("circle")
+      .data(nodes)
+      .join("circle")
+        .attr("r", d => d.radius * 2.5)
+        .attr("fill", d => groupColors[d.group] || "#666")
+        .attr("opacity", 0.08)
+        .attr("pointer-events", "none");
 
     // === NODES ===
     const nodeG = g.append("g").attr("class","kg-nodes");
@@ -526,24 +586,61 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
         .attr("stroke-width", 1.5)
         .attr("opacity", 0.9)
         .attr("cursor", "pointer")
-        .on("mouseenter", (e,d) => {
-          tooltip.style("opacity",1)
-            .html(`<div class="kg-tooltip-name" style="color:${groupColors[d.group]}">${d.label}</div>
-                   <div class="kg-tooltip-category">${groupLabels[d.group]||d.group}</div>
-                   <div class="kg-tooltip-desc">${d.desc}</div>`);
-          d3.select(e.target).attr("stroke-width",3).attr("opacity",1);
-        })
-        .on("mousemove", (e) => {
-          const wrapper = document.querySelector('.knowledge-graph-wrapper');
-          const wrapRect = wrapper.getBoundingClientRect();
-          tooltip
-            .style("left", (e.clientX - wrapRect.left + 12) + "px")
-            .style("top", (e.clientY - wrapRect.top - 12) + "px");
-        })
-        .on("mouseleave", (e,d) => {
-          tooltip.style("opacity",0);
-          d3.select(e.target).attr("stroke-width",1.5).attr("opacity",0.9);
-        });
+        .attr("filter", "url(#node-glow)")
+        .on("mouseenter", onNodeEnter)
+        .on("mousemove", onNodeMove)
+        .on("mouseleave", onNodeLeave);
+
+    function onNodeEnter(e, d) {
+      tooltip.style("opacity", 1)
+        .html(`<div class="kg-tooltip-name" style="color:${groupColors[d.group]}">${d.label}</div>
+               <div class="kg-tooltip-category">${groupLabels[d.group]||d.group}</div>
+               <div class="kg-tooltip-desc">${d.desc}</div>`);
+      d3.select(e.target)
+        .attr("stroke-width", 3)
+        .attr("opacity", 1)
+        .attr("r", d.radius * 1.3)
+        .transition().duration(200);
+
+      // Highlight connected links
+      link
+        .attr("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 0.8 : 0.08)
+        .attr("stroke-width", l => (l.source.id === d.id || l.target.id === d.id)
+          ? (linkTypes[l.type]?.width || 1) * 2
+          : (linkTypes[l.type]?.width || 1) * 0.4);
+
+      // Highlight connected nodes
+      node
+        .attr("opacity", n => (n.id === d.id || links.some(l =>
+          (l.source.id === d.id && l.target.id === n.id) ||
+          (l.target.id === d.id && l.source.id === n.id)
+        )) ? 1 : 0.3);
+    }
+
+    function onNodeMove(e) {
+      const wrapper = document.querySelector('.knowledge-graph-wrapper');
+      const wrapRect = wrapper.getBoundingClientRect();
+      tooltip
+        .style("left", (e.clientX - wrapRect.left + 12) + "px")
+        .style("top", (e.clientY - wrapRect.top - 12) + "px");
+    }
+
+    function onNodeLeave(e, d) {
+      tooltip.style("opacity", 0);
+      d3.select(e.target)
+        .attr("stroke-width", 1.5)
+        .attr("opacity", 0.9)
+        .attr("r", d.radius)
+        .transition().duration(200);
+
+      // Restore all links
+      link
+        .attr("opacity", 0.35)
+        .attr("stroke-width", l => linkTypes[l.type]?.width || 1);
+
+      // Restore all nodes
+      node.attr("opacity", 0.9);
+    }
 
     // === DRAG ===
     const drag = d3.drag()
@@ -580,17 +677,17 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
     // === FORCE ===
     const simulation = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
-        const dists = { "core": 70, "orchestrates": 80, "delegates": 90, "contains": 100 };
-        return dists[d.type] || 120;
+        const dists = { "core": 65, "orchestrates": 75, "delegates": 80, "contains": 90, "uses": 85, "depends": 95 };
+        return dists[d.type] || 110;
       }).strength(d => {
-        const strengths = { "core": 0.5, "orchestrates": 0.4, "contains": 0.3 };
-        return strengths[d.type] || 0.12;
+        const strengths = { "core": 0.5, "orchestrates": 0.4, "contains": 0.3, "uses": 0.3, "depends": 0.35 };
+        return strengths[d.type] || 0.15;
       }))
-      .force("charge", d3.forceManyBody().strength(d => -d.radius * 20))
+      .force("charge", d3.forceManyBody().strength(d => -d.radius * 22))
       .force("center", d3.forceCenter(W/2, H/2))
-      .force("collision", d3.forceCollide().radius(d => d.radius + 10))
-      .force("x", d3.forceX(W/2).strength(0.04))
-      .force("y", d3.forceY(H/2).strength(0.04));
+      .force("collision", d3.forceCollide().radius(d => d.radius + 14))
+      .force("x", d3.forceX(W/2).strength(0.03))
+      .force("y", d3.forceY(H/2).strength(0.03));
 
     simulation.on("tick", () => {
       link
@@ -599,6 +696,9 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
         .attr("x2", d => d.target.x)
         .attr("y2", d => d.target.y);
       node
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+      glow
         .attr("cx", d => d.x)
         .attr("cy", d => d.y);
       label
