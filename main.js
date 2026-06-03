@@ -8,6 +8,7 @@
 const i18n = {
   zh: {
     'nav.projects': '项目',
+    'nav.knowledge': '知识库',
     'nav.about': '关于',
     'nav.contact': '联系',
     'hero.tagline': '数学 × 电路 × 自动化 × 代码',
@@ -41,10 +42,13 @@ const i18n = {
     'contact.moreHint': '更多联系方式即将上线',
     'projects.more.title': '更多项目',
     'projects.more.desc': '在 GitHub 上浏览我的全部仓库。',
+    'knowledge.title': '知识图谱',
+    'knowledge.desc': '我的 Hermes AI 生态系统 — 技能、智能体、记忆与工作流',
     'footer.built': '用好奇心构建',
   },
   en: {
     'nav.projects': 'Projects',
+    'nav.knowledge': 'Knowledge',
     'nav.about': 'About',
     'nav.contact': 'Contact',
     'hero.tagline': 'Mathematics × Circuits × Automation × Code',
@@ -78,6 +82,8 @@ const i18n = {
     'contact.moreHint': 'More ways coming soon',
     'projects.more.title': 'More Projects',
     'projects.more.desc': 'Browse all my repositories on GitHub.',
+    'knowledge.title': 'Knowledge Graph',
+    'knowledge.desc': 'My Hermes AI ecosystem — skills, agents, memory & workflows',
     'footer.built': 'Built with curiosity',
   }
 };
@@ -354,9 +360,267 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
 // GitHub: update href in HTML or set here
 // Social: update href in HTML or set here
 
+// ==================== Knowledge Graph (D3 Force-Directed) ====================
+
+(function initKnowledgeGraph() {
+  const container = document.getElementById('knowledge-graph');
+  if (!container || typeof d3 === 'undefined') return;
+
+  // Check if section is visible before initializing
+  const section = document.getElementById('knowledge');
+  let initialized = false;
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !initialized) {
+        initialized = true;
+        renderGraph();
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  observer.observe(section);
+
+  function renderGraph() {
+    const rect = container.getBoundingClientRect();
+    const W = rect.width || container.offsetWidth || 800;
+    const H = 520;
+
+    // === NODES ===
+    const nodes = [
+      { id:"hermes-agent", group:"orchestration", label:"Hermes Agent", desc:"Central orchestrator — config, extend, delegate, tools", radius:22 },
+      { id:"claude-code", group:"core-agent", label:"Claude Code", desc:"Delegate coding to Claude Code CLI", radius:16 },
+      { id:"codex", group:"core-agent", label:"Codex CLI", desc:"Delegate coding to OpenAI Codex CLI", radius:15 },
+      { id:"local-agent", group:"core-agent", label:"Local Agent", desc:"调用本地 Ollama 模型执行任务", radius:14 },
+      { id:"plan", group:"orchestration", label:"Plan", desc:"Write markdown plan to .hermes/plans/", radius:13 },
+      { id:"subagent-dev", group:"orchestration", label:"Subagent Dev", desc:"Execute plans via delegate_task", radius:15 },
+      { id:"kanban", group:"orchestration", label:"Kanban", desc:"Decomposition playbook, route work", radius:14 },
+      { id:"tdd", group:"execution", label:"TDD", desc:"RED-GREEN-REFACTOR", radius:12 },
+      { id:"code-review", group:"quality", label:"Code Review", desc:"Security scan, quality gates", radius:13 },
+      { id:"github-pr", group:"github", label:"GitHub PR", desc:"Branch, commit, open, CI, merge", radius:15 },
+      { id:"github-issues", group:"github", label:"GitHub Issues", desc:"Create, triage, label, assign", radius:12 },
+      { id:"debug-py", group:"debug", label:"Python Debug", desc:"pdb REPL + debugpy remote", radius:11 },
+      { id:"dspy", group:"ml", label:"DSPy", desc:"Declarative LM programs, RAG", radius:13 },
+      { id:"ollama", group:"ml", label:"Ollama", desc:"Custom Modelfiles for local models", radius:15 },
+      { id:"abliteration", group:"ml", label:"Abliteration", desc:"Download→obliterate→GGUF→deploy", radius:13 },
+      { id:"profile-default", group:"profile", label:"Default Profile", desc:"Main profile — all skills active", radius:16 },
+      { id:"profile-wen", group:"profile", label:"Wen Profile", desc:"Second profile — independent skills", radius:14 },
+      { id:"memory-env", group:"memory", label:"Environment", desc:"M5 Pro 64GB, macOS, Python 3.14", radius:12 },
+      { id:"memory-models", group:"memory", label:"Model Config", desc:"DeepSeek v4 Pro, api_key config", radius:12 },
+    ];
+
+    // === LINKS ===
+    const links = [
+      { source:"hermes-agent", target:"claude-code", type:"delegates" },
+      { source:"hermes-agent", target:"codex", type:"delegates" },
+      { source:"hermes-agent", target:"local-agent", type:"invokes" },
+      { source:"hermes-agent", target:"plan", type:"workflow" },
+      { source:"hermes-agent", target:"subagent-dev", type:"core" },
+      { source:"hermes-agent", target:"kanban", type:"orchestrates" },
+      { source:"plan", target:"subagent-dev", type:"executes" },
+      { source:"subagent-dev", target:"tdd", type:"quality" },
+      { source:"subagent-dev", target:"code-review", type:"quality" },
+      { source:"kanban", target:"subagent-dev", type:"dispatches" },
+      { source:"claude-code", target:"github-pr", type:"produces" },
+      { source:"codex", target:"github-pr", type:"produces" },
+      { source:"github-pr", target:"code-review", type:"requires" },
+      { source:"github-pr", target:"github-issues", type:"links" },
+      { source:"code-review", target:"debug-py", type:"feeds" },
+      { source:"local-agent", target:"ollama", type:"depends" },
+      { source:"abliteration", target:"ollama", type:"produces" },
+      { source:"dspy", target:"ollama", type:"optimizes" },
+      { source:"profile-default", target:"hermes-agent", type:"contains" },
+      { source:"profile-default", target:"claude-code", type:"contains" },
+      { source:"profile-wen", target:"subagent-dev", type:"contains" },
+      { source:"profile-wen", target:"plan", type:"contains" },
+      { source:"memory-env", target:"hermes-agent", type:"informs" },
+      { source:"memory-models", target:"ollama", type:"configures" },
+    ];
+
+    // === COLOR MAP (matches site blue-orange theme) ===
+    const groupColors = {
+      "core-agent":     "#3b82f6",
+      "orchestration":  "#f97316",
+      "execution":      "#22c55e",
+      "quality":        "#a855f7",
+      "github":         "#64748b",
+      "debug":          "#ef4444",
+      "ml":             "#ec4899",
+      "profile":        "#f59e0b",
+      "memory":         "#e2e8f0",
+    };
+
+    const groupLabels = {
+      "core-agent":     "Core Agents",
+      "orchestration":  "Orchestration",
+      "execution":      "Execution",
+      "quality":        "Quality",
+      "github":         "GitHub",
+      "debug":          "Debug",
+      "ml":             "ML/AI",
+      "profile":        "Profiles",
+      "memory":         "Memory",
+    };
+
+    const linkTypes = {
+      "delegates":  { dash:"", color:"rgba(59,130,246,0.5)", width:1.5 },
+      "invokes":    { dash:"", color:"rgba(59,130,246,0.4)", width:1.2 },
+      "workflow":   { dash:"5,5", color:"rgba(249,115,22,0.5)", width:1.3 },
+      "core":       { dash:"", color:"rgba(249,115,22,0.7)", width:2 },
+      "orchestrates":{ dash:"", color:"rgba(249,115,22,0.6)", width:1.8 },
+      "executes":   { dash:"5,5", color:"rgba(249,115,22,0.5)", width:1.5 },
+      "quality":    { dash:"3,6", color:"rgba(168,85,247,0.5)", width:1.5 },
+      "dispatches": { dash:"", color:"rgba(34,197,94,0.5)", width:1.5 },
+      "produces":   { dash:"", color:"rgba(100,116,139,0.5)", width:1.5 },
+      "requires":   { dash:"5,5", color:"rgba(100,116,139,0.4)", width:1.2 },
+      "links":      { dash:"8,4", color:"rgba(100,116,139,0.4)", width:1 },
+      "feeds":      { dash:"5,5", color:"rgba(239,68,68,0.4)", width:1.2 },
+      "depends":    { dash:"5,5", color:"rgba(236,72,153,0.4)", width:1.2 },
+      "contains":   { dash:"2,4", color:"rgba(245,158,11,0.5)", width:1 },
+      "informs":    { dash:"8,4", color:"rgba(226,232,240,0.4)", width:1 },
+      "configures": { dash:"2,2", color:"rgba(226,232,240,0.4)", width:1.2 },
+    };
+
+    // Resolve source/target to node refs
+    const nodeMap = new Map(nodes.map(n => [n.id, n]));
+    links.forEach(l => {
+      l.source = nodeMap.get(l.source) || l.source;
+      l.target = nodeMap.get(l.target) || l.target;
+    });
+
+    // === SVG SETUP ===
+    const svg = d3.select("#knowledge-graph").append("svg")
+      .attr("width", W).attr("height", H)
+      .attr("viewBox", `0 0 ${W} ${H}`);
+
+    const g = svg.append("g");
+
+    // Zoom
+    svg.call(d3.zoom()
+      .scaleExtent([0.4, 3])
+      .on("zoom", (e) => g.attr("transform", e.transform))
+    );
+
+    // Tooltip
+    const tooltip = d3.select("#knowledge-tooltip");
+
+    // === LINKS ===
+    const linkG = g.append("g").attr("class","kg-links");
+    const link = linkG.selectAll("line")
+      .data(links)
+      .join("line")
+        .attr("stroke", d => linkTypes[d.type]?.color || "rgba(255,255,255,0.15)")
+        .attr("stroke-width", d => linkTypes[d.type]?.width || 1)
+        .attr("stroke-dasharray", d => linkTypes[d.type]?.dash || "")
+        .attr("opacity", 0.4);
+
+    // === NODES ===
+    const nodeG = g.append("g").attr("class","kg-nodes");
+    const node = nodeG.selectAll("circle")
+      .data(nodes)
+      .join("circle")
+        .attr("r", d => d.radius)
+        .attr("fill", d => groupColors[d.group] || "#666")
+        .attr("stroke", d => d3.color(groupColors[d.group]||"#666").brighter(0.8))
+        .attr("stroke-width", 1.5)
+        .attr("opacity", 0.9)
+        .attr("cursor", "pointer")
+        .on("mouseenter", (e,d) => {
+          tooltip.style("opacity",1)
+            .html(`<div class="kg-tooltip-name" style="color:${groupColors[d.group]}">${d.label}</div>
+                   <div class="kg-tooltip-category">${groupLabels[d.group]||d.group}</div>
+                   <div class="kg-tooltip-desc">${d.desc}</div>`);
+          d3.select(e.target).attr("stroke-width",3).attr("opacity",1);
+        })
+        .on("mousemove", (e) => {
+          const wrapper = document.querySelector('.knowledge-graph-wrapper');
+          const wrapRect = wrapper.getBoundingClientRect();
+          tooltip
+            .style("left", (e.clientX - wrapRect.left + 12) + "px")
+            .style("top", (e.clientY - wrapRect.top - 12) + "px");
+        })
+        .on("mouseleave", (e,d) => {
+          tooltip.style("opacity",0);
+          d3.select(e.target).attr("stroke-width",1.5).attr("opacity",0.9);
+        });
+
+    // === DRAG ===
+    const drag = d3.drag()
+      .on("start", (e, d) => {
+        if (!e.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x;
+        d.fy = d.y;
+      })
+      .on("drag", (e, d) => {
+        d.fx = e.x;
+        d.fy = e.y;
+      })
+      .on("end", (e, d) => {
+        if (!e.active) simulation.alphaTarget(0);
+        d.fx = null;
+        d.fy = null;
+      });
+
+    node.call(drag);
+
+    // === LABELS ===
+    const labelG = g.append("g").attr("class","kg-labels");
+    const label = labelG.selectAll("text")
+      .data(nodes)
+      .join("text")
+        .text(d => d.label)
+        .attr("font-size", d => Math.max(8, d.radius * 0.5))
+        .attr("fill", "#a1a1aa")
+        .attr("text-anchor", "middle")
+        .attr("dy", d => d.radius + 12)
+        .attr("pointer-events", "none")
+        .attr("opacity", 0.7);
+
+    // === FORCE ===
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
+        const dists = { "core": 70, "orchestrates": 80, "delegates": 90, "contains": 100 };
+        return dists[d.type] || 120;
+      }).strength(d => {
+        const strengths = { "core": 0.5, "orchestrates": 0.4, "contains": 0.3 };
+        return strengths[d.type] || 0.12;
+      }))
+      .force("charge", d3.forceManyBody().strength(d => -d.radius * 20))
+      .force("center", d3.forceCenter(W/2, H/2))
+      .force("collision", d3.forceCollide().radius(d => d.radius + 10))
+      .force("x", d3.forceX(W/2).strength(0.04))
+      .force("y", d3.forceY(H/2).strength(0.04));
+
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+      node
+        .attr("cx", d => d.x)
+        .attr("cy", d => d.y);
+      label
+        .attr("x", d => d.x)
+        .attr("y", d => d.y);
+    });
+
+    simulation.alpha(0.5).restart();
+    setTimeout(() => simulation.alphaTarget(0).alphaDecay(0.02), 3000);
+
+    // === LEGEND ===
+    const legendEl = d3.select("#knowledge-legend");
+    Object.entries(groupLabels).forEach(([key, lbl]) => {
+      legendEl.append("div").attr("class","kg-legend-item")
+        .html(`<div class="kg-legend-dot" style="background:${groupColors[key]};box-shadow:0 0 6px ${groupColors[key]}"></div> ${lbl}`);
+    });
+  }
+})();
+
 console.log('%c🔮 taomahj personal website ready %c| %c✧ %c%c%c',
   'color: #7c6ff7; font-weight: bold;',
   '', 'color: #00cec9;',
   'color: #e4e4ec;', 'font-size: 12px;');
-console.log('%cMouse-following spotlight · Particle canvas · Bilingual · Glassmorphism',
+console.log('%cMouse-following spotlight · Particle canvas · Bilingual · Glassmorphism · Knowledge Graph',
   'color: #9898a8; font-size: 11px;');
