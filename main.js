@@ -385,7 +385,7 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
   function renderGraph() {
     const rect = container.getBoundingClientRect();
     const W = rect.width || container.offsetWidth || 800;
-    const H = 520;
+    const H = 600;
 
     // === NODES ===
     const nodes = [
@@ -407,6 +407,20 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { id:"profile-default", group:"profile", label:"Default Profile", desc:"Main profile — all skills active", radius:16 },
       { id:"memory-env", group:"memory", label:"Environment", desc:"M5 Pro 64GB, macOS, Python 3.14", radius:12 },
       { id:"memory-models", group:"memory", label:"Model Config", desc:"DeepSeek v4 Pro, api_key config", radius:12 },
+      // === Skill Categories ===
+      { id:"creative-skills", group:"skills", label:"Creative Tools", desc:"ASCII art, p5.js, Manim, ComfyUI, Songwriting — 20+ creative skills", radius:14 },
+      { id:"productivity-skills", group:"skills", label:"Productivity", desc:"Notion, Gmail, Airtable, Linear, PowerPoint — 10+ office integrations", radius:14 },
+      { id:"dev-skills", group:"skills", label:"Dev Skills", desc:"Plan, TDD, Code Review, Debug, Spike — software engineering workflows", radius:14 },
+      { id:"research-skills", group:"skills", label:"Research", desc:"arXiv, Polymarket, LLM Wiki, Paper Writing — academic toolkit", radius:13 },
+      { id:"ml-skills", group:"skills", label:"ML Ops", desc:"HuggingFace, vLLM, Ollama Models, Obliteratus — ML pipeline", radius:14 },
+      { id:"media-skills", group:"skills", label:"Media", desc:"Spotify, YouTube Transcripts, GIF Search, Song Generation", radius:12 },
+      { id:"apple-skills", group:"skills", label:"Apple Tools", desc:"Notes, Reminders, iMessage, FindMy — macOS native integration", radius:13 },
+      { id:"social-skills", group:"skills", label:"Social", desc:"X/Twitter via xurl — post, search, DM, media", radius:11 },
+      // === OpenCode Agent System ===
+      { id:"opencode", group:"opencode", label:"OpenCode", desc:"Provider-agnostic coding agent — TUI+CLI, multi-agent, skills ecosystem", radius:17 },
+      { id:"oc-build", group:"opencode", label:"OC Build", desc:"Full execution: read, edit, bash, web — implements features", radius:13 },
+      { id:"oc-plan", group:"opencode", label:"OC Plan", desc:"Read-only planner: analyzes, writes .opencode/plans/*.md", radius:12 },
+      { id:"oc-explore", group:"opencode", label:"OC Explore", desc:"Codebase exploration: grep, glob, list, bash, web", radius:11 },
     ];
 
     // === LINKS ===
@@ -448,6 +462,37 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { source:"profile-default", target:"codex", type:"contains" },
       { source:"profile-default", target:"local-agent", type:"contains" },
       { source:"profile-default", target:"ollama", type:"contains" },
+      // === Skill Category Links ===
+      { source:"hermes-agent", target:"creative-skills", type:"skills" },
+      { source:"hermes-agent", target:"productivity-skills", type:"skills" },
+      { source:"hermes-agent", target:"dev-skills", type:"skills" },
+      { source:"hermes-agent", target:"research-skills", type:"skills" },
+      { source:"hermes-agent", target:"ml-skills", type:"skills" },
+      { source:"hermes-agent", target:"media-skills", type:"skills" },
+      { source:"hermes-agent", target:"apple-skills", type:"skills" },
+      { source:"hermes-agent", target:"social-skills", type:"skills" },
+      { source:"profile-default", target:"creative-skills", type:"contains" },
+      { source:"profile-default", target:"dev-skills", type:"contains" },
+      { source:"profile-default", target:"ml-skills", type:"contains" },
+      { source:"ml-skills", target:"ollama", type:"depends" },
+      { source:"ml-skills", target:"abliteration", type:"contains" },
+      { source:"dev-skills", target:"plan", type:"contains" },
+      { source:"dev-skills", target:"tdd", type:"contains" },
+      { source:"dev-skills", target:"code-review", type:"contains" },
+      { source:"dev-skills", target:"debug-py", type:"contains" },
+      { source:"research-skills", target:"dspy", type:"feeds" },
+      // === OpenCode Agent Links ===
+      { source:"hermes-agent", target:"opencode", type:"delegates" },
+      { source:"opencode", target:"oc-build", type:"core" },
+      { source:"opencode", target:"oc-plan", type:"workflow" },
+      { source:"opencode", target:"oc-explore", type:"delegates" },
+      { source:"oc-plan", target:"oc-build", type:"executes" },
+      { source:"oc-build", target:"github-pr", type:"produces" },
+      { source:"oc-build", target:"code-review", type:"requires" },
+      { source:"oc-explore", target:"oc-build", type:"feeds" },
+      { source:"profile-default", target:"opencode", type:"contains" },
+      { source:"opencode", target:"claude-code", type:"related" },
+      { source:"opencode", target:"codex", type:"related" },
     ];
 
     // === COLOR MAP (matches site blue-orange theme) ===
@@ -461,6 +506,8 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       "ml":             "#ec4899",
       "profile":        "#f59e0b",
       "memory":         "#e2e8f0",
+      "skills":         "#14b8a6",
+      "opencode":       "#06b6d4",
     };
 
     const groupLabels = {
@@ -473,6 +520,8 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       "ml":             "ML/AI",
       "profile":        "Profiles",
       "memory":         "Memory",
+      "skills":         "Skills",
+      "opencode":       "OpenCode",
     };
 
     const linkTypes = {
@@ -496,6 +545,8 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       "manages":     { dash:"4,2", color:"rgba(100,116,139,0.45)", width:1.3 },
       "leads-to":    { dash:"10,4", color:"rgba(239,68,68,0.35)", width:1.1 },
       "research":    { dash:"3,6", color:"rgba(236,72,153,0.4)", width:1.2 },
+      "skills":      { dash:"", color:"rgba(20,184,166,0.45)", width:1.3 },
+      "related":     { dash:"2,6", color:"rgba(6,182,212,0.4)", width:1.1 },
     };
 
     // Resolve source/target to node refs
