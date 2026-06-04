@@ -839,11 +839,12 @@
     // ===== Overlays =====
     function buildMenu() {
       const grid = document.getElementById('levelGrid');
+      if (!grid) return;
       grid.innerHTML = '';
       LEVELS.forEach((lvl, i) => {
         const card = document.createElement('div');
         card.className = 'level-card' + (i >= game.unlockedLevels ? ' locked' : '');
-        const stars = game.levelStars[i];
+        const stars = game.levelStars[i] || 0;
         card.innerHTML = `
           <div class="level-num">${lvl.id}</div>
           <div class="level-name">${lvl.name}</div>
@@ -1250,6 +1251,9 @@
     }
 
     // ===== Init =====
+    // Ensure valid defaults before building menu
+    if (!game.unlockedLevels || game.unlockedLevels < 1) game.unlockedLevels = 1;
+    if (!game.levelStars || !Array.isArray(game.levelStars)) game.levelStars = [0, 0, 0];
     buildMenu();
     loop();
 
