@@ -1,617 +1,501 @@
-/* ========================================================
-   MixFlow App — Cocktail Browser Logic
-   Bilingual (zh/en) · Favorites · Random Pick · Sort · Share
-   ======================================================== */
-
-// ─── i18n ─────────────────────────────────────────────────
-const i18n = {
-  zh: {
-    'nav.cocktails': '鸡尾酒',
-    'nav.mocktails': '无酒精',
-    'nav.favorites': '收藏',
-    'hero.subtitle': 'AI 驱动的鸡尾酒配方浏览器',
-    'search.placeholder': '搜索鸡尾酒名称、配料、类别...',
-    'category.all': '全部类别',
-    'stats.recipes': '个配方',
-    'action.random': '随机推荐',
-    'action.sort': '排序',
-    'action.share': '分享',
-    'loading': '加载配方中...',
-    'empty': '没有找到匹配的配方',
-    'modal.ingredients': '配料 Ingredients',
-    'modal.instructions': '做法 Instructions',
-    'modal.favorite': '☆ 收藏配方',
-    'modal.favorited': '★ 已收藏',
-    'modal.close': '关闭',
-    'random.title': '命运的安排',
-    'random.subtitle': '摇动手机或点击按钮，让命运为你调一杯',
-    'random.shakeAgain': '再摇一次',
-    'random.accept': '接受命运',
-    'sort.nameAsc': '名称 A-Z',
-    'sort.nameDesc': '名称 Z-A',
-    'sort.category': '按类别',
-    'share.title': 'MixFlow 鸡尾酒配方',
-    'share.copySuccess': '链接已复制到剪贴板',
-    'share.unsupported': '您的浏览器不支持分享功能',
-  },
-  en: {
-    'nav.cocktails': 'Cocktails',
-    'nav.mocktails': 'Mocktails',
-    'nav.favorites': 'Favorites',
-    'hero.subtitle': 'AI-powered cocktail recipe browser',
-    'search.placeholder': 'Search by name, ingredient, category...',
-    'category.all': 'All Categories',
-    'stats.recipes': 'recipes',
-    'action.random': 'Random',
-    'action.sort': 'Sort',
-    'action.share': 'Share',
-    'loading': 'Loading recipes...',
-    'empty': 'No matching recipes found',
-    'modal.ingredients': 'Ingredients',
-    'modal.instructions': 'Instructions',
-    'modal.favorite': '☆ Favorite',
-    'modal.favorited': '★ Favorited',
-    'modal.close': 'Close',
-    'random.title': "Fate's Arrangement",
-    'random.subtitle': 'Shake your phone or tap to let fate mix one for you',
-    'random.shakeAgain': 'Shake Again',
-    'random.accept': 'Accept Fate',
-    'sort.nameAsc': 'Name A-Z',
-    'sort.nameDesc': 'Name Z-A',
-    'sort.category': 'By Category',
-    'share.title': 'MixFlow Cocktail Recipe',
-    'share.copySuccess': 'Link copied to clipboard',
-    'share.unsupported': 'Sharing not supported in this browser',
-  }
-};
-
-let currentLang = localStorage.getItem('mixflow_lang') || 'zh';
-
-function applyLang() {
-  const dict = i18n[currentLang];
-  document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.getAttribute('data-i18n');
-    if (dict[key]) el.textContent = dict[key];
-  });
-  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    const key = el.getAttribute('data-i18n-placeholder');
-    if (dict[key]) el.placeholder = dict[key];
-  });
-  document.documentElement.lang = currentLang;
-}
-
-function updateLangToggle() {
-  const toggle = document.getElementById('langToggle');
-  toggle.classList.toggle('lang-zh-active', currentLang === 'zh');
-  toggle.classList.toggle('lang-en-active', currentLang === 'en');
-}
-
-function switchLang() {
-  currentLang = currentLang === 'zh' ? 'en' : 'zh';
-  localStorage.setItem('mixflow_lang', currentLang);
-  applyLang();
-  updateLangToggle();
-  buildCategoryOptions(allRecipes);
-  render();
-}
-
-document.getElementById('langToggle').addEventListener('click', switchLang);
-
-// ─── Debug: catch and display errors ──────────────────────
-window.addEventListener('error', (e) => {
-  const el = document.getElementById('cocktailGrid');
-  if (el) el.innerHTML = '<div style="padding:40px;color:#f97316;font-family:monospace"><h3>JS Error</h3><pre>' +
-    (e.message || e.error?.message || 'Unknown') + '</pre></div>';
-});
-window.addEventListener('unhandledrejection', (e) => {
-  const el = document.getElementById('cocktailGrid');
-  if (el) el.innerHTML = '<div style="padding:40px;color:#f97316;font-family:monospace"><h3>Promise Error</h3><pre>' +
-    (e.reason?.message || String(e.reason)) + '</pre></div>';
-});
-
-// ─── State ────────────────────────────────────────────────
-let allRecipes = [];
-let currentTab = 'cocktails';
-let favorites = [];
-let sortMode = 'default';
-
-// ─── DOM Refs ────────────────────────────────────────────
-const $grid = document.getElementById('cocktailGrid');
-const $loading = document.getElementById('loading');
-const $empty = document.getElementById('emptyState');
-const $search = document.getElementById('searchInput');
-const $category = document.getElementById('categoryFilter');
-const $resultCount = document.getElementById('resultCount');
-const $favCount = document.getElementById('favCount');
-const $modalOverlay = document.getElementById('modalOverlay');
-const $modalContent = document.getElementById('modalContent');
-const $modalClose = document.getElementById('modalClose');
-const $backToTop = document.getElementById('backToTop');
-const $randomOverlay = document.getElementById('randomOverlay');
-const $randomContent = document.getElementById('randomContent');
-const $randomClose = document.getElementById('randomClose');
-const $shakeAgainBtn = document.getElementById('shakeAgainBtn');
-const $acceptFateBtn = document.getElementById('acceptFateBtn');
-const $sortDropdown = document.getElementById('sortDropdown');
-
-// ─── Spotlight ───────────────────────────────────────────
-document.addEventListener('mousemove', (e) => {
-  document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
-  document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
-});
-
-// ─── Back to Top ─────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  $backToTop.classList.toggle('visible', window.scrollY > 400);
-});
-
-$backToTop.addEventListener('click', () => {
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-// ─── Favorites ───────────────────────────────────────────
-function loadFavorites() {
-  try {
-    favorites = JSON.parse(localStorage.getItem('mixflow_favorites') || '[]');
-  } catch {
-    favorites = [];
-  }
-  updateFavCount();
-}
-
-function saveFavorites() {
-  localStorage.setItem('mixflow_favorites', JSON.stringify(favorites));
-  updateFavCount();
-  render();
-}
-
-function toggleFavorite(id) {
-  const idx = favorites.indexOf(id);
-  if (idx >= 0) {
-    favorites.splice(idx, 1);
-  } else {
-    favorites.push(id);
-  }
-  saveFavorites();
-}
-
-function isFavorite(id) {
-  return favorites.includes(id);
-}
-
-function updateFavCount() {
-  $favCount.textContent = favorites.length;
-}
-
-// ─── Data Loading ────────────────────────────────────────
-async function loadData() {
-  try {
-    const [recipesRes, mocktailsRes] = await Promise.all([
-      fetch('recipes.json'),
-      fetch('mocktails.json')
-    ]);
-
-    const recipesData = await recipesRes.json();
-    const mocktailsData = await mocktailsRes.json();
-
-    const recipes = (recipesData.drinks || []).map(r => ({ ...r, _type: 'cocktail' }));
-    const mocktails = (mocktailsData.drinks || []).map(r => ({ ...r, _type: 'mocktail' }));
-
-    allRecipes = [...recipes, ...mocktails];
-    buildCategoryOptions(allRecipes);
-    applyLang();
-    updateLangToggle();
-    render();
-  } catch (err) {
-    console.error('Failed to load recipes:', err);
-    const dict = i18n[currentLang];
-    $loading.innerHTML = `<p style="color:var(--accent2)">${dict['loading'] || 'Loading failed'}</p>`;
-  }
-}
-
-function buildCategoryOptions(recipes) {
-  const cats = new Set();
-  for (const r of recipes) {
-    if (r.strCategory) cats.add(r.strCategory);
-  }
-  const dict = i18n[currentLang];
-  const allLabel = dict['category.all'] || 'All Categories';
-  const sorted = ['all', ...Array.from(cats).sort()];
-  $category.innerHTML = sorted.map(c => `<option value="${c}">${c === 'all' ? allLabel : c}</option>`).join('');
-}
-
-// ─── Filtering ───────────────────────────────────────────
-function getFiltered() {
-  let list = [];
-
-  if (currentTab === 'favorites') {
-    list = allRecipes.filter(r => favorites.includes(r.idDrink));
-  } else {
-    list = allRecipes.filter(r => r._type === (currentTab === 'cocktails' ? 'cocktail' : 'mocktail'));
-  }
-
-  // Search
-  const q = $search.value.toLowerCase().trim();
-  if (q) {
-    list = list.filter(r => {
-      const name = (r.strDrink || '').toLowerCase();
-      const cat = (r.strCategory || '').toLowerCase();
-      const glass = (r.strGlass || '').toLowerCase();
-      const ings = getIngredients(r).join(' ').toLowerCase();
-      return name.includes(q) || cat.includes(q) || glass.includes(q) || ings.includes(q);
-    });
-  }
-
-  // Category
-  const catVal = $category.value;
-  if (catVal && catVal !== 'all') {
-    list = list.filter(r => r.strCategory === catVal);
-  }
-
-  // Sort
-  if (sortMode === 'name-asc') {
-    list.sort((a, b) => (a.strDrink || '').localeCompare(b.strDrink || ''));
-  } else if (sortMode === 'name-desc') {
-    list.sort((a, b) => (b.strDrink || '').localeCompare(a.strDrink || ''));
-  } else if (sortMode === 'category') {
-    list.sort((a, b) => (a.strCategory || '').localeCompare(b.strCategory || ''));
-  }
-
-  return list;
-}
-
-function getIngredients(recipe) {
-  const ings = [];
-  for (let i = 1; i <= 15; i++) {
-    const val = recipe['strIngredient' + i];
-    if (val && typeof val === 'string' && val.trim()) {
-      ings.push(val.trim());
-    }
-  }
-  return ings;
-}
-
-function getMeasures(recipe) {
-  const measures = [];
-  for (let i = 1; i <= 15; i++) {
-    const val = recipe['strMeasure' + i];
-    if (val && typeof val === 'string' && val.trim()) {
-      measures.push(val.trim());
-    }
-  }
-  return measures;
-}
-
-// ─── Render ──────────────────────────────────────────────
-function render() {
-  const filtered = getFiltered();
-
-  $loading.style.display = 'none';
-  $resultCount.textContent = filtered.length;
-
-  if (filtered.length === 0) {
-    $grid.innerHTML = '';
-    $empty.style.display = 'flex';
-    return;
-  }
-
-  $empty.style.display = 'none';
-  $grid.innerHTML = filtered.map(recipe => createCard(recipe)).join('');
-
-  // Attach event listeners to cards
-  $grid.querySelectorAll('.cocktail-card').forEach(card => {
-    card.addEventListener('click', (e) => {
-      if (e.target.closest('.card-fav')) return;
-      openModal(card.dataset.id);
-    });
-  });
-
-  // Attach event listeners to fav buttons
-  $grid.querySelectorAll('.card-fav').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      toggleFavorite(btn.dataset.id);
-      btn.classList.toggle('active', isFavorite(btn.dataset.id));
-      btn.innerHTML = isFavorite(btn.dataset.id) ? '★' : '☆';
-    });
-  });
-
-  // Image error fallback
-  $grid.querySelectorAll('.card-image').forEach(img => {
-    img.addEventListener('error', () => {
-      img.style.display = 'none';
-      const placeholder = img.nextElementSibling;
-      if (placeholder) placeholder.style.display = 'flex';
-    });
-  });
-}
-
-function createCard(recipe) {
-  const id = recipe.idDrink;
-  const thumb = recipe.strDrinkThumb;
-  const name = recipe.strDrink || 'Unknown';
-  const category = recipe.strCategory || '';
-  const glass = recipe.strGlass || '';
-  const fav = isFavorite(id);
-
-  const imageHtml = thumb
-    ? `<img class="card-image" src="${escapeHtml(thumb)}" alt="${escapeHtml(name)}" loading="lazy">`
-    : '';
-
-  const placeholderHtml = thumb
-    ? `<div class="card-image-placeholder" style="display:none">🍸</div>`
-    : `<div class="card-image-placeholder">🍸</div>`;
-
-  return `
-    <div class="cocktail-card" data-id="${escapeHtml(id)}">
-      ${imageHtml}${placeholderHtml}
-      <button class="card-fav ${fav ? 'active' : ''}" data-id="${escapeHtml(id)}" aria-label="favorite">${fav ? '★' : '☆'}</button>
-      <div class="card-body">
-        <h3 class="card-title" title="${escapeHtml(name)}">${escapeHtml(name)}</h3>
-        <div class="card-meta">
-          ${category ? `<span class="card-category">${escapeHtml(category)}</span>` : ''}
-          ${glass ? `<span class="card-glass">${escapeHtml(glass)}</span>` : ''}
-        </div>
-      </div>
-    </div>
-  `;
-}
-
-// ─── Modal ───────────────────────────────────────────────
-function openModal(id) {
-  const recipe = allRecipes.find(r => r.idDrink === id);
-  if (!recipe) return;
-
-  const thumb = recipe.strDrinkThumb;
-  const ingredients = getIngredients(recipe);
-  const measures = getMeasures(recipe);
-  const fav = isFavorite(id);
-  const dict = i18n[currentLang];
-
-  const imageHtml = thumb
-    ? `<img class="modal-image" src="${escapeHtml(thumb)}" alt="${escapeHtml(recipe.strDrink)}">`
-    : `<div class="modal-image-placeholder">🍸</div>`;
-
-  const ingredientsHtml = ingredients.map((ing, i) => `
-    <li class="ingredient-item">
-      <span class="ingredient-name">${escapeHtml(ing)}</span>
-      ${measures[i] ? `<span class="ingredient-measure">${escapeHtml(measures[i])}</span>` : ''}
-    </li>
-  `).join('');
-
-  $modalContent.innerHTML = `
-    ${imageHtml}
-    <div class="modal-info">
-      <h2 class="modal-title">${escapeHtml(recipe.strDrink)}</h2>
-      <div class="modal-meta-row">
-        ${recipe.strCategory ? `<span class="modal-badge">${escapeHtml(recipe.strCategory)}</span>` : ''}
-        ${recipe.strAlcoholic ? `<span class="modal-badge alcoholic">${escapeHtml(recipe.strAlcoholic === 'Alcoholic' ? (currentLang === 'zh' ? '含酒精' : 'Alcoholic') : (currentLang === 'zh' ? '无酒精' : 'Non-Alcoholic'))}</span>` : ''}
-        ${recipe.strGlass ? `<span class="modal-badge">${escapeHtml(recipe.strGlass)}</span>` : ''}
-        ${recipe.strIBA ? `<span class="modal-badge">${escapeHtml(recipe.strIBA)}</span>` : ''}
-      </div>
-
-      ${ingredients.length > 0 ? `
-        <div class="modal-section">
-          <h3 class="modal-section-title">${dict['modal.ingredients']}</h3>
-          <ul class="ingredients-list">${ingredientsHtml}</ul>
-        </div>
-      ` : ''}
-
-      ${recipe.strInstructions ? `
-        <div class="modal-section">
-          <h3 class="modal-section-title">${dict['modal.instructions']}</h3>
-          <p class="instructions-text">${escapeHtml(recipe.strInstructions)}</p>
-        </div>
-      ` : ''}
-
-      <button class="modal-fav-btn ${fav ? 'active' : ''}" id="modalFavBtn" data-id="${escapeHtml(id)}">
-        ${fav ? dict['modal.favorited'] : dict['modal.favorite']}
-      </button>
-    </div>
-  `;
-
-  $modalOverlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
-
-  const modalImg = $modalContent.querySelector('.modal-image');
-  if (modalImg) {
-    modalImg.addEventListener('error', () => {
-      modalImg.style.display = 'none';
-      const placeholder = modalImg.nextElementSibling;
-      if (placeholder && placeholder.classList.contains('modal-image-placeholder')) {
-        placeholder.style.display = 'flex';
-      }
-    });
-  }
-
-  const modalFavBtn = document.getElementById('modalFavBtn');
-  if (modalFavBtn) {
-    modalFavBtn.addEventListener('click', () => {
-      toggleFavorite(id);
-      const nowFav = isFavorite(id);
-      modalFavBtn.classList.toggle('active', nowFav);
-      modalFavBtn.innerHTML = nowFav ? dict['modal.favorited'] : dict['modal.favorite'];
-    });
-  }
-}
-
-function closeModal() {
-  $modalOverlay.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-$modalClose.addEventListener('click', closeModal);
-$modalOverlay.addEventListener('click', (e) => {
-  if (e.target === $modalOverlay) closeModal();
-});
-
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') {
-    closeModal();
-    closeRandomModal();
-  }
-});
-
-// ─── Random Pick ─────────────────────────────────────────
-function openRandomModal() {
-  $randomOverlay.classList.add('open');
-  document.body.style.overflow = 'hidden';
-  document.getElementById('randomResult').style.display = 'none';
-  document.querySelector('.random-hero').style.display = 'block';
-}
-
-function closeRandomModal() {
-  $randomOverlay.classList.remove('open');
-  document.body.style.overflow = '';
-}
-
-function shakeRandom() {
-  const list = currentTab === 'favorites'
-    ? allRecipes.filter(r => favorites.includes(r.idDrink))
-    : allRecipes.filter(r => r._type === (currentTab === 'cocktails' ? 'cocktail' : 'mocktail'));
-
-  if (list.length === 0) return;
-
-  const recipe = list[Math.floor(Math.random() * list.length)];
-  const name = recipe.strDrink || 'Unknown';
-  const category = recipe.strCategory || '';
-  const glass = recipe.strGlass || '';
-
-  document.querySelector('.random-hero').style.display = 'none';
-  const resultEl = document.getElementById('randomResult');
-  resultEl.style.display = 'block';
-  resultEl.innerHTML = `
-    <div class="random-result-card" data-id="${escapeHtml(recipe.idDrink)}">
-      <div style="font-size:48px;margin-bottom:12px;">🍸</div>
-      <h3 class="card-title">${escapeHtml(name)}</h3>
-      <div class="card-meta" style="justify-content:center;">
-        ${category ? `<span class="card-category">${escapeHtml(category)}</span>` : ''}
-        ${glass ? `<span class="card-glass">${escapeHtml(glass)}</span>` : ''}
-      </div>
-    </div>
-  `;
-
-  resultEl.querySelector('.random-result-card').addEventListener('click', () => {
-    closeRandomModal();
-    openModal(recipe.idDrink);
-  });
-}
-
-document.getElementById('randomBtn').addEventListener('click', () => {
-  openRandomModal();
-  shakeRandom();
-});
-
-$randomClose.addEventListener('click', closeRandomModal);
-$randomOverlay.addEventListener('click', (e) => {
-  if (e.target === $randomOverlay) closeRandomModal();
-});
-
-$shakeAgainBtn.addEventListener('click', shakeRandom);
-$acceptFateBtn.addEventListener('click', () => {
-  const card = document.querySelector('.random-result-card');
-  if (card) {
-    closeRandomModal();
-    openModal(card.dataset.id);
-  }
-});
-
-// ─── Sort ────────────────────────────────────────────────
-const $sortBtn = document.getElementById('sortBtn');
-
-$sortBtn.addEventListener('click', (e) => {
-  e.stopPropagation();
-  const rect = $sortBtn.getBoundingClientRect();
-  $sortDropdown.style.display = $sortDropdown.style.display === 'none' ? 'block' : 'none';
-  $sortDropdown.style.top = (rect.bottom + window.scrollY + 4) + 'px';
-  $sortDropdown.style.left = rect.left + 'px';
-});
-
-document.addEventListener('click', (e) => {
-  if (!e.target.closest('#sortDropdown') && !e.target.closest('#sortBtn')) {
-    $sortDropdown.style.display = 'none';
-  }
-});
-
-document.querySelectorAll('.sort-option').forEach(btn => {
-  btn.addEventListener('click', () => {
-    sortMode = btn.dataset.sort;
-    $sortDropdown.style.display = 'none';
-    render();
-  });
-});
-
-// ─── Share ───────────────────────────────────────────────
-document.getElementById('shareBtn').addEventListener('click', async () => {
-  const dict = i18n[currentLang];
-  const shareData = {
-    title: dict['share.title'],
-    text: 'MixFlow — AI Cocktail Recipe Browser',
-    url: window.location.href
-  };
-
-  if (navigator.share) {
-    try {
-      await navigator.share(shareData);
-    } catch (err) {
-      // User cancelled
-    }
-  } else if (navigator.clipboard) {
-    try {
-      await navigator.clipboard.writeText(window.location.href);
-      alert(dict['share.copySuccess']);
-    } catch {
-      alert(dict['share.unsupported']);
-    }
-  } else {
-    alert(dict['share.unsupported']);
-  }
-});
-
-// ─── Navigation / Tabs ───────────────────────────────────
-document.querySelectorAll('.nav-btn[data-tab]').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const tab = btn.dataset.tab;
-    if (tab === 'favorites') {
-      currentTab = 'favorites';
-      document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-    } else if (tab === 'cocktails' || tab === 'mocktails') {
-      currentTab = tab;
-      document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      document.getElementById('favBtn').classList.remove('active');
-    }
-    render();
-  });
-});
-
-// Fav button in nav
-document.getElementById('favBtn').addEventListener('click', function() {
-  currentTab = 'favorites';
-  document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
-  this.classList.add('active');
-  render();
-});
-
-// ─── Search & Filter ─────────────────────────────────────
-let debounceTimer;
-$search.addEventListener('input', () => {
-  clearTimeout(debounceTimer);
-  debounceTimer = setTimeout(render, 200);
-});
-
-$category.addEventListener('change', render);
-
-// ─── Utilities ───────────────────────────────────────────
-function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
-}
-
-// ─── Init ────────────────────────────────────────────────
-(function init() {
-  loadFavorites();
-  loadData();
-})();
+1|/* ========================================================
+2|   MixFlow App — Cocktail Browser Logic
+3|   Bilingual (zh/en) · Favorites · Random Pick · Sort · Share
+4|   Auto-translate: English content gets inline Chinese translation
+5|   ======================================================== */
+6|
+7|// ─── Category Translation Map ─────────────────────────────
+8|const categoryTranslations = {
+9|  'Ordinary Drink': '普通饮品',
+10|  'Cocktail': '鸡尾酒',
+11|  'Shake': '摇和',
+12|  'Other / Unknown': '其他/未知',
+13|  'Cocoa': '可可',
+14|  'Shot': ' shots',
+15|  'Coffee / Tea': '咖啡/茶',
+16|  'Homemade Liqueur': '自制利口酒',
+17|  'Punch / Party Drink': '宾治/派对饮品',
+18|  'Beer': '啤酒',
+19|  'Soft Drink': '软饮',
+20|  'Alcoholic': '含酒精',
+21|  'Non-Alcoholic': '无酒精',
+22|  'Optional alcohol': '可选酒精',
+23|};
+24|
+25|const glassTranslations = {
+26|  'Highball glass': '高球杯',
+27|  'Cocktail glass': '鸡尾酒杯',
+28|  'Old-fashioned glass': '古典杯',
+29|  'Whiskey Glass': '威士忌杯',
+30|  'Collins glass': '柯林杯',
+31|  'Pousse cafe glass': '普施咖啡杯',
+32|  'Champagne flute': '香槟笛杯',
+33|  'Whiskey sour glass': '酸威士忌杯',
+34|  'Cordial glass': '甜酒杯',
+35|  'Brandy snifter': '白兰地杯',
+36|  'White wine glass': '白葡萄酒杯',
+37|  'Nick and Nora Glass': '尼克诺拉杯',
+38|  'Hurricane glass': '飓风杯',
+39|  'Coffee mug': '咖啡杯',
+40|  'Shot glass': ' shot杯',
+41|  'Jar': '罐',
+42|  'Irish coffee cup': '爱尔兰咖啡杯',
+43|  'Punch bowl': '宾治碗',
+44|  'Pitcher': '水壶',
+45|  'Pint glass': '品脱杯',
+46|  'Copper Mug': '铜杯',
+47|  'Wine Glass': '葡萄酒杯',
+48|  'Beer mug': '啤酒杯',
+49|  'Margarita/Coupette glass': '玛格丽特杯',
+50|  'Beer pilsner': '比尔森啤酒杯',
+51|  'Beer Glass': '啤酒杯',
+52|  'Parfait glass': '芭菲杯',
+53|  'Mason jar': '梅森罐',
+54|  'Margarita glass': '玛格丽特杯',
+55|  'Martini Glass': '马天尼杯',
+56|  'Balloon Glass': '气球杯',
+57|  'Coupe Glass': '碟形杯',
+58|};
+59|
+60|// ─── i18n ─────────────────────────────────────────────────
+61|const i18n = {
+62|  zh: {
+63|    'nav.cocktails': '鸡尾酒',
+64|    'nav.mocktails': '无酒精',
+65|    'nav.favorites': '收藏',
+66|    'hero.subtitle': 'AI 驱动的鸡尾酒配方浏览器',
+67|    'search.placeholder': '搜索鸡尾酒名称、配料、类别...',
+68|    'category.all': '全部类别',
+69|    'stats.recipes': '个配方',
+70|    'action.random': '随机推荐',
+71|    'action.sort': '排序',
+72|    'action.share': '分享',
+73|    'loading': '加载配方中...',
+74|    'empty': '没有找到匹配的配方',
+75|    'modal.ingredients': '配料 \u003cspan class="trans-label"\u003eIngredients\u003c/span\u003e',
+76|    'modal.instructions': '做法 \u003cspan class="trans-label"\u003eInstructions\u003c/span\u003e',
+77|    'modal.favorite': '☆ 收藏配方',
+78|    'modal.favorited': '★ 已收藏',
+79|    'modal.close': '关闭',
+80|    'random.title': '命运的安排',
+81|    'random.subtitle': '摇动手机或点击按钮，让命运为你调一杯',
+82|    'random.shakeAgain': '再摇一次',
+83|    'random.accept': '接受命运',
+84|    'sort.nameAsc': '名称 A-Z',
+85|    'sort.nameDesc': '名称 Z-A',
+86|    'sort.category': '按类别',
+87|    'share.title': 'MixFlow 鸡尾酒配方',
+88|    'share.copySuccess': '链接已复制到剪贴板',
+89|    'share.unsupported': '您的浏览器不支持分享功能',
+90|    'alcoholic.alcoholic': '含酒精',
+91|    'alcoholic.non': '无酒精',
+92|    'alcoholic.optional': '可选酒精',
+93|  },
+94|  en: {
+95|    'nav.cocktails': 'Cocktails',
+96|    'nav.mocktails': 'Mocktails',
+97|    'nav.favorites': 'Favorites',
+98|    'hero.subtitle': 'AI-powered cocktail recipe browser',
+99|    'search.placeholder': 'Search by name, ingredient, category...',
+100|    'category.all': 'All Categories',
+101|    'stats.recipes': 'recipes',
+102|    'action.random': 'Random',
+103|    'action.sort': 'Sort',
+104|    'action.share': 'Share',
+105|    'loading': 'Loading recipes...',
+106|    'empty': 'No matching recipes found',
+107|    'modal.ingredients': 'Ingredients \u003cspan class="trans-label"\u003e配料\u003c/span\u003e',
+108|    'modal.instructions': 'Instructions \u003cspan class="trans-label"\u003e做法\u003c/span\u003e',
+109|    'modal.favorite': '☆ Favorite',
+110|    'modal.favorited': '★ Favorited',
+111|    'modal.close': 'Close',
+112|    'random.title': "Fate's Arrangement",
+113|    'random.subtitle': 'Shake your phone or tap to let fate mix one for you',
+114|    'random.shakeAgain': 'Shake Again',
+115|    'random.accept': 'Accept Fate',
+116|    'sort.nameAsc': 'Name A-Z',
+117|    'sort.nameDesc': 'Name Z-A',
+118|    'sort.category': 'By Category',
+119|    'share.title': 'MixFlow Cocktail Recipe',
+120|    'share.copySuccess': 'Link copied to clipboard',
+121|    'share.unsupported': 'Sharing not supported in this browser',
+122|    'alcoholic.alcoholic': 'Alcoholic',
+123|    'alcoholic.non': 'Non-Alcoholic',
+124|    'alcoholic.optional': 'Optional alcohol',
+125|  }
+126|};
+127|
+128|let currentLang = localStorage.getItem('mixflow_lang') || 'zh';
+129|
+130|function t(key) {
+131|  return i18n[currentLang]?.[key] || key;
+132|}
+133|
+134|function applyLang() {
+135|  const dict = i18n[currentLang];
+136|  document.querySelectorAll('[data-i18n]').forEach(el => {
+137|    const key = el.getAttribute('data-i18n');
+138|    if (dict[key]) el.textContent = dict[key];
+139|  });
+140|  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+141|    const key = el.getAttribute('data-i18n-placeholder');
+142|    if (dict[key]) el.placeholder = dict[key];
+143|  });
+144|  document.documentElement.lang = currentLang;
+145|}
+146|
+147|function updateLangToggle() {
+148|  const toggle = document.getElementById('langToggle');
+149|  toggle.classList.toggle('lang-zh-active', currentLang === 'zh');
+150|  toggle.classList.toggle('lang-en-active', currentLang === 'en');
+151|}
+152|
+153|function switchLang() {
+154|  currentLang = currentLang === 'zh' ? 'en' : 'zh';
+155|  localStorage.setItem('mixflow_lang', currentLang);
+156|  applyLang();
+157|  updateLangToggle();
+158|  buildCategoryOptions(allRecipes);
+159|  render();
+160|}
+161|
+162|document.getElementById('langToggle').addEventListener('click', switchLang);
+163|
+164|// ─── Debug: catch and display errors ──────────────────────
+165|window.addEventListener('error', (e) => {
+166|  const el = document.getElementById('cocktailGrid');
+167|  if (el) el.innerHTML = '<div style="padding:40px;color:#f97316;font-family:monospace"><h3>JS Error</h3><pre>' +
+168|    (e.message || e.error?.message || 'Unknown') + '</pre></div>';
+169|});
+170|window.addEventListener('unhandledrejection', (e) => {
+171|  const el = document.getElementById('cocktailGrid');
+172|  if (el) el.innerHTML = '<div style="padding:40px;color:#f97316;font-family:monospace"><h3>Promise Error</h3><pre>' +
+173|    (e.reason?.message || String(e.reason)) + '</pre></div>';
+174|});
+175|
+176|// ─── State ────────────────────────────────────────────────
+177|let allRecipes = [];
+178|let currentTab = 'cocktails';
+179|let favorites = [];
+180|let sortMode = 'default';
+181|
+182|// ─── DOM Refs ────────────────────────────────────────────
+183|const $grid = document.getElementById('cocktailGrid');
+184|const $loading = document.getElementById('loading');
+185|const $empty = document.getElementById('emptyState');
+186|const $search = document.getElementById('searchInput');
+187|const $category = document.getElementById('categoryFilter');
+188|const $resultCount = document.getElementById('resultCount');
+189|const $favCount = document.getElementById('favCount');
+190|const $modalOverlay = document.getElementById('modalOverlay');
+191|const $modalContent = document.getElementById('modalContent');
+192|const $modalClose = document.getElementById('modalClose');
+193|const $backToTop = document.getElementById('backToTop');
+194|const $randomOverlay = document.getElementById('randomOverlay');
+195|const $randomContent = document.getElementById('randomContent');
+196|const $randomClose = document.getElementById('randomClose');
+197|const $shakeAgainBtn = document.getElementById('shakeAgainBtn');
+198|const $acceptFateBtn = document.getElementById('acceptFateBtn');
+199|const $sortDropdown = document.getElementById('sortDropdown');
+200|
+201|// ─── Spotlight ───────────────────────────────────────────
+202|document.addEventListener('mousemove', (e) => {
+203|  document.documentElement.style.setProperty('--mouse-x', e.clientX + 'px');
+204|  document.documentElement.style.setProperty('--mouse-y', e.clientY + 'px');
+205|});
+206|
+207|// ─── Back to Top ─────────────────────────────────────────
+208|window.addEventListener('scroll', () => {
+209|  $backToTop.classList.toggle('visible', window.scrollY > 400);
+210|});
+211|
+212|$backToTop.addEventListener('click', () => {
+213|  window.scrollTo({ top: 0, behavior: 'smooth' });
+214|});
+215|
+216|// ─── Favorites ───────────────────────────────────────────
+217|function loadFavorites() {
+218|  try {
+219|    favorites = JSON.parse(localStorage.getItem('mixflow_favorites') || '[]');
+220|  } catch {
+221|    favorites = [];
+222|  }
+223|  updateFavCount();
+224|}
+225|
+226|function saveFavorites() {
+227|  localStorage.setItem('mixflow_favorites', JSON.stringify(favorites));
+228|  updateFavCount();
+229|  render();
+230|}
+231|
+232|function toggleFavorite(id) {
+233|  const idx = favorites.indexOf(id);
+234|  if (idx >= 0) {
+235|    favorites.splice(idx, 1);
+236|  } else {
+237|    favorites.push(id);
+238|  }
+239|  saveFavorites();
+240|}
+241|
+242|function isFavorite(id) {
+243|  return favorites.includes(id);
+244|}
+245|
+246|function updateFavCount() {
+247|  $favCount.textContent = favorites.length;
+248|}
+249|
+250|// ─── Translation helpers ─────────────────────────────────
+251|function translateCategory(cat) {
+252|  if (!cat) return '';
+253|  if (currentLang === 'zh') return categoryTranslations[cat] || cat;
+254|  return cat;
+255|}
+256|
+257|function translateGlass(glass) {
+258|  if (!glass) return '';
+259|  if (currentLang === 'zh') return glassTranslations[glass] || glass;
+260|  return glass;
+261|}
+262|
+263|function translateAlcoholic(val) {
+264|  if (!val) return '';
+265|  if (val === 'Alcoholic') return t('alcoholic.alcoholic');
+266|  if (val === 'Non alcoholic') return t('alcoholic.non');
+267|  if (val === 'Optional alcohol') return t('alcoholic.optional');
+268|  return val;
+269|}
+270|
+271|function bilingualLabel(en, zh) {
+272|  if (currentLang === 'zh') {
+273|    return zh + ' <span class="trans-label">' + en + '</span>';
+274|  }
+275|  return en + ' <span class="trans-label">' + zh + '</span>';
+276|}
+277|
+278|// ─── Data Loading ────────────────────────────────────────
+279|async function loadData() {
+280|  try {
+281|    const [recipesRes, mocktailsRes] = await Promise.all([
+282|      fetch('recipes.json'),
+283|      fetch('mocktails.json')
+284|    ]);
+285|
+286|    const recipesData = await recipesRes.json();
+287|    const mocktailsData = await mocktailsRes.json();
+288|
+289|    const recipes = (recipesData.drinks || []).map(r => ({ ...r, _type: 'cocktail' }));
+290|    const mocktails = (mocktailsData.drinks || []).map(r => ({ ...r, _type: 'mocktail' }));
+291|
+292|    allRecipes = [...recipes, ...mocktails];
+293|    buildCategoryOptions(allRecipes);
+294|    applyLang();
+295|    updateLangToggle();
+296|    render();
+297|  } catch (err) {
+298|    console.error('Failed to load recipes:', err);
+299|    $loading.innerHTML = `<p style="color:var(--accent2)">${t('loading')}</p>`;
+300|  }
+301|}
+302|
+303|function buildCategoryOptions(recipes) {
+304|  const cats = new Set();
+305|  for (const r of recipes) {
+306|    if (r.strCategory) cats.add(r.strCategory);
+307|  }
+308|  const allLabel = t('category.all');
+309|  const sorted = ['all', ...Array.from(cats).sort()];
+310|  $category.innerHTML = sorted.map(c => {
+311|    const label = c === 'all' ? allLabel : translateCategory(c);
+312|    return `<option value="${c}">${label}</option>`;
+313|  }).join('');
+314|}
+315|
+316|// ─── Filtering ───────────────────────────────────────────
+317|function getFiltered() {
+318|  let list = [];
+319|
+320|  if (currentTab === 'favorites') {
+321|    list = allRecipes.filter(r => favorites.includes(r.idDrink));
+322|  } else {
+323|    list = allRecipes.filter(r => r._type === (currentTab === 'cocktails' ? 'cocktail' : 'mocktail'));
+324|  }
+325|
+326|  // Search
+327|  const q = $search.value.toLowerCase().trim();
+328|  if (q) {
+329|    list = list.filter(r => {
+330|      const name = (r.strDrink || '').toLowerCase();
+331|      const cat = (r.strCategory || '').toLowerCase();
+332|      const glass = (r.strGlass || '').toLowerCase();
+333|      const ings = getIngredients(r).join(' ').toLowerCase();
+334|      return name.includes(q) || cat.includes(q) || glass.includes(q) || ings.includes(q);
+335|    });
+336|  }
+337|
+338|  // Category
+339|  const catVal = $category.value;
+340|  if (catVal && catVal !== 'all') {
+341|    list = list.filter(r => r.strCategory === catVal);
+342|  }
+343|
+344|  // Sort
+345|  if (sortMode === 'name-asc') {
+346|    list.sort((a, b) => (a.strDrink || '').localeCompare(b.strDrink || ''));
+347|  } else if (sortMode === 'name-desc') {
+348|    list.sort((a, b) => (b.strDrink || '').localeCompare(a.strDrink || ''));
+349|  } else if (sortMode === 'category') {
+350|    list.sort((a, b) => (a.strCategory || '').localeCompare(b.strCategory || ''));
+351|  }
+352|
+353|  return list;
+354|}
+355|
+356|function getIngredients(recipe) {
+357|  const ings = [];
+358|  for (let i = 1; i <= 15; i++) {
+359|    const val = recipe['strIngredient' + i];
+360|    if (val && typeof val === 'string' && val.trim()) {
+361|      ings.push(val.trim());
+362|    }
+363|  }
+364|  return ings;
+365|}
+366|
+367|function getMeasures(recipe) {
+368|  const measures = [];
+369|  for (let i = 1; i <= 15; i++) {
+370|    const val = recipe['strMeasure' + i];
+371|    if (val && typeof val === 'string' && val.trim()) {
+372|      measures.push(val.trim());
+373|    }
+374|  }
+375|  return measures;
+376|}
+377|
+378|// ─── Render ──────────────────────────────────────────────
+379|function render() {
+380|  const filtered = getFiltered();
+381|
+382|  $loading.style.display = 'none';
+383|  $resultCount.textContent = filtered.length;
+384|
+385|  if (filtered.length === 0) {
+386|    $grid.innerHTML = '';
+387|    $empty.style.display = 'flex';
+388|    return;
+389|  }
+390|
+391|  $empty.style.display = 'none';
+392|  $grid.innerHTML = filtered.map(recipe => createCard(recipe)).join('');
+393|
+394|  // Attach event listeners to cards
+395|  $grid.querySelectorAll('.cocktail-card').forEach(card => {
+396|    card.addEventListener('click', (e) => {
+397|      if (e.target.closest('.card-fav')) return;
+398|      openModal(card.dataset.id);
+399|    });
+400|  });
+401|
+402|  // Attach event listeners to fav buttons
+403|  $grid.querySelectorAll('.card-fav').forEach(btn => {
+404|    btn.addEventListener('click', (e) => {
+405|      e.stopPropagation();
+406|      toggleFavorite(btn.dataset.id);
+407|      btn.classList.toggle('active', isFavorite(btn.dataset.id));
+408|      btn.innerHTML = isFavorite(btn.dataset.id) ? '★' : '☆';
+409|    });
+410|  });
+411|
+412|  // Image error fallback
+413|  $grid.querySelectorAll('.card-image').forEach(img => {
+414|    img.addEventListener('error', () => {
+415|      img.style.display = 'none';
+416|      const placeholder = img.nextElementSibling;
+417|      if (placeholder) placeholder.style.display = 'flex';
+418|    });
+419|  });
+420|}
+421|
+422|function createCard(recipe) {
+423|  const id = recipe.idDrink;
+424|  const thumb = recipe.strDrinkThumb;
+425|  const name = recipe.strDrink || 'Unknown';
+426|  const category = recipe.strCategory || '';
+427|  const glass = recipe.strGlass || '';
+428|  const fav = isFavorite(id);
+429|
+430|  const imageHtml = thumb
+431|    ? `<img class="card-image" src="${escapeHtml(thumb)}" alt="${escapeHtml(name)}" loading="lazy">`
+432|    : '';
+433|
+434|  const placeholderHtml = thumb
+435|    ? `<div class="card-image-placeholder" style="display:none">🍸</div>`
+436|    : `<div class="card-image-placeholder">🍸</div>`;
+437|
+438|  const catLabel = translateCategory(category);
+439|  const glassLabel = translateGlass(glass);
+440|
+441|  return `
+442|    <div class="cocktail-card" data-id="${escapeHtml(id)}">
+443|      ${imageHtml}${placeholderHtml}
+444|      <button class="card-fav ${fav ? 'active' : ''}" data-id="${escapeHtml(id)}" aria-label="favorite">${fav ? '★' : '☆'}</button>
+445|      <div class="card-body">
+446|        <h3 class="card-title" title="${escapeHtml(name)}">${escapeHtml(name)}</h3>
+447|        <div class="card-meta">
+448|          ${category ? `<span class="card-category" title="${escapeHtml(category)}">${escapeHtml(catLabel)}</span>` : ''}
+449|          ${glass ? `<span class="card-glass" title="${escapeHtml(glass)}">${escapeHtml(glassLabel)}</span>` : ''}
+450|        </div>
+451|      </div>
+452|    </div>
+453|  `;
+454|}
+455|
+456|// ─── Modal ───────────────────────────────────────────────
+457|function openModal(id) {
+458|  const recipe = allRecipes.find(r => r.idDrink === id);
+459|  if (!recipe) return;
+460|
+461|  const thumb = recipe.strDrinkThumb;
+462|  const ingredients = getIngredients(recipe);
+463|  const measures = getMeasures(recipe);
+464|  const fav = isFavorite(id);
+465|
+466|  const imageHtml = thumb
+467|    ? `<img class="modal-image" src="${escapeHtml(thumb)}" alt="${escapeHtml(recipe.strDrink)}">`
+468|    : `<div class="modal-image-placeholder">🍸</div>`;
+469|
+470|  const ingredientsHtml = ingredients.map((ing, i) => `
+471|    <li class="ingredient-item">
+472|      <span class="ingredient-name">${escapeHtml(ing)}</span>
+473|      ${measures[i] ? `<span class="ingredient-measure">${escapeHtml(measures[i])}</span>` : ''}
+474|    </li>
+475|  `).join('');
+476|
+477|  const catLabel = translateCategory(recipe.strCategory);
+478|  const glassLabel = translateGlass(recipe.strGlass);
+479|  const alcLabel = translateAlcoholic(recipe.strAlcoholic);
+480|
+481|  $modalContent.innerHTML = `
+482|    ${imageHtml}
+483|    <div class="modal-info">
+484|      <h2 class="modal-title">${escapeHtml(recipe.strDrink)}</h2>
+485|      <div class="modal-meta-row">
+486|        ${recipe.strCategory ? `<span class="modal-badge" title="${escapeHtml(recipe.strCategory)}">${escapeHtml(catLabel)}</span>` : ''}
+487|        ${recipe.strAlcoholic ? `<span class="modal-badge alcoholic">${escapeHtml(alcLabel)}</span>` : ''}
+488|        ${recipe.strGlass ? `<span class="modal-badge" title="${escapeHtml(recipe.strGlass)}">${escapeHtml(glassLabel)}</span>` : ''}
+489|        ${recipe.strIBA ? `<span class="modal-badge">${escapeHtml(recipe.strIBA)}</span>` : ''}
+490|      </div>
+491|
+492|      ${ingredients.length > 0 ? `
+493|        <div class="modal-section">
+494|          <h3 class="modal-section-title">${bilingualLabel('Ingredients', '配料')}</h3>
+495|          <ul class="ingredients-list">${ingredientsHtml}</ul>
+496|        </div>
+497|      ` : ''}
+498|
+499|      ${recipe.strInstructions ? `
+500|        <div class="modal-section">
+501|
