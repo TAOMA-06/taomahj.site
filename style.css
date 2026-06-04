@@ -183,6 +183,34 @@ a:hover { color: var(--accent2); }
   font-size: 0.85rem;
 }
 
+/* Perler nav link */
+.nav-perler {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #ec4899;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  border: 1px solid rgba(236, 72, 153, 0.2);
+  background: rgba(236, 72, 153, 0.06);
+}
+.nav-perler:hover {
+  color: #fff;
+  background: rgba(236, 72, 153, 0.18);
+  border-color: rgba(236, 72, 153, 0.5);
+  box-shadow: 0 0 16px rgba(236, 72, 153, 0.15);
+}
+.nav-perler-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+.nav-perler-text {
+  font-size: 0.85rem;
+}
+
 /* Language toggle */
 .lang-toggle {
   display: flex;
@@ -722,6 +750,7 @@ a:hover { color: var(--accent2); }
   .section-title { font-size: 1.8rem; }
   .nav-links a:not(.lang-toggle) { display: none; }
   .nav-mixflow { display: none !important; }
+  .nav-perler { display: none !important; }
   .avatar-wrapper { width: 110px; height: 110px; }
   .spotlight { display: none; }
   .knowledge-graph-wrapper { height: 400px; }

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Perler Bead Art Converter — 图片转拼豆风格">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <title>Perler Bead Art — taomahj</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>⚡</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">taomahj</a>
+      <div class="nav-links">
+        <a href="../index.html#projects">Projects</a>
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="main">
+    <div class="container">
+      <header class="page-header">
+        <h1 class="page-title">🧩 <span data-i18n="title">拼豆工坊</span></h1>
+        <p class="page-subtitle" data-i18n="subtitle">把任意图片转换成拼豆（Perler Beads）风格 — 圆润珠子、网格间隙、塑料光泽</p>
+      </header>
+
+      <div class="upload-zone" id="uploadZone">
+        <div class="upload-content">
+          <div class="upload-icon">📎</div>
+          <p class="upload-text" data-i18n="upload.drag">拖拽图片到此处，或点击上传</p>
+          <p class="upload-hint" data-i18n="upload.hint">支持 JPG、PNG、WebP · 纯本地处理，无水印</p>
+        </div>
+        <input type="file" id="fileInput" accept="image/*" hidden>
+      </div>
+
+      <div class="editor" id="editor" style="display:none;">
+        <div class="preview-area">
+          <div class="preview-box">
+            <span class="preview-label" data-i18n="preview.original">原图</span>
+            <canvas id="originalCanvas"></canvas>
+          </div>
+          <div class="preview-box">
+            <span class="preview-label" data-i18n="preview.result">拼豆效果</span>
+            <canvas id="outputCanvas"></canvas>
+          </div>
+        </div>
+
+        <div class="controls">
+          <div class="control-group">
+            <label data-i18n="control.grid">网格大小</label>
+            <div class="range-wrap">
+              <input type="range" id="gridSize" min="20" max="120" value="60">
+              <span class="range-value" id="gridSizeVal">60</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label data-i18n="control.bead">珠子大小</label>
+            <div class="range-wrap">
+              <input type="range" id="beadSize" min="6" max="24" value="12">
+              <span class="range-value" id="beadSizeVal">12px</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label data-i18n="control.gap">间隙</label>
+            <div class="range-wrap">
+              <input type="range" id="gapSize" min="0" max="8" value="2">
+              <span class="range-value" id="gapSizeVal">2px</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label data-i18n="control.roundness">圆角</label>
+            <div class="range-wrap">
+              <input type="range" id="roundness" min="10" max="50" value="35">
+              <span class="range-value" id="roundnessVal">0.35</span>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label data-i18n="control.palette">调色板</label>
+            <select id="palette">
+              <option value="none" data-i18n="palette.none">全彩（不限色）</option>
+              <option value="nes" data-i18n="palette.nes">NES（54色）</option>
+              <option value="gameboy" data-i18n="palette.gameboy">Game Boy（4色）</option>
+              <option value="pico8" data-i18n="palette.pico8">PICO-8（16色）</option>
+              <option value="c64" data-i18n="palette.c64">C64（16色）</option>
+              <option value="grayscale" data-i18n="palette.grayscale">灰度（9色）</option>
+            </select>
+          </div>
+
+          <div class="control-group">
+            <label data-i18n="control.dither">抖动</label>
+            <select id="dither">
+              <option value="none" data-i18n="dither.none">无</option>
+              <option value="bayer" data-i18n="dither.bayer">Bayer 有序</option>
+              <option value="floyd" data-i18n="dither.floyd">Floyd-Steinberg</option>
+            </select>
+          </div>
+
+          <div class="control-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="shading" checked>
+              <span data-i18n="control.shading">3D 立体感（高光+阴影）</span>
+            </label>
+          </div>
+
+          <div class="control-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="showGrid" checked>
+              <span data-i18n="control.gridline">显示网格线</span>
+            </label>
+          </div>
+
+          <div class="control-group checkbox-group">
+            <label class="checkbox-label">
+              <input type="checkbox" id="showCount">
+              <span data-i18n="control.count">显示颜色统计</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button class="btn btn-primary" id="downloadBtn">
+            <span>⬇️</span> <span data-i18n="action.download">下载 PNG</span>
+          </button>
+          <button class="btn btn-outline" id="resetBtn">
+            <span>🔄</span> <span data-i18n="action.reset">重新上传</span>
+          </button>
+        </div>
+
+        <div class="color-stats" id="colorStats" style="display:none;">
+          <h3 data-i18n="stats.title">颜色统计</h3>
+          <div class="stats-grid" id="statsGrid"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 taomahj — <span data-i18n="footer">纯本地处理，图片不会上传到任何服务器</span></p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
