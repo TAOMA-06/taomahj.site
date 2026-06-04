@@ -169,15 +169,25 @@ function switchLang() {
 document.getElementById('langToggle').addEventListener('click', switchLang);
 
 // ─── Debug: catch and display errors ──────────────────────
-window.addEventListener('error', (e) => {
+function showError(title, msg) {
   const el = document.getElementById('cocktailGrid');
-  if (el) el.innerHTML = '<div style="padding:40px;color:#f97316;font-family:monospace"><h3>JS Error</h3><pre>' +
-    (e.message || e.error?.message || 'Unknown') + '</pre></div>';
+  if (!el) return;
+  el.innerHTML = '';
+  const wrap = document.createElement('div');
+  wrap.style.cssText = 'padding:40px;color:#f97316;font-family:monospace';
+  const h3 = document.createElement('h3');
+  h3.textContent = title;
+  const pre = document.createElement('pre');
+  pre.textContent = msg;
+  wrap.appendChild(h3);
+  wrap.appendChild(pre);
+  el.appendChild(wrap);
+}
+window.addEventListener('error', (e) => {
+  showError('JS Error', e.message || e.error?.message || 'Unknown');
 });
 window.addEventListener('unhandledrejection', (e) => {
-  const el = document.getElementById('cocktailGrid');
-  if (el) el.innerHTML = '<div style="padding:40px;color:#f97316;font-family:monospace"><h3>Promise Error</h3><pre>' +
-    (e.reason?.message || String(e.reason)) + '</pre></div>';
+  showError('Promise Error', e.reason?.message || String(e.reason));
 });
 
 // ─── State ────────────────────────────────────────────────

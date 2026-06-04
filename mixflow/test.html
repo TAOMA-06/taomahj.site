@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head><meta charset="UTF-8"><title>Test</title></head>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
+  <title>Test</title>
+</head>
 <body>
 <div id="out">loading...</div>
 <script>
 const out = document.getElementById('out');
+function showError(label, msg) {
+  out.innerHTML = '';
+  const b = document.createElement('b');
+  b.style.color = 'red';
+  b.textContent = label + ':';
+  out.appendChild(b);
+  out.appendChild(document.createTextNode(' ' + msg));
+}
 window.addEventListener('error', e => {
-  out.innerHTML = '<b style="color:red">ERROR:</b> ' + (e.message || e.error?.message);
+  showError('ERROR', e.message || e.error?.message);
 });
 window.addEventListener('unhandledrejection', e => {
-  out.innerHTML = '<b style="color:red">PROMISE:</b> ' + (e.reason?.message || String(e.reason));
+  showError('PROMISE', e.reason?.message || String(e.reason));
 });
 
 (async () => {
@@ -18,9 +30,9 @@ window.addEventListener('unhandledrejection', e => {
     const d1 = await r1.json();
     const r2 = await fetch('mocktails.json');
     const d2 = await r2.json();
-    out.innerHTML = 'OK: ' + d1.drinks.length + ' cocktails, ' + d2.drinks.length + ' mocktails';
+    out.textContent = 'OK: ' + d1.drinks.length + ' cocktails, ' + d2.drinks.length + ' mocktails';
   } catch(e) {
-    out.innerHTML = '<b style="color:red">FETCH ERROR:</b> ' + e.message;
+    showError('FETCH ERROR', e.message);
   }
 })();
 </script>

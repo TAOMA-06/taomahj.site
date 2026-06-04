@@ -13,6 +13,8 @@ const i18n = {
     'nav.contact': '联系',
     'nav.mixflow': 'MixFlow',
     'nav.perler': 'Perler',
+    'nav.bounce': 'Bounce',
+    'nav.bounce': 'Bounce',
     'hero.tagline': '数学 × 电路 × 自动化 × 代码',
     'hero.sub': '探索硬件与软件交汇地带的本科生',
     'hero.viewWork': '查看作品',
@@ -30,6 +32,8 @@ const i18n = {
     'projects.mixflow.desc': 'AI 鸡尾酒配方浏览器 — 发现、搜索并收藏你喜欢的饮品。',
     'projects.perler.title': '🧩 Perler Bead',
     'projects.perler.desc': '图片转拼豆风格 — 圆润珠子、网格间隙、塑料光泽，纯本地处理无水印。',
+    'projects.bounce.title': '🏐 Bounce Ball',
+    'projects.bounce.desc': '物理反弹小游戏 — 预判轨迹、调整角度、利用墙壁反弹击中目标。',
     'about.title': '关于',
     'about.desc': '我的背景、技能与驱动力',
     'about.education.title': '教育背景',
@@ -59,6 +63,7 @@ const i18n = {
     'nav.contact': 'Contact',
     'nav.mixflow': 'MixFlow',
     'nav.perler': 'Perler',
+    'nav.bounce': 'Bounce',
     'hero.tagline': 'Mathematics × Circuits × Automation × Code',
     'hero.sub': 'Undergraduate exploring the intersection of hardware and software',
     'hero.viewWork': 'View My Work',
@@ -76,6 +81,8 @@ const i18n = {
     'projects.mixflow.desc': 'AI-powered cocktail recipe browser — discover, search & save your favorite drinks.',
     'projects.perler.title': '🧩 Perler Bead',
     'projects.perler.desc': 'Image-to-Perler-Bead converter — rounded beads, grid gaps, plastic shine. Fully client-side with no watermark.',
+    'projects.bounce.title': '🏐 Bounce Ball',
+    'projects.bounce.desc': 'Physics rebound game — predict trajectories, adjust angles, use wall bounces to hit targets.',
     'about.title': 'About',
     'about.desc': 'Background, skills, and what drives me',
     'about.education.title': 'Education',
@@ -350,15 +357,27 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
   // Override console methods to prevent info leakage
   const noop = () => {};
-  console.log = noop;
-  console.info = noop;
-  console.warn = noop;
-  console.debug = noop;
+  ['log', 'info', 'warn', 'debug', 'error', 'table', 'trace', 'group', 'groupEnd', 'groupCollapsed', 'time', 'timeEnd', 'timeLog', 'count', 'countReset', 'assert', 'clear', 'dir', 'dirxml'].forEach(method => {
+    if (typeof console[method] === 'function') {
+      console[method] = noop;
+    }
+  });
 }
 
 // Prevent clickjacking: ensure we're not in an iframe
+// Note: Also configure X-Frame-Options: DENY or CSP frame-ancestors 'none' on the server
 if (window.top !== window.self) {
-  window.top.location = window.self.location;
+  // Modern browsers block cross-origin location assignment, so use a defense-in-depth approach
+  try {
+    window.top.location = window.self.location;
+  } catch (e) {
+    // Cross-origin: we can't redirect, so hide the body to prevent UI redressing
+    document.body.style.display = 'none';
+    // Attempt to break out using other techniques
+    if (window.parent && window.parent !== window) {
+      window.parent.postMessage({ type: 'frame-bust', location: window.location.href }, '*');
+    }
+  }
 }
 
 // Disable right-click on avatar to prevent easy image theft
@@ -417,8 +436,8 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { id:"ollama", group:"ml", label:"Ollama", desc:"Custom Modelfiles for local models", radius:15 },
       { id:"abliteration", group:"ml", label:"Abliteration", desc:"Download→obliterate→GGUF→deploy", radius:13 },
       { id:"profile-default", group:"profile", label:"Default Profile", desc:"Main profile — all skills active", radius:16 },
-      { id:"memory-env", group:"memory", label:"Environment", desc:"M5 Pro 64GB, macOS, Python 3.14", radius:12 },
-      { id:"memory-models", group:"memory", label:"Model Config", desc:"DeepSeek v4 Pro, api_key config", radius:12 },
+      { id:"memory-env", group:"memory", label:"Environment", desc:"Development environment configuration", radius:12 },
+      { id:"memory-models", group:"memory", label:"Model Config", desc:"AI model configuration settings", radius:12 },
       // === Skill Categories ===
       { id:"creative-skills", group:"skills", label:"Creative Tools", desc:"ASCII art, p5.js, Manim, ComfyUI, Songwriting — 20+ creative skills", radius:14 },
       { id:"productivity-skills", group:"skills", label:"Productivity", desc:"Notion, Gmail, Airtable, Linear, PowerPoint — 10+ office integrations", radius:14 },

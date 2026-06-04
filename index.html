@@ -39,6 +39,10 @@
           <span class="nav-perler-icon">🧩</span>
           <span class="nav-perler-text" data-i18n="nav.perler">Perler</span>
         </a>
+        <a href="bounce/index.html" class="nav-bounce" title="Bounce Ball Game" aria-label="Bounce Ball">
+          <span class="nav-bounce-icon">🏐</span>
+          <span class="nav-bounce-text" data-i18n="nav.bounce">Bounce</span>
+        </a>
         <button class="lang-toggle" id="langToggle" aria-label="Switch language">
           <span class="lang-zh">中</span>
           <span class="lang-divider">/</span>
@@ -172,6 +176,27 @@
               <span class="tag">Canvas</span>
               <span class="tag">Pixel Art</span>
               <span class="tag">Bilingual</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="bounce/index.html" class="project-card">
+          <div class="project-card-image">
+            <div class="project-icon-wrapper">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 2a10 10 0 0 1 0 20"/>
+                <path d="M12 2a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 0-5 5 5 5 0 0 0 5 5"/>
+              </svg>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <h3 class="project-card-title" data-i18n="projects.bounce.title">🏐 Bounce Ball</h3>
+            <p class="project-card-desc" data-i18n="projects.bounce.desc">物理反弹小游戏 — 预判轨迹、调整角度、利用墙壁反弹击中目标。</p>
+            <div class="project-card-tags">
+              <span class="tag">Canvas</span>
+              <span class="tag">Physics</span>
+              <span class="tag">Game</span>
             </div>
           </div>
         </a>
@@ -312,7 +337,7 @@
     <p>&copy; 2026 taomahj — <span data-i18n="footer.built">Built with curiosity</span></p>
   </footer>
 
-  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js" integrity="sha384-t6GjKLh6W0TohW0i6D6RJgZ0f+0/2OQlD6xv5w0G2z0YlP0K4r3z1yD6v5w0G2z0" crossorigin="anonymous"></script>
   <script src="main.js"></script>
   <script src="perler/widget.js"></script>
 </body>

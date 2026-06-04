@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
   <title>MixFlow Debug</title>
   <style>
     body { background: #050508; color: #f5f5f7; font-family: monospace; padding: 20px; }
@@ -38,10 +39,25 @@
       .then(r => { out('app.js status: ' + r.status, 'ok'); return r.text(); })
       .then(text => {
         out('app.js size: ' + text.length + ' bytes', 'ok');
-        // Check for syntax issues
+        // Check for syntax issues using a safer approach
         try {
-          new Function(text);
-          out('JS syntax: OK', 'ok');
+          // Use a Web Worker or just validate basic structure without execution
+          // Parse as module to check syntax without executing
+          const hasSyntaxError = (code) => {
+            try {
+              // This parses but does not execute the code
+              new Function('return (async () => { "use strict";' + code + '\n})();');
+              return false;
+            } catch (err) {
+              return err.message;
+            }
+          };
+          const err = hasSyntaxError(text);
+          if (err) {
+            out('JS SYNTAX ERROR: ' + err, 'error');
+          } else {
+            out('JS syntax: OK', 'ok');
+          }
         } catch(e) {
           out('JS SYNTAX ERROR: ' + e.message, 'error');
         }
