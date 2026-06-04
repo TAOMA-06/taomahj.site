@@ -839,12 +839,15 @@
     // ===== Overlays =====
     function buildMenu() {
       const grid = document.getElementById('levelGrid');
-      if (!grid) return;
+      if (!grid) { console.error('levelGrid not found'); return; }
       grid.innerHTML = '';
+
+      // Build level cards
       LEVELS.forEach((lvl, i) => {
         const card = document.createElement('div');
-        card.className = 'level-card' + (i >= game.unlockedLevels ? ' locked' : '');
-        const stars = game.levelStars[i] || 0;
+        const isLocked = i >= game.unlockedLevels;
+        card.className = 'level-card' + (isLocked ? ' locked' : '');
+        const stars = (game.levelStars && game.levelStars[i]) || 0;
         card.innerHTML = `
           <div class="level-num">${lvl.id}</div>
           <div class="level-name">${lvl.name}</div>
@@ -855,7 +858,8 @@
             <span class="star ${stars >= 3 ? 'earned' : ''}">★</span>
           </div>
         `;
-        if (i < game.unlockedLevels) {
+        if (!isLocked) {
+          card.style.cursor = 'pointer';
           card.addEventListener('click', () => {
             document.getElementById('menuOverlay').classList.add('hidden');
             loadLevel(i);
@@ -863,6 +867,21 @@
         }
         grid.appendChild(card);
       });
+
+      // Add "Quick Start" button for level 1
+      const existingBtn = document.getElementById('quickStartBtn');
+      if (!existingBtn) {
+        const btnWrap = document.createElement('div');
+        btnWrap.style.marginTop = '24px';
+        btnWrap.innerHTML = `
+          <button class="btn btn-primary" id="quickStartBtn" style="font-size:1.1rem;padding:14px 48px;">▶ Quick Start</button>
+        `;
+        grid.parentNode.appendChild(btnWrap);
+        document.getElementById('quickStartBtn').addEventListener('click', () => {
+          document.getElementById('menuOverlay').classList.add('hidden');
+          loadLevel(0);
+        });
+      }
     }
 
     function showLevelComplete(stars, elapsed) {
@@ -1254,19 +1273,22 @@
     // Ensure valid defaults before building menu
     if (!game.unlockedLevels || game.unlockedLevels < 1) game.unlockedLevels = 1;
     if (!game.levelStars || !Array.isArray(game.levelStars)) game.levelStars = [0, 0, 0];
-    buildMenu();
-    loop();
 
-    // Save/Load progress
+    // Save/Load progress — load FIRST, then build menu once
     try {
       const saved = localStorage.getItem('bounce_progress');
       if (saved) {
         const data = JSON.parse(saved);
-        game.unlockedLevels = data.unlocked || 1;
-        game.levelStars = data.stars || [0, 0, 0];
-        buildMenu();
+        game.unlockedLevels = Math.max(1, data.unlocked || 1);
+        game.levelStars = Array.isArray(data.stars) ? data.stars : [0, 0, 0];
       }
-    } catch (e) {}
+    } catch (e) {
+      game.unlockedLevels = 1;
+      game.levelStars = [0, 0, 0];
+    }
+
+    buildMenu();
+    loop();
 
     window.addEventListener('beforeunload', () => {
       try {
