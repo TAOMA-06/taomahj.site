@@ -347,7 +347,36 @@
     <div class="overlay" id="menuOverlay">
       <div class="overlay-title">🏐 Bounce Ball</div>
       <div class="overlay-subtitle">Aim carefully, use the walls,<br>hit all targets with limited balls.</div>
-      <div class="level-grid" id="levelGrid"></div>
+      <div class="level-grid" id="levelGrid">
+        <!-- Static level cards — always visible even if JS fails -->
+        <div class="level-card" data-level="0" id="levelCard0">
+          <div class="level-num">1</div>
+          <div class="level-name">Open Space</div>
+          <div class="level-desc">3 targets, 5 balls</div>
+          <div class="stars" id="stars0">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+        </div>
+        <div class="level-card locked" data-level="1" id="levelCard1">
+          <div class="level-num">2</div>
+          <div class="level-name">The Maze</div>
+          <div class="level-desc">4 targets, 5 balls</div>
+          <div class="stars" id="stars1">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+        </div>
+        <div class="level-card locked" data-level="2" id="levelCard2">
+          <div class="level-num">3</div>
+          <div class="level-name">Moving Targets</div>
+          <div class="level-desc">5 targets, 6 balls, 60s</div>
+          <div class="stars" id="stars2">
+            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:24px;">
+        <button class="btn btn-primary" id="quickStartBtn" style="font-size:1.1rem;padding:14px 48px;">▶ Quick Start</button>
+      </div>
     </div>
 
     <!-- Level Complete Overlay -->
@@ -838,49 +867,33 @@
 
     // ===== Overlays =====
     function buildMenu() {
-      const grid = document.getElementById('levelGrid');
-      if (!grid) { console.error('levelGrid not found'); return; }
-      grid.innerHTML = '';
-
-      // Build level cards
+      // Update static cards based on progress
       LEVELS.forEach((lvl, i) => {
-        const card = document.createElement('div');
+        const card = document.getElementById('levelCard' + i);
+        if (!card) return;
         const isLocked = i >= game.unlockedLevels;
         card.className = 'level-card' + (isLocked ? ' locked' : '');
-        const stars = (game.levelStars && game.levelStars[i]) || 0;
-        card.innerHTML = `
-          <div class="level-num">${lvl.id}</div>
-          <div class="level-name">${lvl.name}</div>
-          <div class="level-desc">${lvl.desc}</div>
-          <div class="stars">
-            <span class="star ${stars >= 1 ? 'earned' : ''}">★</span>
-            <span class="star ${stars >= 2 ? 'earned' : ''}">★</span>
-            <span class="star ${stars >= 3 ? 'earned' : ''}">★</span>
-          </div>
-        `;
         if (!isLocked) {
           card.style.cursor = 'pointer';
-          card.addEventListener('click', () => {
+          card.onclick = () => {
             document.getElementById('menuOverlay').classList.add('hidden');
             loadLevel(i);
-          });
+          };
         }
-        grid.appendChild(card);
+        const stars = (game.levelStars && game.levelStars[i]) || 0;
+        const starEls = card.querySelectorAll('.star');
+        starEls.forEach((s, idx) => {
+          s.className = 'star' + (idx < stars ? ' earned' : '');
+        });
       });
 
-      // Add "Quick Start" button for level 1
-      const existingBtn = document.getElementById('quickStartBtn');
-      if (!existingBtn) {
-        const btnWrap = document.createElement('div');
-        btnWrap.style.marginTop = '24px';
-        btnWrap.innerHTML = `
-          <button class="btn btn-primary" id="quickStartBtn" style="font-size:1.1rem;padding:14px 48px;">▶ Quick Start</button>
-        `;
-        grid.parentNode.appendChild(btnWrap);
-        document.getElementById('quickStartBtn').addEventListener('click', () => {
+      // Quick start button
+      const qs = document.getElementById('quickStartBtn');
+      if (qs) {
+        qs.onclick = () => {
           document.getElementById('menuOverlay').classList.add('hidden');
           loadLevel(0);
-        });
+        };
       }
     }
 
