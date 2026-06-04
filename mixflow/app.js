@@ -691,6 +691,95 @@ function escapeHtml(str) {
   return div.innerHTML;
 }
 
+// ─── Mobile FAB ──────────────────────────────────────────
+const $mobileFab = document.getElementById('mobileFab');
+const $mobileFabMenu = document.getElementById('mobileFabMenu');
+
+if ($mobileFab && $mobileFabMenu) {
+  $mobileFab.addEventListener('click', () => {
+    const isOpen = $mobileFabMenu.classList.contains('open');
+    if (isOpen) {
+      $mobileFabMenu.classList.remove('open');
+      $mobileFab.classList.remove('active');
+      $mobileFab.innerHTML = `
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 21h8"/><path d="M12 21v-7"/><path d="M12 14l7-7H5l7 7z"/>
+        </svg>
+      `;
+    } else {
+      $mobileFabMenu.classList.add('open');
+      $mobileFab.classList.add('active');
+      $mobileFab.innerHTML = `
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6L6 18"/><path d="M6 6l12 12"/>
+        </svg>
+      `;
+    }
+  });
+
+  // Close menu when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!$mobileFab.contains(e.target) && !$mobileFabMenu.contains(e.target)) {
+      $mobileFabMenu.classList.remove('open');
+      $mobileFab.classList.remove('active');
+      $mobileFab.innerHTML = `
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 21h8"/><path d="M12 21v-7"/><path d="M12 14l7-7H5l7 7z"/>
+        </svg>
+      `;
+    }
+  });
+
+  // FAB menu actions
+  document.getElementById('fabRandom')?.addEventListener('click', () => {
+    $mobileFabMenu.classList.remove('open');
+    $mobileFab.classList.remove('active');
+    $mobileFab.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 21h8"/><path d="M12 21v-7"/><path d="M12 14l7-7H5l7 7z"/>
+      </svg>
+    `;
+    openRandomModal();
+  });
+
+  document.getElementById('fabFav')?.addEventListener('click', () => {
+    $mobileFabMenu.classList.remove('open');
+    $mobileFab.classList.remove('active');
+    $mobileFab.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 21h8"/><path d="M12 21v-7"/><path d="M12 14l7-7H5l7 7z"/>
+      </svg>
+    `;
+    currentTab = 'favorites';
+    document.querySelectorAll('.nav-btn[data-tab]').forEach(b => b.classList.remove('active'));
+    document.getElementById('favBtn').classList.add('active');
+    render();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.getElementById('fabShare')?.addEventListener('click', () => {
+    $mobileFabMenu.classList.remove('open');
+    $mobileFab.classList.remove('active');
+    $mobileFab.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 21h8"/><path d="M12 21v-7"/><path d="M12 14l7-7H5l7 7z"/>
+      </svg>
+    `;
+    sharePage();
+  });
+
+  document.getElementById('fabTop')?.addEventListener('click', () => {
+    $mobileFabMenu.classList.remove('open');
+    $mobileFab.classList.remove('active');
+    $mobileFab.innerHTML = `
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 21h8"/><path d="M12 21v-7"/><path d="M12 14l7-7H5l7 7z"/>
+      </svg>
+    `;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+}
+
 // ─── Init ────────────────────────────────────────────────
 (function init() {
   loadFavorites();

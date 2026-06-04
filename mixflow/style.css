@@ -824,6 +824,104 @@ a:hover { color: var(--accent2); }
   color: var(--accent);
 }
 
+/* ---------- Mobile FAB — Perler Bead Style ---------- */
+.mobile-fab {
+  display: none;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 90;
+  width: 56px;
+  height: 56px;
+  border-radius: 18px;
+  border: none;
+  background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+  color: #fff;
+  cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  box-shadow:
+    0 6px 24px rgba(236, 72, 153, 0.45),
+    0 0 0 4px rgba(236, 72, 153, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.mobile-fab::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 50%);
+  pointer-events: none;
+}
+
+.mobile-fab:hover {
+  transform: scale(1.08) translateY(-2px);
+  box-shadow:
+    0 8px 32px rgba(236, 72, 153, 0.55),
+    0 0 0 4px rgba(236, 72, 153, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+.mobile-fab:active {
+  transform: scale(0.92);
+}
+
+.mobile-fab.active {
+  background: var(--bg-base);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+}
+
+.mobile-fab.active::before {
+  display: none;
+}
+
+/* Mobile FAB Menu */
+.mobile-fab-menu {
+  display: none;
+  position: fixed;
+  bottom: 92px;
+  right: 24px;
+  z-index: 89;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-end;
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+
+.mobile-fab-menu.open {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.mobile-fab-item {
+  padding: 10px 18px;
+  border-radius: 12px;
+  border: 1px solid var(--border-card);
+  background: rgba(8, 8, 16, 0.95);
+  backdrop-filter: blur(16px);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s;
+}
+
+.mobile-fab-item:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .page-title {
@@ -874,5 +972,15 @@ a:hover { color: var(--accent2); }
   .action-btn {
     padding: 6px 12px;
     font-size: 12px;
+  }
+
+  /* Show mobile FAB on small screens */
+  .mobile-fab {
+    display: flex;
+  }
+
+  /* Hide back-to-top on mobile (replaced by FAB menu) */
+  .back-to-top {
+    display: none;
   }
 }
