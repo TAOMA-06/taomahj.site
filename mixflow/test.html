@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="UTF-8"><title>Test</title></head>
+<body>
+<div id="out">loading...</div>
+<script>
+const out = document.getElementById('out');
+window.addEventListener('error', e => {
+  out.innerHTML = '<b style="color:red">ERROR:</b> ' + (e.message || e.error?.message);
+});
+window.addEventListener('unhandledrejection', e => {
+  out.innerHTML = '<b style="color:red">PROMISE:</b> ' + (e.reason?.message || String(e.reason));
+});
+
+(async () => {
+  try {
+    const r1 = await fetch('recipes.json');
+    const d1 = await r1.json();
+    const r2 = await fetch('mocktails.json');
+    const d2 = await r2.json();
+    out.innerHTML = 'OK: ' + d1.drinks.length + ' cocktails, ' + d2.drinks.length + ' mocktails';
+  } catch(e) {
+    out.innerHTML = '<b style="color:red">FETCH ERROR:</b> ' + e.message;
+  }
+})();
+</script>
+</body>
+</html>
