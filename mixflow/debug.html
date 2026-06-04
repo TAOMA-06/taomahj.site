@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MixFlow Debug</title>
+  <style>
+    body { background: #050508; color: #f5f5f7; font-family: monospace; padding: 20px; }
+    .error { color: #f97316; }
+    .ok { color: #3b82f6; }
+    pre { white-space: pre-wrap; word-break: break-all; }
+  </style>
+</head>
+<body>
+  <h1>MixFlow Debug</h1>
+  <div id="log"></div>
+  <script>
+    const log = document.getElementById('log');
+    function out(msg, cls) {
+      const div = document.createElement('div');
+      div.className = cls || '';
+      div.textContent = msg;
+      log.appendChild(div);
+    }
+    
+    window.addEventListener('error', (e) => {
+      out('ERROR: ' + (e.message || e.error?.message || 'Unknown'), 'error');
+      out('File: ' + e.filename + ':' + e.lineno, 'error');
+    });
+    
+    window.addEventListener('unhandledrejection', (e) => {
+      out('PROMISE ERROR: ' + (e.reason?.message || String(e.reason)), 'error');
+    });
+    
+    out('Page loaded', 'ok');
+    out('Fetching app.js...');
+    
+    fetch('app.js')
+      .then(r => { out('app.js status: ' + r.status, 'ok'); return r.text(); })
+      .then(text => {
+        out('app.js size: ' + text.length + ' bytes', 'ok');
+        // Check for syntax issues
+        try {
+          new Function(text);
+          out('JS syntax: OK', 'ok');
+        } catch(e) {
+          out('JS SYNTAX ERROR: ' + e.message, 'error');
+        }
+      })
+      .catch(e => out('Fetch app.js failed: ' + e, 'error'));
+    
+    out('Fetching recipes.json...');
+    fetch('recipes.json')
+      .then(r => { out('recipes.json status: ' + r.status, 'ok'); return r.json(); })
+      .then(data => out('recipes.json drinks: ' + (data.drinks?.length || 0), 'ok'))
+      .catch(e => out('Fetch recipes.json failed: ' + e, 'error'));
+  </script>
+</body>
+</html>

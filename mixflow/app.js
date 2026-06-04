@@ -409,8 +409,6 @@ function createCard(recipe) {
   const catLabel = translateCategory(category);
   const glassLabel = translateGlass(glass);
   const fav = isFavorite(id);
-  const catLabel = translateCategory(category);
-  const glassLabel = translateGlass(glass);
 
   const imageHtml = thumb
     ? `<img class="card-image" src="${escapeHtml(thumb)}" alt="${escapeHtml(name)}" loading="lazy">`
