@@ -199,30 +199,72 @@
       animation: fadeUp 0.8s ease-out 0.7s both;
     }
     .hero-phone {
-      width: 240px;
-      height: 490px;
+      width: 250px;
+      height: 510px;
       background: #F2F0EC;
-      border-radius: 40px;
-      border: 3px solid #2C2C2C;
+      border-radius: 44px;
+      border: 3px solid #1a1a1a;
       position: relative;
       overflow: hidden;
       box-shadow:
-        0 0 0 2px #1a1a1a,
-        0 0 0 3px #333,
-        0 20px 60px rgba(0,0,0,0.5);
+        0 0 0 2px #111,
+        0 0 0 4px #2a2a2a,
+        0 0 0 5px #1a1a1a,
+        0 20px 60px rgba(0,0,0,0.5),
+        inset 0 0 2px rgba(255,255,255,0.1);
     }
-    .hero-phone-notch {
+    /* Screen reflection */
+    .phone-reflection {
       position: absolute;
-      top: 0; left: 50%;
+      inset: 0;
+      z-index: 10;
+      pointer-events: none;
+      border-radius: 41px;
+      background: linear-gradient(
+        135deg,
+        rgba(255,255,255,0.12) 0%,
+        rgba(255,255,255,0.03) 20%,
+        transparent 45%,
+        transparent 55%,
+        rgba(255,255,255,0.02) 80%,
+        rgba(255,255,255,0.06) 100%
+      );
+    }
+    /* Dynamic Island */
+    .phone-island {
+      position: absolute;
+      top: 8px;
+      left: 50%;
       transform: translateX(-50%);
-      width: 100px;
-      height: 28px;
-      background: #2C2C2C;
-      border-radius: 0 0 20px 20px;
+      width: 80px;
+      height: 26px;
+      background: #1a1a1a;
+      border-radius: 20px;
+      z-index: 11;
+    }
+    /* Status bar */
+    .phone-statusbar {
+      position: absolute;
+      top: 18px;
+      left: 28px;
+      right: 28px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 12;
+      font-size: 0.55rem;
+      font-weight: 600;
+      color: #1C1C1E;
+    }
+    .phone-status-icons {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      color: #1C1C1E;
     }
     /* Simulated app screen */
     .phone-screen {
-      padding: 44px 16px 16px;
+      padding: 52px 16px 0;
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -231,62 +273,83 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .phone-title {
-      font-size: 0.7rem;
+      font-size: 0.72rem;
       font-weight: 700;
       color: #8B7355;
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
     .phone-count {
-      font-size: 0.65rem;
+      font-size: 0.62rem;
       color: #9E9E9E;
     }
     /* Simulated item cards */
     .phone-card {
       background: #fff;
       border-radius: 14px;
-      padding: 12px;
-      margin-bottom: 10px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
       display: flex;
       gap: 10px;
       align-items: center;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
-      transition: transform 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.02);
+    }
+    .phone-card-left {
+      flex-shrink: 0;
     }
     .phone-card-img {
-      width: 44px;
-      height: 44px;
+      width: 42px;
+      height: 42px;
       border-radius: 10px;
       flex-shrink: 0;
     }
-    .phone-card-text { flex: 1; }
+    .phone-card-text { flex: 1; min-width: 0; }
     .phone-card-name {
       font-size: 0.68rem;
       font-weight: 600;
       color: #1C1C1E;
-      margin-bottom: 2px;
+      margin-bottom: 1px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .phone-card-date {
-      font-size: 0.58rem;
+      font-size: 0.56rem;
       color: #9E9E9E;
     }
     .phone-card-badge {
-      font-size: 0.55rem;
+      font-size: 0.54rem;
       color: #8B7355;
       background: rgba(139,115,85,0.08);
-      padding: 2px 6px;
+      padding: 2px 7px;
       border-radius: 6px;
+      flex-shrink: 0;
+    }
+    /* Bottom tab bar */
+    .phone-tabbar {
+      margin-top: auto;
+      padding: 8px 0 12px;
+      display: flex;
+      justify-content: space-around;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    .phone-tab {
+      font-size: 0.8rem;
+      opacity: 0.35;
+    }
+    .phone-tab.active {
+      opacity: 1;
     }
     /* Floating glow behind phone */
     .hero-phone-glow {
       position: absolute;
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 300px;
-      height: 550px;
+      width: 320px;
+      height: 580px;
       background: radial-gradient(ellipse, rgba(139,115,85,0.15) 0%, transparent 60%);
       filter: blur(40px);
       pointer-events: none;
@@ -520,45 +583,93 @@
       flex-direction: column;
       align-items: center;
       position: relative;
+      filter: drop-shadow(0 12px 40px rgba(0,0,0,0.25));
     }
+    /* Leather band */
     .watch-band-top,
     .watch-band-bottom {
-      width: 64px;
-      height: 40px;
-      background: linear-gradient(180deg, #3a3a3a, #2a2a2a);
-      border-radius: 4px;
+      width: 56px;
+      height: 48px;
+      background: linear-gradient(
+        180deg,
+        #4a3728 0%, #3d2d20 15%, #4a3728 30%,
+        #3d2d20 50%, #4a3728 70%, #3d2d20 85%, #4a3728 100%
+      );
+      border-radius: 3px;
+      position: relative;
     }
     .watch-band-top {
-      border-radius: 8px 8px 4px 4px;
-      margin-bottom: -2px;
+      border-radius: 6px 6px 3px 3px;
+      margin-bottom: -3px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
     }
     .watch-band-bottom {
-      border-radius: 4px 4px 8px 8px;
-      margin-top: -2px;
+      border-radius: 3px 3px 6px 6px;
+      margin-top: -3px;
+      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.08);
     }
+    /* Stitching detail */
+    .watch-band-top::after,
+    .watch-band-bottom::after {
+      content: '';
+      position: absolute;
+      left: 6px;
+      right: 6px;
+      height: 1px;
+      background: rgba(180,150,120,0.3);
+      top: 50%;
+    }
+    /* Watch body */
     .watch-body {
-      width: 120px;
-      height: 148px;
-      background: #1a1a1a;
-      border-radius: 28px;
+      width: 130px;
+      height: 156px;
+      background: linear-gradient(
+        180deg,
+        #3a3a3c 0%, #1c1c1e 30%, #1a1a1c 50%, #1c1c1e 70%, #2a2a2c 100%
+      );
+      border-radius: 34px;
       position: relative;
-      padding: 3px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      padding: 4px;
+      box-shadow:
+        0 4px 16px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.05),
+        inset 0 -1px 0 rgba(0,0,0,0.3);
+      z-index: 1;
     }
+    /* Screen */
     .watch-screen {
       width: 100%;
       height: 100%;
-      background: #F2F0EC;
-      border-radius: 26px;
+      background: #0a0a0a;
+      border-radius: 30px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      position: relative;
+    }
+    /* Screen glass reflection */
+    .watch-screen-reflection {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      border-radius: 30px;
+      background: linear-gradient(
+        150deg,
+        rgba(255,255,255,0.08) 0%,
+        transparent 35%,
+        transparent 65%,
+        rgba(255,255,255,0.03) 100%
+      );
     }
     .watch-status-bar {
       text-align: center;
-      padding: 8px 0 4px;
-      color: #1C1C1E;
+      padding: 10px 0 4px;
+      color: #f5f5f7;
       font-weight: 600;
+      font-size: 0.48rem;
+      position: relative;
+      z-index: 1;
     }
     .watch-content {
       flex: 1;
@@ -566,26 +677,92 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 0 12px 16px;
+      padding: 0 14px 18px;
       text-align: center;
+      position: relative;
+      z-index: 1;
     }
+    .watch-complication-label {
+      font-size: 0.38rem;
+      color: #8B7355;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 4px;
+      font-weight: 500;
+    }
+    .watch-complication-item {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #f5f5f7;
+      margin-bottom: 1px;
+    }
+    .watch-complication-days {
+      font-size: 0.52rem;
+      color: #a1a1aa;
+      margin-bottom: 8px;
+    }
+    .watch-progress-bar {
+      width: 78%;
+      height: 3px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 3px;
+    }
+    .watch-progress-fill {
+      width: 72%;
+      height: 100%;
+      background: linear-gradient(90deg, #8B7355, #A68B6B);
+      border-radius: 2px;
+    }
+    .watch-complication-hint {
+      font-size: 0.36rem;
+      color: #6b6b7b;
+    }
+    /* Digital Crown */
     .watch-crown {
       position: absolute;
-      right: -6px;
-      top: 38px;
-      width: 14px;
-      height: 32px;
-      background: #2a2a2a;
-      border-radius: 6px;
+      right: -8px;
+      top: 34px;
+      width: 16px;
+      height: 38px;
+      background: linear-gradient(
+        180deg,
+        #4a4a4c 0%, #2a2a2c 20%, #3a3a3c 50%, #2a2a2c 80%, #4a4a4c 100%
+      );
+      border-radius: 8px;
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+      z-index: 0;
     }
-    .watch-btn {
+    .watch-crown::after {
+      content: '';
       position: absolute;
-      right: -6px;
-      top: 78px;
+      top: 4px;
+      left: 3px;
+      right: 3px;
+      bottom: 4px;
+      border-radius: 5px;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 1.5px,
+        rgba(0,0,0,0.15) 1.5px,
+        rgba(0,0,0,0.15) 2px
+      );
+    }
+    /* Side button */
+    .watch-side-btn {
+      position: absolute;
+      right: -8px;
+      top: 82px;
       width: 6px;
-      height: 36px;
-      background: #2a2a2a;
-      border-radius: 3px;
+      height: 28px;
+      background: linear-gradient(180deg, #3a3a3c, #2a2a2c);
+      border-radius: 3px 3px 3px 3px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      z-index: 0;
     }
 
     /* ---------- Stats Bar ---------- */
@@ -759,19 +936,47 @@
       .section-alt { padding: 80px 24px; min-height: auto; }
       .download-cards { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr; gap: 24px; }
-      .hero-phone { width: 200px; height: 410px; }
+      .hero-phone { width: 210px; height: 430px; }
+      .hero-phone .phone-island { width: 66px; height: 22px; top: 7px; }
+      .hero-phone .phone-statusbar { top: 16px; left: 24px; right: 24px; font-size: 0.5rem; }
+      .hero-phone .phone-screen { padding-top: 46px; }
+      .hero-phone .phone-card { padding: 8px 10px; }
+      .hero-phone .phone-card-img { width: 34px; height: 34px; }
       .hero h1 { font-size: 2.8rem; }
       .section-heading { font-size: 2rem !important; }
+      .watch-body { width: 110px; height: 132px; border-radius: 28px; }
+      .watch-screen { border-radius: 24px; }
+      .watch-screen-reflection { border-radius: 24px; }
+      .watch-band-top, .watch-band-bottom { width: 48px; height: 38px; }
+      .watch-crown { width: 13px; height: 30px; top: 28px; right: -7px; }
+      .watch-side-btn { height: 22px; top: 68px; }
     }
     @media (max-width: 480px) {
       .hero { padding: 100px 20px 60px; }
-      .hero-phone { width: 170px; height: 350px; }
-      .hero-phone .phone-screen { padding: 36px 12px 12px; }
-      .hero-phone .phone-card { padding: 8px; }
-      .hero-phone .phone-card-img { width: 30px; height: 30px; }
-      .hero-phone .phone-card-name { font-size: 0.6rem; }
+      .hero-phone { width: 170px; height: 350px; border-radius: 36px; }
+      .hero-phone .phone-reflection { border-radius: 33px; }
+      .hero-phone .phone-island { width: 54px; height: 18px; top: 6px; }
+      .hero-phone .phone-statusbar { top: 13px; left: 20px; right: 20px; font-size: 0.45rem; }
+      .hero-phone .phone-screen { padding: 38px 10px 0; }
+      .hero-phone .phone-card { padding: 6px 8px; margin-bottom: 5px; gap: 6px; border-radius: 10px; }
+      .hero-phone .phone-card-img { width: 28px; height: 28px; border-radius: 7px; }
+      .hero-phone .phone-card-name { font-size: 0.58rem; }
+      .hero-phone .phone-card-date { font-size: 0.5rem; }
+      .hero-phone .phone-card-badge { font-size: 0.48rem; padding: 1px 5px; }
+      .hero-phone .phone-tabbar { padding: 4px 0 8px; }
+      .hero-phone .phone-tab { font-size: 0.68rem; }
+      .hero-phone-glow { width: 220px; height: 420px; }
       .hero h1 { font-size: 2.2rem; }
       .nav-links a:not(.nav-cta) { padding: 6px 8px; font-size: 0.78rem; }
+      .watch-body { width: 96px; height: 116px; border-radius: 24px; }
+      .watch-screen { border-radius: 20px; }
+      .watch-screen-reflection { border-radius: 20px; }
+      .watch-band-top, .watch-band-bottom { width: 42px; height: 30px; }
+      .watch-crown { width: 11px; height: 24px; top: 22px; right: -6px; }
+      .watch-side-btn { width: 5px; height: 18px; top: 54px; right: -6px; }
+      .watch-complication-item { font-size: 0.62rem; }
+      .watch-complication-days { font-size: 0.46rem; }
+      .watch-status-bar { font-size: 0.42rem; padding: 7px 0 2px; }
     }
   </style>
 </head>
@@ -805,22 +1010,31 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
         下载持物
       </a>
-      <a href="https://github.com/TAOMA-06/chiwu" class="btn-secondary" target="_blank" rel="noopener">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-        GitHub
-      </a>
     </div>
     <div class="hero-phone-wrap">
       <div class="hero-phone-glow"></div>
       <div class="hero-phone">
-        <div class="hero-phone-notch"></div>
+        <!-- Screen reflection -->
+        <div class="phone-reflection"></div>
+        <!-- Dynamic Island -->
+        <div class="phone-island"></div>
+        <!-- Status bar -->
+        <div class="phone-statusbar">
+          <span>9:41</span>
+          <span class="phone-status-icons">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><path d="M1 9l2 2c4.97-4.97 13.03-4.97 18 0l2-2C17.93 4.07 6.07 4.07 1 9zm8 8l3 3 3-3c-1.65-1.66-4.34-1.66-6 0zm-5-5l2 2c2.76-2.76 7.24-2.76 10 0l2-2C13.14 7.14 5.86 7.14 4 12z"/></svg>
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="6" width="18" height="12" rx="2"/><line x1="21" y1="10" x2="21" y2="14"/></svg>
+          </span>
+        </div>
         <div class="phone-screen">
           <div class="phone-header-row">
             <span class="phone-title">持物</span>
             <span class="phone-count">5 件物品</span>
           </div>
           <div class="phone-card">
-            <div class="phone-card-img" style="background: linear-gradient(135deg, #D4C5B2, #C4B5A2);"></div>
+            <div class="phone-card-left">
+              <div class="phone-card-img" style="background: linear-gradient(135deg, #D4C5B2 0%, #C4B5A2 100%);"></div>
+            </div>
             <div class="phone-card-text">
               <div class="phone-card-name">MacBook Pro</div>
               <div class="phone-card-date">2023.10 · 已陪伴 965 天</div>
@@ -828,7 +1042,9 @@
             <span class="phone-card-badge">数码</span>
           </div>
           <div class="phone-card">
-            <div class="phone-card-img" style="background: linear-gradient(135deg, #E8D5C4, #D4C0A8);"></div>
+            <div class="phone-card-left">
+              <div class="phone-card-img" style="background: linear-gradient(135deg, #E8D5C4 0%, #D4C0A8 100%);"></div>
+            </div>
             <div class="phone-card-text">
               <div class="phone-card-name">机械键盘</div>
               <div class="phone-card-date">2024.01 · 已陪伴 877 天</div>
@@ -836,12 +1052,20 @@
             <span class="phone-card-badge">桌面</span>
           </div>
           <div class="phone-card">
-            <div class="phone-card-img" style="background: linear-gradient(135deg, #C8B8A8, #B8A898);"></div>
+            <div class="phone-card-left">
+              <div class="phone-card-img" style="background: linear-gradient(135deg, #C8B8A8 0%, #B8A898 100%);"></div>
+            </div>
             <div class="phone-card-text">
               <div class="phone-card-name">胶片相机</div>
               <div class="phone-card-date">2022.06 · 已陪伴 1452 天</div>
             </div>
             <span class="phone-card-badge">摄影</span>
+          </div>
+          <!-- Bottom nav bar -->
+          <div class="phone-tabbar">
+            <span class="phone-tab active">📋</span>
+            <span class="phone-tab">➕</span>
+            <span class="phone-tab">⚙️</span>
           </div>
         </div>
       </div>
@@ -1053,25 +1277,26 @@
       <div class="section-alt-visual reveal" style="justify-content:center;">
         <!-- Apple Watch CSS Mockup -->
         <div class="watch-mockup">
+          <div class="watch-band-top"></div>
           <div class="watch-body">
             <div class="watch-screen">
+              <div class="watch-screen-reflection"></div>
               <div class="watch-status-bar">
-                <span style="font-size:0.45rem;">10:09</span>
+                <span>10:09</span>
               </div>
               <div class="watch-content">
-                <div style="font-size:0.38rem;color:#8B7355;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;">陪伴最久</div>
-                <div style="font-size:0.7rem;font-weight:700;color:#1C1C1E;">📷 胶片相机</div>
-                <div style="font-size:0.55rem;color:#9E9E9E;margin-top:2px;">1,452 天</div>
-                <div style="margin-top:8px;width:80%;height:2px;background:#E5E5EA;border-radius:1px;overflow:hidden;">
-                  <div style="width:72%;height:100%;background:#8B7355;border-radius:1px;"></div>
+                <div class="watch-complication-label">陪伴最久</div>
+                <div class="watch-complication-item">📷 胶片相机</div>
+                <div class="watch-complication-days">1,452 天</div>
+                <div class="watch-progress-bar">
+                  <div class="watch-progress-fill"></div>
                 </div>
-                <div style="font-size:0.38rem;color:#9E9E9E;margin-top:2px;">下一个里程碑: 1,500 天</div>
+                <div class="watch-complication-hint">下一个里程碑 1,500 天</div>
               </div>
             </div>
             <div class="watch-crown"></div>
-            <div class="watch-btn"></div>
+            <div class="watch-side-btn"></div>
           </div>
-          <div class="watch-band-top"></div>
           <div class="watch-band-bottom"></div>
         </div>
       </div>
@@ -1125,10 +1350,6 @@
           <div class="download-note">
             <p>🚀 iOS 版本正在准备上架 <strong>App Store</strong>。届时可直接搜索"持物"下载，无需侧载。</p>
           </div>
-          <a href="https://github.com/TAOMA-06/chiwu" class="btn-secondary" target="_blank" rel="noopener" style="margin-top:16px;display:inline-flex;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-            GitHub 仓库
-          </a>
         </div>
       </div>
     </div>
