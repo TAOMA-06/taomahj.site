@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="持物 — 记录长期陪伴你的每一件物品。一款本地优先的物品档案 App，支持 iOS 与 Android。">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
+  <title>持物 — taomahj</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>📦</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    /* ---------- 持物 Page Specific ---------- */
+    :root {
+      --chiwu-warm: #8B6F4E;
+      --chiwu-bg: #F5F1EB;
+      --chiwu-text: #2C2C2C;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: var(--nav-height);
+      background: rgba(8, 8, 16, 0.92);
+      backdrop-filter: blur(20px) saturate(120%);
+      -webkit-backdrop-filter: blur(20px) saturate(120%);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.04);
+    }
+    .nav-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-logo {
+      font-size: 1.4rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .nav-links { display: flex; align-items: center; gap: 4px; }
+    .nav-links a {
+      padding: 8px 16px;
+      border-radius: 8px;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: color 0.2s, background 0.2s;
+    }
+    .nav-links a:hover {
+      color: var(--text-primary);
+      background: rgba(255,255,255,0.05);
+    }
+
+    /* Hero */
+    .chiwu-hero {
+      padding: 140px 24px 80px;
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .chiwu-icon {
+      font-size: 72px;
+      margin-bottom: 24px;
+      display: block;
+      animation: floatIcon 3s ease-in-out infinite;
+    }
+    @keyframes floatIcon {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .chiwu-hero h1 {
+      font-size: 3.2rem;
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #8B6F4E 0%, #c4a265 50%, #e8d5a3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .chiwu-hero .subtitle {
+      font-size: 1.2rem;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+    .chiwu-hero .tagline {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Features */
+    .chiwu-features {
+      max-width: 900px;
+      margin: 0 auto 80px;
+      padding: 0 24px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        500px circle at var(--card-mouse-x, 50%) var(--card-mouse-y, 50%),
+        rgba(139, 111, 78, 0.08),
+        transparent 50%
+      );
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .feature-card:hover {
+      border-color: rgba(139, 111, 78, 0.4);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .feature-card h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+
+    /* Download Section */
+    .chiwu-download {
+      max-width: 700px;
+      margin: 0 auto 100px;
+      padding: 0 24px;
+    }
+    .chiwu-download h2 {
+      text-align: center;
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    .chiwu-download .section-hint {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 40px;
+    }
+    .download-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius);
+      padding: 32px;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .download-card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(
+        600px circle at var(--card-mouse-x, 50%) var(--card-mouse-y, 50%),
+        rgba(139, 111, 78, 0.06),
+        transparent 50%
+      );
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+      z-index: 1;
+    }
+    .download-card:hover {
+      border-color: rgba(139, 111, 78, 0.35);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .download-card:hover::before { opacity: 1; }
+    .download-card-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+    .download-card-header .platform-icon {
+      font-size: 40px;
+      line-height: 1;
+    }
+    .download-card-header .platform-info h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+    .download-card-header .platform-info span {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+    .download-card-body p {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .download-card-body ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 20px;
+    }
+    .download-card-body ul li {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+    .download-card-body ul li::before {
+      content: '•';
+      position: absolute;
+      left: 4px;
+      color: var(--chiwu-warm);
+    }
+    .btn-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      border: none;
+      text-decoration: none;
+      background: linear-gradient(135deg, #8B6F4E 0%, #a6845a 100%);
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(139, 111, 78, 0.3);
+    }
+    .btn-download:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px rgba(139, 111, 78, 0.45);
+      color: #fff;
+    }
+    .btn-download svg {
+      width: 20px;
+      height: 20px;
+    }
+    .btn-download-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.25s;
+      border: 1px solid var(--border-card);
+      background: transparent;
+      color: var(--text-primary);
+      text-decoration: none;
+    }
+    .btn-download-secondary:hover {
+      border-color: var(--accent);
+      background: rgba(59, 130, 246, 0.08);
+      color: var(--text-primary);
+    }
+    .version-tag {
+      display: inline-block;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.05);
+      padding: 3px 10px;
+      border-radius: 20px;
+      margin-left: 8px;
+      font-family: var(--font-mono);
+    }
+    .file-size {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+
+    /* Install Steps */
+    .install-steps {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-card);
+    }
+    .install-steps h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+    }
+    .install-steps ol {
+      padding-left: 20px;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 2;
+    }
+    .install-steps ol li {
+      margin-bottom: 4px;
+    }
+
+    /* iOS Note */
+    .ios-note {
+      background: rgba(59, 130, 246, 0.06);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      border-radius: var(--radius-sm);
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+    .ios-note p {
+      font-size: 0.88rem;
+      color: var(--text-secondary);
+      margin: 0;
+      line-height: 1.6;
+    }
+    .ios-note strong {
+      color: var(--accent);
+    }
+
+    /* Footer */
+    .chiwu-footer {
+      text-align: center;
+      padding: 40px 24px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border-card);
+    }
+    .chiwu-footer a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+    .chiwu-footer a:hover { color: var(--accent); }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .chiwu-hero { padding: 120px 20px 60px; }
+      .chiwu-hero h1 { font-size: 2.4rem; }
+      .chiwu-features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">taomahj</a>
+      <div class="nav-links">
+        <a href="../index.html#projects">Projects</a>
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="chiwu-hero">
+    <span class="chiwu-icon">📦</span>
+    <h1>持物</h1>
+    <p class="subtitle">记录长期陪伴你的每一件物品</p>
+    <p class="tagline">一款本地优先的物品档案 App — 你的私人物品博物馆</p>
+  </section>
+
+  <!-- Features -->
+  <section class="chiwu-features">
+    <div class="feature-card">
+      <span class="feature-icon">🔒</span>
+      <h3>本地优先 · 隐私安全</h3>
+      <p>所有数据存储在设备本地 LocalStorage，不上传服务器。你的物品档案，只有你知道。</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📸</span>
+      <h3>拍照记录 · 图片压缩</h3>
+      <p>拍照或上传照片，自动压缩为 Base64 存储。无需担心空间占用。</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📋</span>
+      <h3>灵活管理 · 分类归档</h3>
+      <p>为每件物品添加名称、分类、购买日期、故事和备注。支持编辑、搜索、删除。</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">📱</span>
+      <h3>iOS + Android</h3>
+      <p>同时支持 iOS 原生 App 与 Android APK。一套代码，两个平台。</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🎨</span>
+      <h3>温润设计</h3>
+      <p>暖白底色搭配檀木色强调 — 圆角卡片、柔和阴影，安静而有温度的视觉体验。</p>
+    </div>
+    <div class="feature-card">
+      <span class="feature-icon">🚫</span>
+      <h3>无需注册 · 离线可用</h3>
+      <p>打开即用，不强制注册，不依赖网络。真正的离线应用。</p>
+    </div>
+  </section>
+
+  <!-- Download -->
+  <section class="chiwu-download">
+    <h2>下载安装</h2>
+    <p class="section-hint">选择你的平台开始使用持物</p>
+
+    <!-- Android -->
+    <div class="download-card" id="androidCard">
+      <div class="download-card-header">
+        <span class="platform-icon">🤖</span>
+        <div class="platform-info">
+          <h3>Android 版 <span class="version-tag">v1.0</span></h3>
+          <span>APK 直接下载 · Android 8.0+</span>
+        </div>
+      </div>
+      <div class="download-card-body">
+        <ul>
+          <li>免费版支持记录 15 件物品</li>
+          <li>原生 WebView 封装，体验流畅</li>
+          <li>无需 Google Play，APK 直装</li>
+        </ul>
+        <a href="chiwu-android.apk" class="btn-download" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          下载 Android APK
+        </a>
+        <div class="file-size" id="apkSize">—</div>
+        <div class="install-steps">
+          <h4>📋 安装步骤</h4>
+          <ol>
+            <li>点击上方按钮下载 APK 文件</li>
+            <li>打开下载的 <code>chiwu-android.apk</code></li>
+            <li>系统提示"未知来源"时，前往 <strong>设置 → 安全 → 允许安装未知应用</strong></li>
+            <li>安装完成后即可打开使用</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- iOS -->
+    <div class="download-card">
+      <div class="download-card-header">
+        <span class="platform-icon">🍎</span>
+        <div class="platform-info">
+          <h3>iOS 版</h3>
+          <span>原生 SwiftUI · iPhone / iPad</span>
+        </div>
+      </div>
+      <div class="download-card-body">
+        <ul>
+          <li>支持记录 25 件物品</li>
+          <li>原生 SwiftUI 构建，流畅动画</li>
+          <li>支持应用内购买解锁无限物品</li>
+        </ul>
+        <div class="ios-note">
+          <p>📱 iOS 版本目前需通过 <strong>Xcode 侧载</strong>安装到设备。将项目克隆到 Mac，在 Xcode 中打开 <code>chiwu.xcodeproj</code>，选择你的设备后 Build &amp; Run。</p>
+          <p style="margin-top:8px;">💡 将来会上架 App Store 或提供 TestFlight 测试，敬请期待。</p>
+        </div>
+        <a href="https://github.com/TAOMA-06/chiwu" class="btn-download-secondary" target="_blank" rel="noopener" style="margin-top:16px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+          查看 GitHub 仓库
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="chiwu-footer">
+    <p>&copy; 2026 <a href="../index.html">taomahj</a> · 持物 — 记录与物品的羁绊</p>
+  </footer>
+
+  <script>
+    // Card mouse glow effect
+    document.querySelectorAll('.feature-card, .download-card').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        card.style.setProperty('--card-mouse-x', `${x}%`);
+        card.style.setProperty('--card-mouse-y', `${y}%`);
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--card-mouse-x', '50%');
+        card.style.setProperty('--card-mouse-y', '50%');
+      });
+    });
+
+    // Show APK file size
+    fetch('chiwu-android.apk', { method: 'HEAD' })
+      .then(res => {
+        const size = parseInt(res.headers.get('Content-Length'));
+        if (size) {
+          const mb = (size / (1024 * 1024)).toFixed(1);
+          document.getElementById('apkSize').textContent = `文件大小: ${mb} MB`;
+        }
+      })
+      .catch(() => {});
+  </script>
+</body>
+</html>

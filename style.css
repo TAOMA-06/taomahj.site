@@ -238,6 +238,34 @@ a:hover { color: var(--accent2); }
   font-size: 0.85rem;
 }
 
+/* 持物 nav link */
+.nav-chiwu {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #a6845a;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  border: 1px solid rgba(139, 111, 78, 0.25);
+  background: rgba(139, 111, 78, 0.08);
+}
+.nav-chiwu:hover {
+  color: #fff;
+  background: rgba(139, 111, 78, 0.2);
+  border-color: rgba(139, 111, 78, 0.5);
+  box-shadow: 0 0 16px rgba(139, 111, 78, 0.15);
+}
+.nav-chiwu-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+.nav-chiwu-text {
+  font-size: 0.85rem;
+}
+
 
 /* Language toggle */
 .lang-toggle {
