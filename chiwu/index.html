@@ -3,31 +3,37 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="持物 — 记录长期陪伴你的每一件物品。一款本地优先的物品档案 App，支持 iOS 与 Android。">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
-  <title>持物 — taomahj</title>
+  <meta name="description" content="持物 — 记录长期陪伴你的每一件物品。本地优先、隐私安全的物品档案 App。iOS + Android。">
+  <title>持物 — 你的私人物品博物馆</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>📦</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../style.css">
   <style>
-    /* ---------- 持物 Page Specific ---------- */
-    :root {
-      --chiwu-warm: #8B6F4E;
-      --chiwu-bg: #F5F1EB;
-      --chiwu-text: #2C2C2C;
+    /* ============================================================
+       持物 — Apple-style Product Page
+       Theme: Warm Cream × Sandalwood × Charcoal
+       ============================================================ */
+
+    /* ---------- Reset ---------- */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+      background: #0a0a0a;
+      color: #1C1C1E;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow-x: hidden;
+      letter-spacing: -0.01em;
     }
 
+    /* ---------- Nav ---------- */
     .nav {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
-      height: var(--nav-height);
-      background: rgba(8, 8, 16, 0.92);
-      backdrop-filter: blur(20px) saturate(120%);
-      -webkit-backdrop-filter: blur(20px) saturate(120%);
-      box-shadow: 0 1px 0 rgba(255,255,255,0.04);
+      z-index: 1000;
+      height: 56px;
+      background: rgba(10, 10, 10, 0.82);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
     }
     .nav-inner {
       max-width: 1200px;
@@ -39,484 +45,991 @@
       justify-content: space-between;
     }
     .nav-logo {
-      font-size: 1.4rem;
+      font-size: 1.25rem;
       font-weight: 700;
-      letter-spacing: -0.5px;
-      color: var(--text-primary);
+      color: #f5f5f7;
       text-decoration: none;
+      letter-spacing: -0.5px;
     }
     .nav-links { display: flex; align-items: center; gap: 4px; }
     .nav-links a {
-      padding: 8px 16px;
+      padding: 6px 14px;
       border-radius: 8px;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
+      color: #a1a1aa;
+      font-size: 0.85rem;
       font-weight: 500;
       text-decoration: none;
       transition: color 0.2s, background 0.2s;
     }
-    .nav-links a:hover {
-      color: var(--text-primary);
-      background: rgba(255,255,255,0.05);
+    .nav-links a:hover { color: #f5f5f7; background: rgba(255,255,255,0.06); }
+    .nav-cta {
+      background: #8B7355 !important;
+      color: #fff !important;
+      border-radius: 20px !important;
+      font-weight: 600 !important;
+      padding: 6px 18px !important;
+      transition: all 0.2s !important;
+    }
+    .nav-cta:hover {
+      background: #A68B6B !important;
+      color: #fff !important;
     }
 
-    /* Hero */
-    .chiwu-hero {
-      padding: 140px 24px 80px;
+    /* ---------- Hero ---------- */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       text-align: center;
-      max-width: 800px;
-      margin: 0 auto;
+      padding: 120px 24px 80px;
+      position: relative;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(139,115,85,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(166,139,107,0.06) 0%, transparent 50%),
+        #0a0a0a;
     }
-    .chiwu-icon {
-      font-size: 72px;
-      margin-bottom: 24px;
-      display: block;
-      animation: floatIcon 3s ease-in-out infinite;
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 16px;
+      border-radius: 20px;
+      background: rgba(139,115,85,0.12);
+      border: 1px solid rgba(139,115,85,0.2);
+      color: #A68B6B;
+      font-size: 0.82rem;
+      font-weight: 500;
+      margin-bottom: 28px;
+      animation: fadeUp 0.8s ease-out 0.1s both;
     }
-    @keyframes floatIcon {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-10px); }
+    .hero-badge-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #8B7355;
+      animation: pulse 2s infinite;
     }
-    .chiwu-hero h1 {
-      font-size: 3.2rem;
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .hero-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: 20px;
+      margin-bottom: 32px;
+      box-shadow: 0 8px 40px rgba(139,115,85,0.25);
+      animation: fadeUp 0.8s ease-out 0.2s both;
+    }
+    .hero h1 {
+      font-size: clamp(3rem, 7vw, 5.5rem);
       font-weight: 800;
-      letter-spacing: -1.5px;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
       margin-bottom: 16px;
-      background: linear-gradient(135deg, #8B6F4E 0%, #c4a265 50%, #e8d5a3 100%);
+      background: linear-gradient(180deg, #f5f5f7 0%, #a1a1aa 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
+      animation: fadeUp 0.8s ease-out 0.3s both;
     }
-    .chiwu-hero .subtitle {
-      font-size: 1.2rem;
-      color: var(--text-secondary);
+    .hero h2 {
+      font-size: clamp(1.1rem, 2vw, 1.35rem);
+      font-weight: 400;
+      color: #a1a1aa;
       margin-bottom: 8px;
-      line-height: 1.6;
+      letter-spacing: 0.02em;
+      animation: fadeUp 0.8s ease-out 0.4s both;
     }
-    .chiwu-hero .tagline {
-      font-size: 0.95rem;
-      color: var(--text-muted);
-      font-style: italic;
-    }
-
-    /* Features */
-    .chiwu-features {
-      max-width: 900px;
-      margin: 0 auto 80px;
-      padding: 0 24px;
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 20px;
-    }
-    .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: var(--radius);
-      padding: 28px 24px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .feature-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(
-        500px circle at var(--card-mouse-x, 50%) var(--card-mouse-y, 50%),
-        rgba(139, 111, 78, 0.08),
-        transparent 50%
-      );
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-      z-index: 1;
-    }
-    .feature-card:hover {
-      border-color: rgba(139, 111, 78, 0.4);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-    }
-    .feature-card:hover::before { opacity: 1; }
-    .feature-icon { font-size: 32px; margin-bottom: 12px; display: block; }
-    .feature-card h3 {
-      font-size: 1.05rem;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 8px;
-    }
-    .feature-card p {
+    .hero-sub {
       font-size: 0.9rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
+      color: #6b6b7b;
+      animation: fadeUp 0.8s ease-out 0.5s both;
     }
-
-    /* Download Section */
-    .chiwu-download {
-      max-width: 700px;
-      margin: 0 auto 100px;
-      padding: 0 24px;
-    }
-    .chiwu-download h2 {
-      text-align: center;
-      font-size: 1.8rem;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text-primary);
-    }
-    .chiwu-download .section-hint {
-      text-align: center;
-      color: var(--text-secondary);
-      font-size: 0.95rem;
-      margin-bottom: 40px;
-    }
-    .download-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-card);
-      border-radius: var(--radius);
-      padding: 32px;
-      margin-bottom: 20px;
-      transition: all 0.3s ease;
-      position: relative;
-      overflow: hidden;
-    }
-    .download-card::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(
-        600px circle at var(--card-mouse-x, 50%) var(--card-mouse-y, 50%),
-        rgba(139, 111, 78, 0.06),
-        transparent 50%
-      );
-      opacity: 0;
-      transition: opacity 0.3s;
-      pointer-events: none;
-      z-index: 1;
-    }
-    .download-card:hover {
-      border-color: rgba(139, 111, 78, 0.35);
-      transform: translateY(-2px);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
-    }
-    .download-card:hover::before { opacity: 1; }
-    .download-card-header {
+    .hero-cta-group {
       display: flex;
-      align-items: center;
       gap: 16px;
-      margin-bottom: 16px;
+      margin-top: 36px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeUp 0.8s ease-out 0.6s both;
     }
-    .download-card-header .platform-icon {
-      font-size: 40px;
-      line-height: 1;
-    }
-    .download-card-header .platform-info h3 {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: 2px;
-    }
-    .download-card-header .platform-info span {
-      font-size: 0.85rem;
-      color: var(--text-secondary);
-    }
-    .download-card-body p {
-      font-size: 0.9rem;
-      color: var(--text-secondary);
-      line-height: 1.6;
-      margin-bottom: 20px;
-    }
-    .download-card-body ul {
-      list-style: none;
-      padding: 0;
-      margin-bottom: 20px;
-    }
-    .download-card-body ul li {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      padding: 4px 0;
-      padding-left: 20px;
-      position: relative;
-    }
-    .download-card-body ul li::before {
-      content: '•';
-      position: absolute;
-      left: 4px;
-      color: var(--chiwu-warm);
-    }
-    .btn-download {
+    .btn-primary {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 14px 32px;
-      border-radius: 12px;
-      font-size: 1rem;
+      border-radius: 28px;
+      font-size: 0.95rem;
       font-weight: 600;
-      cursor: pointer;
-      transition: all 0.25s;
-      border: none;
       text-decoration: none;
-      background: linear-gradient(135deg, #8B6F4E 0%, #a6845a 100%);
+      background: #8B7355;
       color: #fff;
-      box-shadow: 0 4px 20px rgba(139, 111, 78, 0.3);
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
-    .btn-download:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 30px rgba(139, 111, 78, 0.45);
-      color: #fff;
+    .btn-primary:hover {
+      background: #A68B6B;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 32px rgba(139,115,85,0.35);
     }
-    .btn-download svg {
-      width: 20px;
-      height: 20px;
-    }
-    .btn-download-secondary {
+    .btn-secondary {
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      padding: 12px 24px;
-      border-radius: 12px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.25s;
-      border: 1px solid var(--border-card);
-      background: transparent;
-      color: var(--text-primary);
+      padding: 14px 32px;
+      border-radius: 28px;
+      font-size: 0.95rem;
+      font-weight: 500;
       text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: #f5f5f7;
+      transition: all 0.3s;
     }
-    .btn-download-secondary:hover {
-      border-color: var(--accent);
-      background: rgba(59, 130, 246, 0.08);
-      color: var(--text-primary);
-    }
-    .version-tag {
-      display: inline-block;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      background: rgba(255,255,255,0.05);
-      padding: 3px 10px;
-      border-radius: 20px;
-      margin-left: 8px;
-      font-family: var(--font-mono);
-    }
-    .file-size {
-      font-family: var(--font-mono);
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      margin-top: 8px;
+    .btn-secondary:hover {
+      border-color: rgba(255,255,255,0.35);
+      background: rgba(255,255,255,0.04);
     }
 
-    /* Install Steps */
-    .install-steps {
-      margin-top: 24px;
-      padding-top: 20px;
-      border-top: 1px solid var(--border-card);
+    /* Phone mockup in hero */
+    .hero-phone-wrap {
+      position: relative;
+      margin-top: 60px;
+      animation: fadeUp 0.8s ease-out 0.7s both;
     }
-    .install-steps h4 {
+    .hero-phone {
+      width: 240px;
+      height: 490px;
+      background: #F2F0EC;
+      border-radius: 40px;
+      border: 3px solid #2C2C2C;
+      position: relative;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 2px #1a1a1a,
+        0 0 0 3px #333,
+        0 20px 60px rgba(0,0,0,0.5);
+    }
+    .hero-phone-notch {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 100px;
+      height: 28px;
+      background: #2C2C2C;
+      border-radius: 0 0 20px 20px;
+    }
+    /* Simulated app screen */
+    .phone-screen {
+      padding: 44px 16px 16px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+    .phone-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .phone-title {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: #8B7355;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .phone-count {
+      font-size: 0.65rem;
+      color: #9E9E9E;
+    }
+    /* Simulated item cards */
+    .phone-card {
+      background: #fff;
+      border-radius: 14px;
+      padding: 12px;
+      margin-bottom: 10px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+      transition: transform 0.2s;
+    }
+    .phone-card-img {
+      width: 44px;
+      height: 44px;
+      border-radius: 10px;
+      flex-shrink: 0;
+    }
+    .phone-card-text { flex: 1; }
+    .phone-card-name {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #1C1C1E;
+      margin-bottom: 2px;
+    }
+    .phone-card-date {
+      font-size: 0.58rem;
+      color: #9E9E9E;
+    }
+    .phone-card-badge {
+      font-size: 0.55rem;
+      color: #8B7355;
+      background: rgba(139,115,85,0.08);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+    /* Floating glow behind phone */
+    .hero-phone-glow {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 300px;
+      height: 550px;
+      background: radial-gradient(ellipse, rgba(139,115,85,0.15) 0%, transparent 60%);
+      filter: blur(40px);
+      pointer-events: none;
+      animation: glowPulse 3s ease-in-out infinite;
+    }
+    @keyframes glowPulse {
+      0%, 100% { opacity: 0.6; transform: translate(-50%, -50%) scale(1); }
+      50% { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+    }
+
+    /* ---------- Section Common ---------- */
+    .section {
+      padding: 100px 24px;
+      position: relative;
+    }
+    .section-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .section-label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #8B7355;
+      margin-bottom: 16px;
+    }
+    .section-heading {
+      font-size: clamp(2rem, 4.5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 16px;
+    }
+    .section-body {
+      font-size: 1.05rem;
+      line-height: 1.8;
+      color: #6b6b7b;
+      max-width: 600px;
+    }
+
+    /* ---------- Features Grid Section ---------- */
+    .section-features {
+      background: #0a0a0a;
+      color: #f5f5f7;
+    }
+    .section-features .section-heading { color: #f5f5f7; }
+    .section-features .section-body { color: #a1a1aa; }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      margin-top: 56px;
+    }
+    .feature-tile {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 20px;
+      padding: 32px 28px;
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-tile::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(139,115,85,0.08), transparent 50%);
+      opacity: 0;
+      transition: opacity 0.35s;
+      pointer-events: none;
+    }
+    .feature-tile:hover { border-color: rgba(139,115,85,0.3); transform: translateY(-3px); }
+    .feature-tile:hover::after { opacity: 1; }
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+      display: block;
+    }
+    .feature-tile h3 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #f5f5f7;
+    }
+    .feature-tile p {
+      font-size: 0.88rem;
+      color: #a1a1aa;
+      line-height: 1.7;
+    }
+
+    /* ---------- Alternating Sections ---------- */
+    .section-alt {
+      padding: 120px 24px;
+      display: flex;
+      align-items: center;
+      min-height: 80vh;
+    }
+    .section-alt.light {
+      background: #F2F0EC;
+    }
+    .section-alt.dark {
+      background: #0a0a0a;
+      color: #f5f5f7;
+    }
+    .section-alt .section-body { color: inherit; opacity: 0.7; }
+    .section-alt-row {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      gap: 80px;
+    }
+    .section-alt-row.reverse { flex-direction: row-reverse; }
+    .section-alt-text { flex: 1; min-width: 0; }
+    .section-alt-text .section-label { margin-bottom: 12px; }
+    .section-alt-text .section-heading { margin-bottom: 20px; }
+    .section-alt-visual { flex: 1; min-width: 0; display: flex; justify-content: center; }
+
+    /* Visual: Phone mockup */
+    .visual-phone {
+      width: 200px;
+      height: 410px;
+      background: #F2F0EC;
+      border-radius: 32px;
+      border: 2.5px solid #2C2C2C;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    }
+    .visual-phone .phone-screen { padding: 40px 14px 14px; }
+    .visual-phone .phone-card { padding: 10px; margin-bottom: 8px; }
+    .visual-phone .phone-card-img { width: 36px; height: 36px; border-radius: 8px; }
+    .visual-phone .phone-card-name { font-size: 0.62rem; }
+    .visual-phone .phone-card-date { font-size: 0.54rem; }
+
+    /* Visual: Lock icon */
+    .visual-lock {
+      width: 160px;
+      height: 160px;
+      position: relative;
+    }
+    .visual-lock-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: rgba(139,115,85,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(139,115,85,0.15);
+    }
+    .visual-lock-svg {
+      width: 64px;
+      height: 64px;
+      color: #8B7355;
+    }
+
+    /* Visual: Stacked cards */
+    .visual-stack {
+      position: relative;
+      width: 220px;
+      height: 320px;
+    }
+    .stack-card {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px;
+    }
+    .stack-card:nth-child(1) {
+      transform: rotate(-3deg);
+      z-index: 1;
+    }
+    .stack-card:nth-child(2) {
+      transform: rotate(2deg) translateY(8px);
+      z-index: 2;
+    }
+    .stack-card:nth-child(3) {
+      transform: rotate(-1deg) translateY(16px);
+      z-index: 3;
+    }
+    .stack-card-icon { font-size: 40px; }
+    .stack-card-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1C1C1E;
+    }
+    .stack-card-date {
+      font-size: 0.7rem;
+      color: #9E9E9E;
+    }
+
+    /* Visual: Device icons */
+    .visual-devices {
+      display: flex;
+      gap: 40px;
+      align-items: center;
+    }
+    .device-icon {
+      text-align: center;
+    }
+    .device-icon-svg {
+      width: 64px;
+      height: 64px;
+      margin-bottom: 12px;
+      opacity: 0.8;
+    }
+    .device-icon-label {
       font-size: 0.9rem;
       font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 12px;
+      color: #f5f5f7;
     }
-    .install-steps ol {
-      padding-left: 20px;
-      color: var(--text-secondary);
-      font-size: 0.88rem;
-      line-height: 2;
+    .device-icon-sub {
+      font-size: 0.78rem;
+      color: #a1a1aa;
     }
-    .install-steps ol li {
+
+    /* ---------- Stats Bar ---------- */
+    .stats-bar {
+      padding: 60px 24px;
+      background: #0a0a0a;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+    .stats-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      background: linear-gradient(180deg, #f5f5f7 0%, #8B7355 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
       margin-bottom: 4px;
     }
+    .stat-label {
+      font-size: 0.85rem;
+      color: #a1a1aa;
+    }
 
-    /* iOS Note */
-    .ios-note {
-      background: rgba(59, 130, 246, 0.06);
-      border: 1px solid rgba(59, 130, 246, 0.15);
-      border-radius: var(--radius-sm);
-      padding: 20px 24px;
+    /* ---------- Download Section ---------- */
+    .section-download {
+      padding: 100px 24px;
+      background: #0a0a0a;
+      color: #f5f5f7;
+    }
+    .section-download .section-heading { color: #f5f5f7; }
+    .section-download .section-body { color: #a1a1aa; }
+    .download-cards {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      margin-top: 48px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .download-card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 24px;
+      padding: 36px 32px;
+      transition: all 0.35s;
+      position: relative;
+      overflow: hidden;
+    }
+    .download-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(139,115,85,0.06), transparent 50%);
+      opacity: 0;
+      transition: opacity 0.35s;
+      pointer-events: none;
+    }
+    .download-card:hover { border-color: rgba(139,115,85,0.25); }
+    .download-card:hover::after { opacity: 1; }
+    .download-card-top {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .download-card-icon {
+      font-size: 36px;
+      line-height: 1;
+      flex-shrink: 0;
+    }
+    .download-card h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    .download-card .ver {
+      font-size: 0.78rem;
+      color: #8B7355;
+      font-weight: 500;
+    }
+    .download-card ul {
+      list-style: none;
+      padding: 0;
+      margin-bottom: 24px;
+    }
+    .download-card ul li {
+      font-size: 0.85rem;
+      color: #a1a1aa;
+      padding: 4px 0 4px 18px;
+      position: relative;
+    }
+    .download-card ul li::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 10px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #8B7355;
+    }
+    .download-card .file-size {
+      font-size: 0.8rem;
+      color: #6b6b7b;
+      margin-top: 8px;
+      font-family: 'SF Mono', 'JetBrains Mono', monospace;
+    }
+    .download-note {
+      background: rgba(139,115,85,0.06);
+      border: 1px solid rgba(139,115,85,0.12);
+      border-radius: 14px;
+      padding: 16px 20px;
       margin-top: 16px;
     }
-    .ios-note p {
-      font-size: 0.88rem;
-      color: var(--text-secondary);
-      margin: 0;
+    .download-note p {
+      font-size: 0.82rem;
+      color: #a1a1aa;
       line-height: 1.6;
     }
-    .ios-note strong {
-      color: var(--accent);
-    }
+    .download-note strong { color: #A68B6B; }
 
-    /* Footer */
-    .chiwu-footer {
+    /* ---------- Footer ---------- */
+    .page-footer {
+      padding: 48px 24px;
       text-align: center;
-      padding: 40px 24px;
-      color: var(--text-muted);
-      font-size: 0.85rem;
-      border-top: 1px solid var(--border-card);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      background: #0a0a0a;
     }
-    .chiwu-footer a {
-      color: var(--text-secondary);
+    .page-footer p {
+      font-size: 0.82rem;
+      color: #6b6b7b;
+    }
+    .page-footer a {
+      color: #a1a1aa;
       text-decoration: none;
+      transition: color 0.2s;
     }
-    .chiwu-footer a:hover { color: var(--accent); }
+    .page-footer a:hover { color: #8B7355; }
 
-    /* Responsive */
-    @media (max-width: 640px) {
-      .chiwu-hero { padding: 120px 20px 60px; }
-      .chiwu-hero h1 { font-size: 2.4rem; }
-      .chiwu-features { grid-template-columns: 1fr; }
+    /* ---------- Animations ---------- */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                  transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ---------- Responsive ---------- */
+    @media (max-width: 768px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .section-alt-row { flex-direction: column !important; gap: 48px; }
+      .section-alt { padding: 80px 24px; min-height: auto; }
+      .download-cards { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr; gap: 24px; }
+      .hero-phone { width: 200px; height: 410px; }
+      .hero h1 { font-size: 2.8rem; }
+      .section-heading { font-size: 2rem !important; }
+    }
+    @media (max-width: 480px) {
+      .hero { padding: 100px 20px 60px; }
+      .hero-phone { width: 170px; height: 350px; }
+      .hero-phone .phone-screen { padding: 36px 12px 12px; }
+      .hero-phone .phone-card { padding: 8px; }
+      .hero-phone .phone-card-img { width: 30px; height: 30px; }
+      .hero-phone .phone-card-name { font-size: 0.6rem; }
+      .hero h1 { font-size: 2.2rem; }
+      .nav-links a:not(.nav-cta) { padding: 6px 8px; font-size: 0.78rem; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Nav -->
+  <!-- ==================== Nav ==================== -->
   <nav class="nav">
     <div class="nav-inner">
       <a href="../index.html" class="nav-logo">taomahj</a>
       <div class="nav-links">
-        <a href="../index.html#projects">Projects</a>
-        <a href="../index.html#about">About</a>
-        <a href="../index.html#contact">Contact</a>
+        <a href="../index.html">Home</a>
+        <a href="#features">特性</a>
+        <a href="#privacy">隐私</a>
+        <a href="#download" class="nav-cta">下载</a>
       </div>
     </div>
   </nav>
 
-  <!-- Hero -->
-  <section class="chiwu-hero">
-    <span class="chiwu-icon">📦</span>
+  <!-- ==================== Hero ==================== -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      全新发布
+    </div>
+    <img class="hero-icon" src="icon.png" alt="持物图标" width="80" height="80">
     <h1>持物</h1>
-    <p class="subtitle">记录长期陪伴你的每一件物品</p>
-    <p class="tagline">一款本地优先的物品档案 App — 你的私人物品博物馆</p>
-  </section>
-
-  <!-- Features -->
-  <section class="chiwu-features">
-    <div class="feature-card">
-      <span class="feature-icon">🔒</span>
-      <h3>本地优先 · 隐私安全</h3>
-      <p>所有数据存储在设备本地 LocalStorage，不上传服务器。你的物品档案，只有你知道。</p>
+    <h2>记录长期陪伴你的每一件物品</h2>
+    <p class="hero-sub">本地优先 · 隐私安全 · 你的私人物品博物馆</p>
+    <div class="hero-cta-group">
+      <a href="#download" class="btn-primary">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        下载持物
+      </a>
+      <a href="https://github.com/TAOMA-06/chiwu" class="btn-secondary" target="_blank" rel="noopener">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+        GitHub
+      </a>
     </div>
-    <div class="feature-card">
-      <span class="feature-icon">📸</span>
-      <h3>拍照记录 · 图片压缩</h3>
-      <p>拍照或上传照片，自动压缩为 Base64 存储。无需担心空间占用。</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📋</span>
-      <h3>灵活管理 · 分类归档</h3>
-      <p>为每件物品添加名称、分类、购买日期、故事和备注。支持编辑、搜索、删除。</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">📱</span>
-      <h3>iOS + Android</h3>
-      <p>同时支持 iOS 原生 App 与 Android APK。一套代码，两个平台。</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🎨</span>
-      <h3>温润设计</h3>
-      <p>暖白底色搭配檀木色强调 — 圆角卡片、柔和阴影，安静而有温度的视觉体验。</p>
-    </div>
-    <div class="feature-card">
-      <span class="feature-icon">🚫</span>
-      <h3>无需注册 · 离线可用</h3>
-      <p>打开即用，不强制注册，不依赖网络。真正的离线应用。</p>
-    </div>
-  </section>
-
-  <!-- Download -->
-  <section class="chiwu-download">
-    <h2>下载安装</h2>
-    <p class="section-hint">选择你的平台开始使用持物</p>
-
-    <!-- Android -->
-    <div class="download-card" id="androidCard">
-      <div class="download-card-header">
-        <span class="platform-icon">🤖</span>
-        <div class="platform-info">
-          <h3>Android 版 <span class="version-tag">v1.0</span></h3>
-          <span>APK 直接下载 · Android 8.0+</span>
+    <div class="hero-phone-wrap">
+      <div class="hero-phone-glow"></div>
+      <div class="hero-phone">
+        <div class="hero-phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-header-row">
+            <span class="phone-title">持物</span>
+            <span class="phone-count">5 件物品</span>
+          </div>
+          <div class="phone-card">
+            <div class="phone-card-img" style="background: linear-gradient(135deg, #D4C5B2, #C4B5A2);"></div>
+            <div class="phone-card-text">
+              <div class="phone-card-name">MacBook Pro</div>
+              <div class="phone-card-date">2023.10 · 已陪伴 965 天</div>
+            </div>
+            <span class="phone-card-badge">数码</span>
+          </div>
+          <div class="phone-card">
+            <div class="phone-card-img" style="background: linear-gradient(135deg, #E8D5C4, #D4C0A8);"></div>
+            <div class="phone-card-text">
+              <div class="phone-card-name">机械键盘</div>
+              <div class="phone-card-date">2024.01 · 已陪伴 877 天</div>
+            </div>
+            <span class="phone-card-badge">桌面</span>
+          </div>
+          <div class="phone-card">
+            <div class="phone-card-img" style="background: linear-gradient(135deg, #C8B8A8, #B8A898);"></div>
+            <div class="phone-card-text">
+              <div class="phone-card-name">胶片相机</div>
+              <div class="phone-card-date">2022.06 · 已陪伴 1452 天</div>
+            </div>
+            <span class="phone-card-badge">摄影</span>
+          </div>
         </div>
-      </div>
-      <div class="download-card-body">
-        <ul>
-          <li>免费版支持记录 15 件物品</li>
-          <li>原生 WebView 封装，体验流畅</li>
-          <li>无需 Google Play，APK 直装</li>
-        </ul>
-        <a href="chiwu-android.apk" class="btn-download" download>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          下载 Android APK
-        </a>
-        <div class="file-size" id="apkSize">—</div>
-        <div class="install-steps">
-          <h4>📋 安装步骤</h4>
-          <ol>
-            <li>点击上方按钮下载 APK 文件</li>
-            <li>打开下载的 <code>chiwu-android.apk</code></li>
-            <li>系统提示"未知来源"时，前往 <strong>设置 → 安全 → 允许安装未知应用</strong></li>
-            <li>安装完成后即可打开使用</li>
-          </ol>
-        </div>
-      </div>
-    </div>
-
-    <!-- iOS -->
-    <div class="download-card">
-      <div class="download-card-header">
-        <span class="platform-icon">🍎</span>
-        <div class="platform-info">
-          <h3>iOS 版</h3>
-          <span>原生 SwiftUI · iPhone / iPad</span>
-        </div>
-      </div>
-      <div class="download-card-body">
-        <ul>
-          <li>支持记录 25 件物品</li>
-          <li>原生 SwiftUI 构建，流畅动画</li>
-          <li>支持应用内购买解锁无限物品</li>
-        </ul>
-        <div class="ios-note">
-          <p>📱 iOS 版本目前需通过 <strong>Xcode 侧载</strong>安装到设备。将项目克隆到 Mac，在 Xcode 中打开 <code>chiwu.xcodeproj</code>，选择你的设备后 Build &amp; Run。</p>
-          <p style="margin-top:8px;">💡 将来会上架 App Store 或提供 TestFlight 测试，敬请期待。</p>
-        </div>
-        <a href="https://github.com/TAOMA-06/chiwu" class="btn-download-secondary" target="_blank" rel="noopener" style="margin-top:16px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
-          查看 GitHub 仓库
-        </a>
       </div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="chiwu-footer">
+  <!-- ==================== Stats ==================== -->
+  <div class="stats-bar">
+    <div class="stats-grid">
+      <div class="reveal">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">本地存储</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-number">0</div>
+        <div class="stat-label">数据上传</div>
+      </div>
+      <div class="reveal">
+        <div class="stat-number">∞</div>
+        <div class="stat-label">离线可用</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== Features ==================== -->
+  <section class="section section-features" id="features">
+    <div class="section-inner">
+      <div class="section-label reveal">功能特性</div>
+      <div class="section-heading reveal">为记录而设计。</div>
+      <div class="section-body reveal">每一件值得记住的物品，都该有一个家。</div>
+      <div class="features-grid">
+        <div class="feature-tile reveal">
+          <span class="feature-icon">📸</span>
+          <h3>拍照记录</h3>
+          <p>随手拍摄物品照片，自动压缩为高质量 Base64 存储。支持图库选取或直接拍照。</p>
+        </div>
+        <div class="feature-tile reveal">
+          <span class="feature-icon">📋</span>
+          <h3>灵活归档</h3>
+          <p>名称、分类、品牌、购买日期、价格、故事——为每件物品建立完整的数字档案。</p>
+        </div>
+        <div class="feature-tile reveal">
+          <span class="feature-icon">🔍</span>
+          <h3>快速检索</h3>
+          <p>按分类筛选、按名称搜索、按陪伴时长排序。物品再多也一秒找到。</p>
+        </div>
+        <div class="feature-tile reveal">
+          <span class="feature-icon">⏱️</span>
+          <h3>陪伴计时</h3>
+          <p>从购买那天起，自动计算物品陪伴你的天数。里程碑提醒——100 天、1 年、1000 天。</p>
+        </div>
+        <div class="feature-tile reveal">
+          <span class="feature-icon">🎨</span>
+          <h3>温润设计</h3>
+          <p>暖白底色 × 檀木强调色 × 圆角卡片。安静而有温度的视觉体验，像翻阅一本旧相册。</p>
+        </div>
+        <div class="feature-tile reveal">
+          <span class="feature-icon">🚫</span>
+          <h3>无需账户</h3>
+          <p>打开即用。不强制注册，不依赖网络，不需要任何权限。真正的离线优先应用。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Privacy Section ==================== -->
+  <section class="section-alt light" id="privacy">
+    <div class="section-alt-row">
+      <div class="section-alt-text reveal">
+        <div class="section-label">隐私优先</div>
+        <div class="section-heading">你的物品，<br>只有你知道。</div>
+        <div class="section-body">
+          所有数据存储在设备本地 LocalStorage 中。<br>
+          没有服务器、没有云端同步、没有第三方分析。<br>
+          你的物品档案完全属于你——这是设计的第一原则。
+        </div>
+      </div>
+      <div class="section-alt-visual reveal">
+        <div class="visual-lock">
+          <div class="visual-lock-inner">
+            <svg class="visual-lock-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              <circle cx="12" cy="16" r="1"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Philosophy Section ==================== -->
+  <section class="section-alt dark">
+    <div class="section-alt-row reverse">
+      <div class="section-alt-text reveal">
+        <div class="section-label">设计哲学</div>
+        <div class="section-heading">物品即记忆。</div>
+        <div class="section-body">
+          一支用了三年的钢笔、一台陪你度过大学时光的相机、<br>
+          朋友送的生日礼物——它们不只是物件，<br>
+          而是你生活故事的注脚。<br>
+          持物帮你记住每一段羁绊。
+        </div>
+      </div>
+      <div class="section-alt-visual reveal">
+        <div class="visual-stack">
+          <div class="stack-card">
+            <span class="stack-card-icon">🖊️</span>
+            <span class="stack-card-label">钢笔</span>
+            <span class="stack-card-date">2023.03 · 3 年</span>
+          </div>
+          <div class="stack-card">
+            <span class="stack-card-icon">📷</span>
+            <span class="stack-card-label">相机</span>
+            <span class="stack-card-date">2022.06 · 4 年</span>
+          </div>
+          <div class="stack-card">
+            <span class="stack-card-icon">🎁</span>
+            <span class="stack-card-label">礼物</span>
+            <span class="stack-card-date">2024.09 · 1 年</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Cross Platform ==================== -->
+  <section class="section section-features">
+    <div class="section-inner" style="text-align:center;">
+      <div class="section-label reveal" style="text-align:center;">跨平台</div>
+      <div class="section-heading reveal">iOS + Android。</div>
+      <div class="section-body reveal" style="margin: 0 auto 48px;">
+        一套代码，两个平台。iOS 原生 SwiftUI 构建，Android 通过 WebView 封装。<br>
+        相同的设计语言，相同的流畅体验。
+      </div>
+      <div class="visual-devices reveal" style="justify-content:center;">
+        <div class="device-icon">
+          <svg class="device-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <rect x="5" y="2" width="14" height="20" rx="3"/>
+            <line x1="12" y1="18" x2="12.01" y2="18"/>
+          </svg>
+          <div class="device-icon-label">iOS</div>
+          <div class="device-icon-sub">SwiftUI 原生</div>
+        </div>
+        <div style="font-size:1.5rem;color:#6b6b7b;">+</div>
+        <div class="device-icon">
+          <svg class="device-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <rect x="4" y="2" width="16" height="20" rx="2"/>
+            <line x1="8" y1="18" x2="16" y2="18"/>
+          </svg>
+          <div class="device-icon-label">Android</div>
+          <div class="device-icon-sub">WebView 封装</div>
+        </div>
+      </div>
+      <div style="display:flex;gap:16px;margin-top:48px;flex-wrap:wrap;justify-content:center;" class="reveal">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px 24px;">
+          <div style="font-size:0.85rem;font-weight:600;color:#f5f5f7;">iOS 免费版</div>
+          <div style="font-size:0.78rem;color:#a1a1aa;">25 件物品 · 应用内购买解锁无限</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:16px 24px;">
+          <div style="font-size:0.85rem;font-weight:600;color:#f5f5f7;">Android 免费版</div>
+          <div style="font-size:0.78rem;color:#a1a1aa;">15 件物品 · 完全免费</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Download ==================== -->
+  <section class="section-download" id="download">
+    <div class="section-inner" style="text-align:center;">
+      <div class="section-label reveal" style="text-align:center;">获取持物</div>
+      <div class="section-heading reveal">选择你的平台。</div>
+      <div class="section-body reveal" style="margin:0 auto;">
+        持物目前提供 Android APK 直接下载，iOS 版本可通过 Xcode 侧载安装。
+      </div>
+      <div class="download-cards">
+        <!-- Android -->
+        <div class="download-card reveal">
+          <div class="download-card-top">
+            <span class="download-card-icon">🤖</span>
+            <div>
+              <h3>Android</h3>
+              <span class="ver">APK 直接下载 · Android 8.0+</span>
+            </div>
+          </div>
+          <ul>
+            <li>免费记录 15 件物品</li>
+            <li>原生 WebView 封装</li>
+            <li>无需 Google Play</li>
+          </ul>
+          <a href="chiwu-android.apk" class="btn-primary" download style="display:inline-flex;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            下载 APK
+          </a>
+          <div class="file-size" id="apkSize">—</div>
+          <div class="download-note">
+            <p><strong>安装提示：</strong>首次安装需前往「设置 → 安全 → 允许安装未知应用」后打开 APK 文件即可。</p>
+          </div>
+        </div>
+        <!-- iOS -->
+        <div class="download-card reveal">
+          <div class="download-card-top">
+            <span class="download-card-icon">🍎</span>
+            <div>
+              <h3>iOS</h3>
+              <span class="ver">Xcode 侧载 · iPhone / iPad</span>
+            </div>
+          </div>
+          <ul>
+            <li>支持 25 件物品</li>
+            <li>原生 SwiftUI 动画</li>
+            <li>应用内购买解锁</li>
+          </ul>
+          <div class="download-note">
+            <p>将项目克隆到 Mac，在 Xcode 中打开 <strong>chiwu.xcodeproj</strong>，选择设备后 Build &amp; Run 即可安装。将来会上架 TestFlight。</p>
+          </div>
+          <a href="https://github.com/TAOMA-06/chiwu" class="btn-secondary" target="_blank" rel="noopener" style="margin-top:16px;display:inline-flex;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/></svg>
+            GitHub 仓库
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== Footer ==================== -->
+  <footer class="page-footer">
     <p>&copy; 2026 <a href="../index.html">taomahj</a> · 持物 — 记录与物品的羁绊</p>
   </footer>
 
   <script>
-    // Card mouse glow effect
-    document.querySelectorAll('.feature-card, .download-card').forEach(card => {
+    // Scroll reveal
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+    // Card glow effect
+    document.querySelectorAll('.feature-tile, .download-card').forEach(card => {
       card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const x = ((e.clientX - rect.left) / rect.width) * 100;
         const y = ((e.clientY - rect.top) / rect.height) * 100;
-        card.style.setProperty('--card-mouse-x', `${x}%`);
-        card.style.setProperty('--card-mouse-y', `${y}%`);
+        card.style.setProperty('--mx', `${x}%`);
+        card.style.setProperty('--my', `${y}%`);
       });
       card.addEventListener('mouseleave', () => {
-        card.style.setProperty('--card-mouse-x', '50%');
-        card.style.setProperty('--card-mouse-y', '50%');
+        card.style.setProperty('--mx', '50%');
+        card.style.setProperty('--my', '50%');
       });
     });
 
-    // Show APK file size
+    // APK file size
     fetch('chiwu-android.apk', { method: 'HEAD' })
       .then(res => {
         const size = parseInt(res.headers.get('Content-Length'));
         if (size) {
-          const mb = (size / (1024 * 1024)).toFixed(1);
-          document.getElementById('apkSize').textContent = `文件大小: ${mb} MB`;
+          document.getElementById('apkSize').textContent = `文件大小: ${(size / (1024 * 1024)).toFixed(1)} MB`;
         }
       })
       .catch(() => {});
