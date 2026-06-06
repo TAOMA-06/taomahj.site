@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta name="description" content="壁纸图库 — taomahj 收藏的高清壁纸，原图下载无限制。">
+  <title>壁纸图库 — taomahj</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🖼️</text></svg>">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav class="nav">
+    <div class="nav-inner">
+      <a href="../index.html" class="nav-logo">taomahj<span class="accent">.</span>site</a>
+      <div class="nav-links">
+        <a href="../index.html">← 返回</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      高清壁纸
+    </div>
+    <h1>壁纸图库</h1>
+    <h2>个人收藏 · 原图下载 · 不限制大小</h2>
+    <p class="hero-sub">所有壁纸均为原图直出，无压缩、无水印。点击下载即可获取原始文件。</p>
+  </section>
+
+  <!-- Gallery -->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-header">
+      <div class="gallery-count" id="galleryCount"></div>
+    </div>
+    <div class="gallery-grid" id="galleryGrid">
+      <!-- Rendered by JS -->
+    </div>
+    <div class="gallery-empty" id="galleryEmpty" style="display:none;">
+      <span>🖼️</span>
+      <p>图库暂空。用 <code>scripts/add-wallpaper.py</code> 添加壁纸。</p>
+    </div>
+  </section>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightboxClose">&times;</button>
+    <button class="lightbox-prev" id="lightboxPrev">‹</button>
+    <button class="lightbox-next" id="lightboxNext">›</button>
+    <div class="lightbox-content">
+      <img id="lightboxImg" src="" alt="">
+      <div class="lightbox-info" id="lightboxInfo"></div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="page-footer">
+    <p>&copy; 2026 <a href="../index.html">taomahj</a> · 壁纸图库</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

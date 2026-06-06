@@ -266,6 +266,34 @@ a:hover { color: var(--accent2); }
   font-size: 0.85rem;
 }
 
+/* 图库 nav link */
+.nav-gallery {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  color: #10b981;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.2s;
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.08);
+}
+.nav-gallery:hover {
+  color: #fff;
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+  box-shadow: 0 0 16px rgba(16, 185, 129, 0.15);
+}
+.nav-gallery-icon {
+  font-size: 1rem;
+  line-height: 1;
+}
+.nav-gallery-text {
+  font-size: 0.85rem;
+}
+
 
 /* Language toggle */
 .lang-toggle {
@@ -808,6 +836,8 @@ a:hover { color: var(--accent2); }
   .nav-mixflow { display: none !important; }
   .nav-perler { display: none !important; }
   .nav-bounce { display: none !important; }
+  .nav-chiwu { display: none !important; }
+  .nav-gallery { display: none !important; }
   .avatar-wrapper { width: 110px; height: 110px; }
   .spotlight { display: none; }
   .knowledge-graph-wrapper { height: 400px; }
