@@ -1415,15 +1415,6 @@
       });
     });
 
-    // APK file size
-    fetch('chiwu-android.apk', { method: 'HEAD' })
-      .then(res => {
-        const size = parseInt(res.headers.get('Content-Length'));
-        if (size) {
-          document.getElementById('apkSize').textContent = `文件大小: ${(size / (1024 * 1024)).toFixed(1)} MB`;
-        }
-      })
-      .catch(() => {});
   </script>
 </body>
 </html>
