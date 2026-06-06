@@ -1307,16 +1307,30 @@
       <div class="section-label reveal" style="text-align:center;">获取持物记录</div>
       <div class="section-heading reveal">选择你的平台。</div>
       <div class="section-body reveal" style="margin:0 auto;">
-        持物记录 Android 版现已可下载。iOS 即将上线 App Store，watchOS 版本正在积极开发中。
+        iOS 即将上线 App Store，watchOS 版本正在积极开发中。Android 端目前暂停下载，详见公告。
+      </div>
+      <!-- Announcement -->
+      <div class="download-card" style="border: 1px solid rgba(245,158,11,0.35); background: rgba(245,158,11,0.06); max-width: 640px; margin: 0 auto 32px; text-align: left;">
+        <div style="display: flex; align-items: flex-start; gap: 12px;">
+          <span style="font-size: 1.5rem;">⚠️</span>
+          <div>
+            <h3 style="color: #f59e0b; margin: 0 0 8px;">Android 端维护公告</h3>
+            <p style="color: #a1a1aa; font-size: 0.88rem; line-height: 1.7; margin: 0;">
+              由于近期开发压力较大，<strong style="color: #e5e5e7;">Android 端维护时间可能较长</strong>。
+              当前版本 APK 存在少量已知问题，为保障使用体验，我们决定<strong style="color: #e5e5e7;">暂时下架 APK 下载</strong>。
+              待问题修复后将重新开放。感谢理解 🙏
+            </p>
+          </div>
+        </div>
       </div>
       <div class="download-cards">
         <!-- Android -->
-        <div class="download-card reveal">
+        <div class="download-card reveal" style="opacity: 0.65;">
           <div class="download-card-top">
             <span class="download-card-icon">🤖</span>
             <div>
-              <h3>Android</h3>
-              <span class="ver">APK 直接下载 · Android 8.0+</span>
+              <h3>Android <span style="font-size:0.75rem;color:#f59e0b;font-weight:500;margin-left:6px;">维护中</span></h3>
+              <span class="ver">暂时下架 · 敬请期待</span>
             </div>
           </div>
           <ul>
@@ -1324,13 +1338,10 @@
             <li>原生 WebView 封装</li>
             <li>无需 Google Play</li>
           </ul>
-          <a href="chiwu-android.apk" class="btn-primary" download style="display:inline-flex;">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-            下载 APK
-          </a>
-          <div class="file-size" id="apkSize">—</div>
-          <div class="download-note">
-            <p><strong>安装提示：</strong>首次安装需前往「设置 → 安全 → 允许安装未知应用」后打开 APK 文件即可。</p>
+          <div style="padding: 12px 18px; border-radius: 10px; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.15); margin-top: 8px;">
+            <p style="color: #a1a1aa; font-size: 0.82rem; margin: 0; line-height: 1.6;">
+              🚧 当前版本存在少量问题，APK <strong style="color: #f59e0b;">暂不开放下载</strong>。我们正在努力修复，请耐心等待。
+            </p>
           </div>
         </div>
         <!-- watchOS -->
