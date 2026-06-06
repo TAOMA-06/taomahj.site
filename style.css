@@ -245,18 +245,18 @@ a:hover { color: var(--accent2); }
   gap: 6px;
   padding: 8px 16px;
   border-radius: 8px;
-  color: #a6845a;
+  color: #3b82f6;
   font-size: 0.9rem;
   font-weight: 600;
   transition: all 0.2s;
-  border: 1px solid rgba(139, 111, 78, 0.25);
-  background: rgba(139, 111, 78, 0.08);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  background: rgba(59, 130, 246, 0.08);
 }
 .nav-chiwu:hover {
   color: #fff;
-  background: rgba(139, 111, 78, 0.2);
-  border-color: rgba(139, 111, 78, 0.5);
-  box-shadow: 0 0 16px rgba(139, 111, 78, 0.15);
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 16px rgba(59, 130, 246, 0.15);
 }
 .nav-chiwu-icon {
   font-size: 1rem;
