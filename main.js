@@ -155,12 +155,30 @@ updateLangToggle();
   if (!toggle || hiddenCards.length === 0) return;
 
   let expanded = false;
+  let collapseTimer = null;
 
   function expand() {
     expanded = true;
+    // Clear any pending collapse timer
+    if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
+
     hiddenCards.forEach((card, i) => {
-      card.classList.add('visible');
-      card.style.transitionDelay = `${i * 0.08}s`;
+      // Ensure the card is in the grid flow (flex layout matching other project cards)
+      card.style.display = 'flex';
+      card.style.flexDirection = 'column';
+      // Start from invisible state
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(-12px)';
+      card.style.pointerEvents = 'none';
+      card.classList.remove('visible');
+
+      // Trigger transition on next frame
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          card.style.transitionDelay = `${i * 0.08}s`;
+          card.classList.add('visible');
+        });
+      });
     });
     toggle.classList.add('expanded');
     if (arrowIcon) arrowIcon.style.transform = 'rotate(90deg)';
@@ -170,12 +188,24 @@ updateLangToggle();
   function collapse() {
     expanded = false;
     hiddenCards.forEach((card, i) => {
-      card.classList.remove('visible');
       card.style.transitionDelay = `${(hiddenCards.length - 1 - i) * 0.06}s`;
+      card.classList.remove('visible');
     });
     toggle.classList.remove('expanded');
     if (arrowIcon) arrowIcon.style.transform = 'rotate(0deg)';
     if (countTag) countTag.textContent = '+2';
+
+    // After transition completes, remove from grid flow
+    collapseTimer = setTimeout(() => {
+      if (!expanded) {
+        hiddenCards.forEach(card => {
+          card.style.display = 'none';
+          card.style.opacity = '';
+          card.style.transform = '';
+          card.style.transitionDelay = '';
+        });
+      }
+    }, 450);
   }
 
   toggle.addEventListener('click', (e) => {

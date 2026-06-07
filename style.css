@@ -588,25 +588,12 @@ a:hover { color: var(--accent2); }
 
 /* Hidden project cards */
 .hidden-project {
-  max-height: 0;
-  opacity: 0;
-  overflow: hidden;
-  margin: 0;
-  padding: 0;
-  border: 1px solid transparent;
-  transform: translateY(-12px);
-  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              opacity 0.3s ease,
-              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-              margin 0.3s ease;
-  pointer-events: none;
+  /* display is toggled by JS; transitions handle the animation */
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .hidden-project.visible {
-  max-height: 300px;
   opacity: 1;
-  overflow: visible;
-  margin: inherit;
-  padding: inherit;
   transform: translateY(0);
   pointer-events: auto;
 }
