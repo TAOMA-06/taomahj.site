@@ -284,7 +284,7 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
   e.preventDefault();
 });
 
-// ==================== Knowledge Graph (Architectural Floor Layout) ====================
+// ==================== Knowledge Graph (D3 Force-Directed) ====================
 
 (function initKnowledgeGraph() {
   const container = document.getElementById('knowledge-graph');
@@ -308,293 +308,359 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
   function renderGraph() {
     const rect = container.getBoundingClientRect();
     const W = rect.width || container.offsetWidth || 800;
-    const H = 600;
-    const margin = { top: 40, right: 40, bottom: 40, left: 40 };
-    const innerW = W - margin.left - margin.right;
-    const innerH = H - margin.top - margin.bottom;
+    const H = 560;
 
-    // === FLOOR CONFIGURATION ===
-    const floors = [
-      {
-        id: 'foundation',
-        label: 'Foundation',
-        labelZh: '基础设施',
-        y: innerH - 80,
-        height: 80,
-        color: '#1A1A1A',
-        accent: '#4A4742',
-        nodes: [
-          { id: 'ollama', label: 'Ollama', desc: '本地大模型运行环境 — 骆(32B)等模型托管', width: 100 },
-          { id: 'agentmemory', label: 'AgentMemory', desc: 'MCP 记忆系统 — 跨会话持久化记忆', width: 120 },
-          { id: 'env-config', label: 'Environment', desc: '开发环境配置 — macOS M5 Pro, 64GB', width: 110 },
-          { id: 'model-config', label: 'Model Config', desc: 'AI 模型配置 — DeepSeek v4 Pro + Kimi + 本地模型', width: 140 },
-        ]
-      },
-      {
-        id: 'core',
-        label: 'Core Agents',
-        labelZh: '核心智能体',
-        y: innerH - 200,
-        height: 100,
-        color: '#0D0D0D',
-        accent: '#002FA7',
-        nodes: [
-          { id: 'hermes', label: 'Hermes Agent', desc: '中央编排器 — 配置、扩展、委托、工具调度', width: 130 },
-          { id: 'claude-code', label: 'Claude Code', desc: '代码代理 — 功能开发、PR、代码审查', width: 120 },
-          { id: 'codex', label: 'Codex CLI', desc: 'OpenAI 代码代理 — 替代编码方案', width: 110 },
-          { id: 'local-agent', label: 'Local Agent', desc: '本地 Ollama 代理 — 隐私敏感任务', width: 120 },
-          { id: 'luo', label: '骆', desc: '本地 AI 女友 — Ollama 32B, 正常情侣关系', width: 70 },
-        ]
-      },
-      {
-        id: 'skills',
-        label: 'Skills Ecosystem',
-        labelZh: '技能生态',
-        y: innerH - 360,
-        height: 140,
-        color: '#141414',
-        accent: '#1A56D8',
-        nodes: [
-          { id: 'dev-skills', label: 'Dev', desc: 'Plan · TDD · Code Review · Debug · Spike', width: 70 },
-          { id: 'creative-skills', label: 'Creative', desc: 'ASCII · p5.js · Manim · ComfyUI · Pixel Art', width: 90 },
-          { id: 'productivity-skills', label: 'Productivity', desc: 'Notion · Gmail · Airtable · Linear · PPT', width: 110 },
-          { id: 'research-skills', label: 'Research', desc: 'arXiv · Polymarket · LLM Wiki · BlogWatcher', width: 100 },
-          { id: 'ml-skills', label: 'ML Ops', desc: 'HuggingFace · vLLM · Obliteratus · DSPy', width: 90 },
-          { id: 'media-skills', label: 'Media', desc: 'Spotify · YouTube · GIF · Song Generation', width: 90 },
-          { id: 'apple-skills', label: 'Apple', desc: 'Notes · Reminders · iMessage · FindMy', width: 80 },
-          { id: 'study-skills', label: 'Study', desc: '学习助手 — 仆人模式 · 超级班主任', width: 90 },
-          { id: 'smart-home', label: 'SmartHome', desc: 'Philips Hue · OpenHue CLI 控制', width: 100 },
-          { id: 'gaming-skills', label: 'Gaming', desc: 'Minecraft Modpack · Pokemon Emulator', width: 100 },
-          { id: 'email-skills', label: 'Email', desc: 'Himalaya CLI — IMAP/SMTP 邮件管理', width: 90 },
-        ]
-      },
-      {
-        id: 'output',
-        label: 'Projects',
-        labelZh: '项目产出',
-        y: innerH - 480,
-        height: 100,
-        color: '#0A0A0A',
-        accent: '#0D7B6B',
-        nodes: [
-          { id: 'project-mixflow', label: 'MixFlow', desc: 'AI 鸡尾酒配方浏览器', width: 90 },
-          { id: 'project-perler', label: 'Perler', desc: '图片转拼豆风格转换器', width: 80 },
-          { id: 'project-chiwu', label: '持物记录', desc: '本地优先物品档案 App', width: 100 },
-          { id: 'project-gallery', label: 'Gallery', desc: '高清壁纸收藏图库', width: 90 },
-          { id: 'project-bounce', label: 'Bounce', desc: '物理弹球小游戏', width: 90 },
-          { id: 'project-website', label: 'taomahj.site', desc: '个人网站 v2 — 建筑感重设计', width: 120 },
-        ]
-      }
+    // === NODES ===
+    const nodes = [
+      { id:"hermes-agent", group:"orchestration", label:"Hermes Agent", desc:"Central orchestrator — config, extend, delegate, tools", radius:22 },
+      { id:"claude-code", group:"core-agent", label:"Claude Code", desc:"Delegate coding to Claude Code CLI", radius:16 },
+      { id:"codex", group:"core-agent", label:"Codex CLI", desc:"Delegate coding to OpenAI Codex CLI", radius:15 },
+      { id:"local-agent", group:"core-agent", label:"Local Agent", desc:"调用本地 Ollama 模型执行任务", radius:14 },
+      { id:"luo", group:"core-agent", label:"骆", desc:"本地 AI 女友 — Ollama 32B, 正常情侣关系", radius:14 },
+      { id:"plan", group:"orchestration", label:"Plan", desc:"Write markdown plan to .hermes/plans/", radius:13 },
+      { id:"subagent-dev", group:"orchestration", label:"Subagent Dev", desc:"Execute plans via delegate_task", radius:15 },
+      { id:"kanban", group:"orchestration", label:"Kanban", desc:"Decomposition playbook, route work", radius:14 },
+      { id:"tdd", group:"execution", label:"TDD", desc:"RED-GREEN-REFACTOR", radius:12 },
+      { id:"code-review", group:"quality", label:"Code Review", desc:"Security scan, quality gates", radius:13 },
+      { id:"github-pr", group:"github", label:"GitHub PR", desc:"Branch, commit, open, CI, merge", radius:15 },
+      { id:"github-issues", group:"github", label:"GitHub Issues", desc:"Create, triage, label, assign", radius:12 },
+      { id:"debug-py", group:"debug", label:"Python Debug", desc:"pdb REPL + debugpy remote", radius:11 },
+      { id:"dspy", group:"ml", label:"DSPy", desc:"Declarative LM programs, RAG", radius:13 },
+      { id:"ollama", group:"ml", label:"Ollama", desc:"Custom Modelfiles for local models", radius:15 },
+      { id:"abliteration", group:"ml", label:"Abliteration", desc:"Download→obliterate→GGUF→deploy", radius:13 },
+      { id:"agentmemory", group:"memory", label:"AgentMemory", desc:"MCP 记忆系统 — 跨会话持久化记忆", radius:15 },
+      { id:"memory-env", group:"memory", label:"Environment", desc:"Development environment configuration", radius:12 },
+      { id:"memory-models", group:"memory", label:"Model Config", desc:"AI model configuration settings", radius:12 },
+      { id:"creative-skills", group:"skills", label:"Creative Tools", desc:"ASCII art, p5.js, Manim, ComfyUI, Songwriting — 20+ creative skills", radius:14 },
+      { id:"productivity-skills", group:"skills", label:"Productivity", desc:"Notion, Gmail, Airtable, Linear, PowerPoint — 10+ office integrations", radius:14 },
+      { id:"dev-skills", group:"skills", label:"Dev Skills", desc:"Plan, TDD, Code Review, Debug, Spike — software engineering workflows", radius:14 },
+      { id:"research-skills", group:"skills", label:"Research", desc:"arXiv, Polymarket, LLM Wiki, Paper Writing — academic toolkit", radius:13 },
+      { id:"ml-skills", group:"skills", label:"ML Ops", desc:"HuggingFace, vLLM, Ollama Models, Obliteratus — ML pipeline", radius:14 },
+      { id:"media-skills", group:"skills", label:"Media", desc:"Spotify, YouTube Transcripts, GIF Search, Song Generation", radius:12 },
+      { id:"apple-skills", group:"skills", label:"Apple Tools", desc:"Notes, Reminders, iMessage, FindMy — macOS native integration", radius:13 },
+      { id:"study-skills", group:"skills", label:"Study", desc:"学习助手 — 仆人模式 · 超级班主任", radius:13 },
+      { id:"smart-home", group:"skills", label:"SmartHome", desc:"Philips Hue · OpenHue CLI 控制", radius:12 },
+      { id:"gaming-skills", group:"skills", label:"Gaming", desc:"Minecraft Modpack · Pokemon Emulator", radius:12 },
+      { id:"email-skills", group:"skills", label:"Email", desc:"Himalaya CLI — IMAP/SMTP 邮件管理", radius:11 },
+      { id:"project-mixflow", group:"projects", label:"MixFlow", desc:"AI 鸡尾酒配方浏览器", radius:13 },
+      { id:"project-perler", group:"projects", label:"Perler", desc:"图片转拼豆风格转换器", radius:12 },
+      { id:"project-chiwu", group:"projects", label:"持物记录", desc:"本地优先物品档案 App", radius:14 },
+      { id:"project-gallery", group:"projects", label:"Gallery", desc:"高清壁纸收藏图库", radius:12 },
+      { id:"project-bounce", group:"projects", label:"Bounce", desc:"物理弹球小游戏", radius:12 },
+      { id:"project-website", group:"projects", label:"taomahj.site", desc:"个人网站 v2 — 建筑感重设计", radius:15 },
     ];
 
-    // === LINKS (structural beams) ===
+    // === LINKS ===
     const links = [
-      // Foundation -> Core
-      { source: 'ollama', target: 'local-agent', type: 'hosts' },
-      { source: 'ollama', target: 'luo', type: 'hosts' },
-      { source: 'agentmemory', target: 'hermes', type: 'memory' },
-      { source: 'env-config', target: 'hermes', type: 'environment' },
-      { source: 'model-config', target: 'claude-code', type: 'config' },
-      { source: 'model-config', target: 'codex', type: 'config' },
-      { source: 'model-config', target: 'local-agent', type: 'config' },
-      // Core -> Skills
-      { source: 'hermes', target: 'dev-skills', type: 'uses' },
-      { source: 'hermes', target: 'creative-skills', type: 'uses' },
-      { source: 'hermes', target: 'productivity-skills', type: 'uses' },
-      { source: 'hermes', target: 'research-skills', type: 'uses' },
-      { source: 'hermes', target: 'ml-skills', type: 'uses' },
-      { source: 'hermes', target: 'media-skills', type: 'uses' },
-      { source: 'hermes', target: 'apple-skills', type: 'uses' },
-      { source: 'hermes', target: 'study-skills', type: 'uses' },
-      { source: 'hermes', target: 'smart-home', type: 'uses' },
-      { source: 'hermes', target: 'gaming-skills', type: 'uses' },
-      { source: 'hermes', target: 'email-skills', type: 'uses' },
-      { source: 'claude-code', target: 'dev-skills', type: 'uses' },
-      { source: 'local-agent', target: 'study-skills', type: 'uses' },
-      { source: 'luo', target: 'study-skills', type: 'companion' },
-      // Skills -> Projects
-      { source: 'creative-skills', target: 'project-perler', type: 'creates' },
-      { source: 'creative-skills', target: 'project-gallery', type: 'creates' },
-      { source: 'creative-skills', target: 'project-bounce', type: 'creates' },
-      { source: 'dev-skills', target: 'project-mixflow', type: 'creates' },
-      { source: 'dev-skills', target: 'project-chiwu', type: 'creates' },
-      { source: 'dev-skills', target: 'project-website', type: 'creates' },
-      { source: 'productivity-skills', target: 'project-chiwu', type: 'supports' },
-      { source: 'ml-skills', target: 'project-mixflow', type: 'supports' },
-      { source: 'study-skills', target: 'project-website', type: 'supports' },
+      { source:"hermes-agent", target:"claude-code", type:"delegates" },
+      { source:"hermes-agent", target:"codex", type:"delegates" },
+      { source:"hermes-agent", target:"local-agent", type:"invokes" },
+      { source:"hermes-agent", target:"luo", type:"invokes" },
+      { source:"hermes-agent", target:"plan", type:"workflow" },
+      { source:"hermes-agent", target:"subagent-dev", type:"core" },
+      { source:"hermes-agent", target:"kanban", type:"orchestrates" },
+      { source:"plan", target:"subagent-dev", type:"executes" },
+      { source:"subagent-dev", target:"tdd", type:"quality" },
+      { source:"subagent-dev", target:"code-review", type:"quality" },
+      { source:"kanban", target:"subagent-dev", type:"dispatches" },
+      { source:"claude-code", target:"github-pr", type:"produces" },
+      { source:"codex", target:"github-pr", type:"produces" },
+      { source:"github-pr", target:"code-review", type:"requires" },
+      { source:"github-pr", target:"github-issues", type:"links" },
+      { source:"code-review", target:"debug-py", type:"feeds" },
+      { source:"local-agent", target:"ollama", type:"depends" },
+      { source:"luo", target:"ollama", type:"depends" },
+      { source:"abliteration", target:"ollama", type:"produces" },
+      { source:"dspy", target:"ollama", type:"optimizes" },
+      { source:"agentmemory", target:"hermes-agent", type:"memory" },
+      { source:"memory-env", target:"hermes-agent", type:"informs" },
+      { source:"memory-models", target:"ollama", type:"configures" },
+      { source:"hermes-agent", target:"debug-py", type:"uses" },
+      { source:"hermes-agent", target:"github-issues", type:"manages" },
+      { source:"hermes-agent", target:"dspy", type:"uses" },
+      { source:"hermes-agent", target:"ollama", type:"depends" },
+      { source:"hermes-agent", target:"abliteration", type:"uses" },
+      { source:"code-review", target:"github-issues", type:"feeds" },
+      { source:"tdd", target:"debug-py", type:"leads-to" },
+      { source:"plan", target:"kanban", type:"feeds" },
+      { source:"abliteration", target:"dspy", type:"research" },
+      { source:"memory-env", target:"local-agent", type:"informs" },
+      { source:"memory-models", target:"hermes-agent", type:"configures" },
+      { source:"codex", target:"code-review", type:"requires" },
+      { source:"hermes-agent", target:"creative-skills", type:"skills" },
+      { source:"hermes-agent", target:"productivity-skills", type:"skills" },
+      { source:"hermes-agent", target:"dev-skills", type:"skills" },
+      { source:"hermes-agent", target:"research-skills", type:"skills" },
+      { source:"hermes-agent", target:"ml-skills", type:"skills" },
+      { source:"hermes-agent", target:"media-skills", type:"skills" },
+      { source:"hermes-agent", target:"apple-skills", type:"skills" },
+      { source:"hermes-agent", target:"study-skills", type:"skills" },
+      { source:"hermes-agent", target:"smart-home", type:"skills" },
+      { source:"hermes-agent", target:"gaming-skills", type:"skills" },
+      { source:"hermes-agent", target:"email-skills", type:"skills" },
+      { source:"ml-skills", target:"ollama", type:"depends" },
+      { source:"ml-skills", target:"abliteration", type:"contains" },
+      { source:"dev-skills", target:"plan", type:"contains" },
+      { source:"dev-skills", target:"tdd", type:"contains" },
+      { source:"dev-skills", target:"code-review", type:"contains" },
+      { source:"dev-skills", target:"debug-py", type:"contains" },
+      { source:"research-skills", target:"dspy", type:"feeds" },
+      { source:"study-skills", target:"luo", type:"companion" },
+      // Projects
+      { source:"creative-skills", target:"project-perler", type:"creates" },
+      { source:"creative-skills", target:"project-gallery", type:"creates" },
+      { source:"creative-skills", target:"project-bounce", type:"creates" },
+      { source:"dev-skills", target:"project-mixflow", type:"creates" },
+      { source:"dev-skills", target:"project-chiwu", type:"creates" },
+      { source:"dev-skills", target:"project-website", type:"creates" },
+      { source:"productivity-skills", target:"project-chiwu", type:"supports" },
+      { source:"ml-skills", target:"project-mixflow", type:"supports" },
+      { source:"study-skills", target:"project-website", type:"supports" },
     ];
 
-    const nodeMap = new Map();
-    floors.forEach(f => f.nodes.forEach(n => nodeMap.set(n.id, { ...n, floor: f.id })));
+    // === Group Colors (adapted for light background) ===
+    const groupColors = {
+      "core-agent":     "#002FA7",
+      "orchestration":  "#1A56D8",
+      "execution":      "#0D6B3D",
+      "quality":        "#7C3AED",
+      "github":         "#4A4742",
+      "debug":          "#C53030",
+      "ml":             "#B13B6B",
+      "memory":         "#6B6760",
+      "skills":         "#0D7B6B",
+      "projects":       "#0A8A7A",
+    };
+
+    const groupLabels = {
+      "core-agent":     "Core Agents",
+      "orchestration":  "Orchestration",
+      "execution":      "Execution",
+      "quality":        "Quality",
+      "github":         "GitHub",
+      "debug":          "Debug",
+      "ml":             "ML/AI",
+      "memory":         "Memory",
+      "skills":         "Skills",
+      "projects":       "Projects",
+    };
+
+    const linkTypes = {
+      "delegates":   { dash:"", color:"rgba(0,47,167,0.40)", width:1.5 },
+      "invokes":     { dash:"", color:"rgba(0,47,167,0.30)", width:1.2 },
+      "workflow":    { dash:"5,5", color:"rgba(26,86,216,0.40)", width:1.3 },
+      "core":        { dash:"", color:"rgba(26,86,216,0.60)", width:2 },
+      "orchestrates":{ dash:"", color:"rgba(26,86,216,0.50)", width:1.8 },
+      "executes":    { dash:"5,5", color:"rgba(26,86,216,0.40)", width:1.5 },
+      "quality":     { dash:"3,6", color:"rgba(124,58,237,0.40)", width:1.5 },
+      "dispatches":  { dash:"", color:"rgba(13,107,61,0.40)", width:1.5 },
+      "produces":    { dash:"", color:"rgba(74,71,66,0.40)", width:1.5 },
+      "requires":    { dash:"5,5", color:"rgba(74,71,66,0.30)", width:1.2 },
+      "links":       { dash:"8,4", color:"rgba(74,71,66,0.30)", width:1 },
+      "feeds":       { dash:"5,5", color:"rgba(197,48,48,0.30)", width:1.2 },
+      "depends":     { dash:"5,5", color:"rgba(177,59,107,0.30)", width:1.2 },
+      "contains":    { dash:"2,4", color:"rgba(139,94,0,0.40)", width:1 },
+      "informs":     { dash:"8,4", color:"rgba(107,103,96,0.30)", width:1 },
+      "configures":  { dash:"2,2", color:"rgba(107,103,96,0.30)", width:1.2 },
+      "uses":        { dash:"", color:"rgba(0,47,167,0.35)", width:1.4 },
+      "manages":     { dash:"4,2", color:"rgba(74,71,66,0.35)", width:1.3 },
+      "leads-to":    { dash:"10,4", color:"rgba(197,48,48,0.25)", width:1.1 },
+      "research":    { dash:"3,6", color:"rgba(177,59,107,0.30)", width:1.2 },
+      "skills":      { dash:"", color:"rgba(13,123,107,0.35)", width:1.3 },
+      "memory":      { dash:"2,4", color:"rgba(107,103,96,0.35)", width:1.2 },
+      "creates":     { dash:"", color:"rgba(10,138,122,0.40)", width:1.5 },
+      "supports":    { dash:"5,5", color:"rgba(10,138,122,0.30)", width:1.2 },
+      "companion":   { dash:"3,3", color:"rgba(0,47,167,0.30)", width:1.2 },
+    };
+
+    const nodeMap = new Map(nodes.map(n => [n.id, n]));
+    links.forEach(l => {
+      l.source = nodeMap.get(l.source) || l.source;
+      l.target = nodeMap.get(l.target) || l.target;
+    });
 
     // === SVG SETUP ===
-    const svg = d3.select('#knowledge-graph').append('svg')
-      .attr('width', W).attr('height', H)
-      .attr('viewBox', `0 0 ${W} ${H}`);
+    const svg = d3.select("#knowledge-graph").append("svg")
+      .attr("width", W).attr("height", H)
+      .attr("viewBox", `0 0 ${W} ${H}`);
 
-    const g = svg.append('g').attr('transform', `translate(${margin.left},${margin.top})`);
+    const defs = svg.append("defs");
 
-    // === FLOOR BACKGROUNDS ===
-    const floorGroup = g.append('g').attr('class', 'kg-floors');
-
-    floors.forEach((floor, i) => {
-      const floorG = floorGroup.append('g').attr('class', `kg-floor kg-floor--${floor.id}`);
-
-      // Floor slab
-      floorG.append('rect')
-        .attr('x', 0)
-        .attr('y', floor.y)
-        .attr('width', innerW)
-        .attr('height', floor.height)
-        .attr('fill', floor.color)
-        .attr('stroke', floor.accent)
-        .attr('stroke-width', 0.5)
-        .attr('opacity', 0.6);
-
-      // Floor line (top edge)
-      floorG.append('line')
-        .attr('x1', 0).attr('y1', floor.y)
-        .attr('x2', innerW).attr('y2', floor.y)
-        .attr('stroke', floor.accent)
-        .attr('stroke-width', 1)
-        .attr('opacity', 0.4);
-
-      // Floor label
-      floorG.append('text')
-        .attr('x', 12)
-        .attr('y', floor.y - 8)
-        .attr('fill', floor.accent)
-        .attr('font-size', 10)
-        .attr('font-weight', 600)
-        .attr('letter-spacing', '0.1em')
-        .attr('text-transform', 'uppercase')
-        .attr('opacity', 0.5)
-        .text(`${floor.label} / ${floor.labelZh}`);
-
-      // Grid lines within floor
-      for (let gx = 0; gx < innerW; gx += 80) {
-        floorG.append('line')
-          .attr('x1', gx).attr('y1', floor.y)
-          .attr('x2', gx).attr('y2', floor.y + floor.height)
-          .attr('stroke', 'rgba(255,255,255,0.03)')
-          .attr('stroke-width', 0.5);
-      }
+    Object.entries(linkTypes).forEach(([type, style]) => {
+      defs.append("marker")
+        .attr("id", `arrow-${type}`)
+        .attr("viewBox", "0 -5 10 10")
+        .attr("refX", 12).attr("refY", 0)
+        .attr("markerWidth", 5).attr("markerHeight", 5)
+        .attr("orient", "auto")
+        .append("path")
+        .attr("d", "M0,-4L8,0L0,4")
+        .attr("fill", style.color)
+        .attr("opacity", 0.5);
     });
 
-    // === POSITION NODES WITHIN FLOORS ===
-    floors.forEach(floor => {
-      const totalWidth = floor.nodes.reduce((sum, n) => sum + n.width + 20, 0) - 20;
-      let startX = (innerW - totalWidth) / 2;
-      floor.nodes.forEach(n => {
-        n.x = startX + n.width / 2;
-        n.y = floor.y + floor.height / 2;
-        startX += n.width + 20;
-      });
-    });
+    const glowFilter = defs.append("filter")
+      .attr("id", "node-glow")
+      .attr("x", "-50%").attr("y", "-50%")
+      .attr("width", "200%").attr("height", "200%");
+    glowFilter.append("feGaussianBlur")
+      .attr("stdDeviation", "2.5")
+      .attr("result", "blur");
+    glowFilter.append("feMerge")
+      .selectAll("feMergeNode")
+      .data(["blur", "SourceGraphic"])
+      .join("feMergeNode")
+      .attr("in", d => d);
 
-    // === LINKS (structural beams) ===
-    const linkG = g.append('g').attr('class', 'kg-links');
+    const g = svg.append("g");
 
-    links.forEach(l => {
-      const source = nodeMap.get(l.source);
-      const target = nodeMap.get(l.target);
-      if (!source || !target) return;
+    svg.call(d3.zoom()
+      .scaleExtent([0.4, 3])
+      .on("zoom", (e) => g.attr("transform", e.transform))
+    );
 
-      const sourceFloor = floors.find(f => f.id === source.floor);
-      const targetFloor = floors.find(f => f.id === target.floor);
+    const tooltip = d3.select("#knowledge-tooltip");
 
-      // Draw L-shaped beam: horizontal from source, vertical to target, horizontal to target
-      const midY = (source.y + target.y) / 2;
+    const linkG = g.append("g").attr("class","kg-links");
+    const link = linkG.selectAll("line")
+      .data(links)
+      .join("line")
+        .attr("stroke", d => linkTypes[d.type]?.color || "rgba(74,71,66,0.15)")
+        .attr("stroke-width", d => linkTypes[d.type]?.width || 1)
+        .attr("stroke-dasharray", d => linkTypes[d.type]?.dash || "")
+        .attr("opacity", 0.30)
+        .attr("marker-end", d => `url(#arrow-${d.type})`);
 
-      const path = linkG.append('path')
-        .attr('d', `M${source.x},${source.y + (sourceFloor.height/2 - 4)} L${source.x},${midY} L${target.x},${midY} L${target.x},${target.y - (targetFloor.height/2 - 4)}`)
-        .attr('fill', 'none')
-        .attr('stroke', 'rgba(0,47,167,0.25)')
-        .attr('stroke-width', 1)
-        .attr('opacity', 0);
+    const glowG = g.append("g").attr("class","kg-glows");
+    const glow = glowG.selectAll("circle")
+      .data(nodes)
+      .join("circle")
+        .attr("r", d => d.radius * 2.2)
+        .attr("fill", d => groupColors[d.group] || "#6B6760")
+        .attr("opacity", 0.06)
+        .attr("pointer-events", "none");
 
-      path.transition().duration(800).delay(Math.random() * 500)
-        .attr('opacity', 1);
-    });
+    const nodeG = g.append("g").attr("class","kg-nodes");
+    const node = nodeG.selectAll("circle")
+      .data(nodes)
+      .join("circle")
+        .attr("r", d => d.radius)
+        .attr("fill", d => groupColors[d.group] || "#6B6760")
+        .attr("stroke", d => d3.color(groupColors[d.group]||"#6B6760").darker(0.4))
+        .attr("stroke-width", 1.5)
+        .attr("opacity", 0.9)
+        .attr("cursor", "pointer")
+        .attr("filter", "url(#node-glow)")
+        .on("mouseenter", onNodeEnter)
+        .on("mousemove", onNodeMove)
+        .on("mouseleave", onNodeLeave);
 
-    // === NODES (building columns) ===
-    const nodeG = g.append('g').attr('class', 'kg-nodes');
-    const tooltip = d3.select('#knowledge-tooltip');
+    function onNodeEnter(e, d) {
+      tooltip.style("opacity", 1)
+        .html(`<div class="kg-tooltip-name" style="color:${groupColors[d.group]}">${d.label}</div>
+               <div class="kg-tooltip-category">${groupLabels[d.group]||d.group}</div>
+               <div class="kg-tooltip-desc">${d.desc}</div>`);
+      d3.select(e.target)
+        .attr("stroke-width", 3)
+        .attr("opacity", 1)
+        .attr("r", d.radius * 1.3)
+        .transition().duration(200);
 
-    floors.forEach(floor => {
-      floor.nodes.forEach(n => {
-        const colG = nodeG.append('g')
-          .attr('class', 'kg-column')
-          .attr('transform', `translate(${n.x},${n.y})`)
-          .attr('cursor', 'pointer')
-          .on('mouseenter', function(e) {
-            d3.select(this).select('rect').attr('stroke-width', 2).attr('opacity', 1);
-            d3.select(this).select('text').attr('opacity', 1);
-            tooltip.style('opacity', 1)
-              .html(`<div class="kg-tooltip-name" style="color:${floor.accent}">${n.label}</div>
-                     <div class="kg-tooltip-category">${floor.label} / ${floor.labelZh}</div>
-                     <div class="kg-tooltip-desc">${n.desc}</div>`);
-          })
-          .on('mousemove', function(e) {
-            const wrapper = document.querySelector('.knowledge-graph-wrapper');
-            const wrapRect = wrapper.getBoundingClientRect();
-            tooltip
-              .style('left', (e.clientX - wrapRect.left + 12) + 'px')
-              .style('top', (e.clientY - wrapRect.top - 12) + 'px');
-          })
-          .on('mouseleave', function() {
-            d3.select(this).select('rect').attr('stroke-width', 1).attr('opacity', 0.85);
-            d3.select(this).select('text').attr('opacity', 0.7);
-            tooltip.style('opacity', 0);
-          });
+      link
+        .attr("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 0.7 : 0.06)
+        .attr("stroke-width", l => (l.source.id === d.id || l.target.id === d.id)
+          ? (linkTypes[l.type]?.width || 1) * 2
+          : (linkTypes[l.type]?.width || 1) * 0.3);
 
-        // Column body
-        colG.append('rect')
-          .attr('x', -n.width / 2)
-          .attr('y', -floor.height / 2 + 8)
-          .attr('width', n.width)
-          .attr('height', floor.height - 16)
-          .attr('fill', floor.color)
-          .attr('stroke', floor.accent)
-          .attr('stroke-width', 1)
-          .attr('opacity', 0.85)
-          .attr('rx', 0);
+      node
+        .attr("opacity", n => (n.id === d.id || links.some(l =>
+          (l.source.id === d.id && l.target.id === n.id) ||
+          (l.target.id === d.id && l.source.id === n.id)
+        )) ? 1 : 0.25);
+    }
 
-        // Column label
-        colG.append('text')
-          .attr('y', 4)
-          .attr('fill', '#f5f5f7')
-          .attr('font-size', Math.max(9, Math.min(12, n.width / 8)))
-          .attr('font-weight', 500)
-          .attr('text-anchor', 'middle')
-          .attr('opacity', 0.7)
-          .attr('pointer-events', 'none')
-          .text(n.label);
-      });
-    });
+    function onNodeMove(e) {
+      const wrapper = document.querySelector('.knowledge-graph-wrapper');
+      const wrapRect = wrapper.getBoundingClientRect();
+      tooltip
+        .style("left", (e.clientX - wrapRect.left + 12) + "px")
+        .style("top", (e.clientY - wrapRect.top - 12) + "px");
+    }
 
-    // === ENTRANCE ANIMATION ===
-    nodeG.selectAll('.kg-column')
-      .attr('opacity', 0)
-      .attr('transform', function() {
-        const transform = d3.select(this).attr('transform');
-        return transform + ' scale(0.8)';
+    function onNodeLeave(e, d) {
+      tooltip.style("opacity", 0);
+      d3.select(e.target)
+        .attr("stroke-width", 1.5)
+        .attr("opacity", 0.9)
+        .attr("r", d.radius)
+        .transition().duration(200);
+
+      link
+        .attr("opacity", 0.30)
+        .attr("stroke-width", l => linkTypes[l.type]?.width || 1);
+
+      node.attr("opacity", 0.9);
+    }
+
+    const drag = d3.drag()
+      .on("start", (e, d) => {
+        if (!e.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x; d.fy = d.y;
       })
-      .transition()
-      .duration(600)
-      .delay((d, i) => i * 40)
-      .attr('opacity', 1)
-      .attr('transform', function() {
-        const transform = d3.select(this).attr('transform');
-        return transform.replace(' scale(0.8)', ' scale(1)');
+      .on("drag", (e, d) => {
+        d.fx = e.x; d.fy = e.y;
+      })
+      .on("end", (e, d) => {
+        if (!e.active) simulation.alphaTarget(0);
+        d.fx = null; d.fy = null;
       });
+
+    node.call(drag);
+
+    const labelG = g.append("g").attr("class","kg-labels");
+    const label = labelG.selectAll("text")
+      .data(nodes)
+      .join("text")
+        .text(d => d.label)
+        .attr("font-size", d => Math.max(8, d.radius * 0.5))
+        .attr("fill", "#6B6760")
+        .attr("text-anchor", "middle")
+        .attr("dy", d => d.radius + 12)
+        .attr("pointer-events", "none")
+        .attr("opacity", 0.65);
+
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
+        const dists = { "core": 65, "orchestrates": 75, "delegates": 80, "contains": 90, "uses": 85, "depends": 95, "skills": 70, "creates": 80 };
+        return dists[d.type] || 110;
+      }).strength(d => {
+        const strengths = { "core": 0.5, "orchestrates": 0.4, "contains": 0.3, "uses": 0.3, "depends": 0.35, "skills": 0.4, "creates": 0.35 };
+        return strengths[d.type] || 0.15;
+      }))
+      .force("charge", d3.forceManyBody().strength(d => -d.radius * 22))
+      .force("center", d3.forceCenter(W/2, H/2))
+      .force("collision", d3.forceCollide().radius(d => d.radius + 14))
+      .force("x", d3.forceX(W/2).strength(0.03))
+      .force("y", d3.forceY(H/2).strength(0.03));
+
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+      node.attr("cx", d => d.x).attr("cy", d => d.y);
+      glow.attr("cx", d => d.x).attr("cy", d => d.y);
+      label.attr("x", d => d.x).attr("y", d => d.y);
+    });
+
+    simulation.alpha(0.5).restart();
+    setTimeout(() => simulation.alphaTarget(0).alphaDecay(0.02), 3000);
 
     // === LEGEND ===
-    const legendEl = d3.select('#knowledge-legend');
+    const legendEl = d3.select("#knowledge-legend");
     legendEl.html('');
-    floors.forEach(f => {
-      legendEl.append('div').attr('class', 'kg-legend-item')
-        .html(`<div class="kg-legend-dot" style="background:${f.accent};box-shadow:0 0 5px ${f.accent}40"></div> ${f.label}`);
+    Object.entries(groupLabels).forEach(([key, lbl]) => {
+      legendEl.append("div").attr("class","kg-legend-item")
+        .html(`<div class="kg-legend-dot" style="background:${groupColors[key]};box-shadow:0 0 5px ${groupColors[key]}40"></div> ${lbl}`);
     });
   }
 })();
