@@ -37,9 +37,11 @@
 
   /* Animation — restrained, rational */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   --dur-fast: 200ms;
   --dur-med:  300ms;
   --dur-slow: 400ms;
+  --dur-arch: 800ms;
 
   --nav-height: 64px;
 }
@@ -73,6 +75,26 @@ body {
 
 a { color: var(--accent); text-decoration: none; transition: color var(--dur-fast) var(--ease-out); }
 a:hover { color: var(--near-black); }
+
+/* ---------- Architectural Background Canvas ---------- */
+.arch-bg-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+#arch-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
 
 /* ---------- 12-Column Grid ---------- */
 .grid {
@@ -191,12 +213,24 @@ a:hover { color: var(--near-black); }
   margin-bottom: var(--sp-3);
 }
 
+/* ---------- Scroll Progress Bar ---------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  z-index: 1000;
+  width: 0%;
+  transition: width 0.1s linear;
+}
+
 /* ---------- Animations ---------- */
 .reveal {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity var(--dur-slow) var(--ease-out),
-              transform var(--dur-slow) var(--ease-out);
+  transform: translateY(30px);
+  transition: opacity var(--dur-arch) var(--ease-out),
+              transform var(--dur-arch) var(--ease-out);
 }
 .reveal.revealed {
   opacity: 1;
@@ -205,9 +239,9 @@ a:hover { color: var(--near-black); }
 
 .reveal--left {
   opacity: 0;
-  transform: translateX(-12px);
-  transition: opacity var(--dur-slow) var(--ease-out),
-              transform var(--dur-slow) var(--ease-out);
+  transform: translateX(-20px);
+  transition: opacity var(--dur-arch) var(--ease-out),
+              transform var(--dur-arch) var(--ease-out);
 }
 .reveal--left.revealed {
   opacity: 1;
@@ -215,10 +249,20 @@ a:hover { color: var(--near-black); }
 }
 
 /* Stagger delays */
-.reveal-d1 { transition-delay: 80ms; }
-.reveal-d2 { transition-delay: 160ms; }
-.reveal-d3 { transition-delay: 240ms; }
-.reveal-d4 { transition-delay: 320ms; }
+.reveal-d1 { transition-delay: 100ms; }
+.reveal-d2 { transition-delay: 200ms; }
+.reveal-d3 { transition-delay: 300ms; }
+.reveal-d4 { transition-delay: 400ms; }
+
+/* Floor-active section state */
+.section.floor-active {
+  opacity: 1;
+}
+
+.section.floor-active .section-number {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* Lang switching fade */
 .lang-switching * { transition: none !important; }
@@ -236,7 +280,8 @@ a:hover { color: var(--near-black); }
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid rgba(0,0,0,0.06);
-  transition: background var(--dur-med) var(--ease-out);
+  transition: background var(--dur-med) var(--ease-out),
+              transform var(--dur-med) var(--ease-out);
 }
 
 .nav-inner {
@@ -319,10 +364,22 @@ a:hover { color: var(--near-black); }
 .lang-toggle.lang-zh-active .lang-zh { color: var(--accent); }
 .lang-toggle.lang-en-active .lang-en { color: var(--accent); }
 
+/* Nav floor indicator */
+.nav-floor-indicator {
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: left 0.4s var(--ease-out), width 0.4s var(--ease-out);
+}
+
 /* ---------- Section ---------- */
 .section {
   padding: var(--sp-16) 0;
   position: relative;
+  opacity: 1;
+  transition: opacity var(--dur-arch) var(--ease-out);
 }
 
 .section--hero {
@@ -331,6 +388,8 @@ a:hover { color: var(--near-black); }
   min-height: 90vh;
   display: flex;
   align-items: center;
+  position: relative;
+  z-index: 1;
 }
 
 .section--dark {
@@ -342,6 +401,18 @@ a:hover { color: var(--near-black); }
   background-color: var(--concrete-100);
   background-image:
     repeating-linear-gradient(180deg, transparent, transparent 3px, rgba(0,0,0,0.012) 3px, rgba(0,0,0,0.012) 4px);
+}
+
+/* Section floor divider */
+.section::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: var(--margin-x);
+  right: var(--margin-x);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--concrete-200) 20%, var(--concrete-200) 80%, transparent);
+  opacity: 0.5;
 }
 
 /* Large section number watermark */
@@ -358,6 +429,9 @@ a:hover { color: var(--near-black); }
   pointer-events: none;
   user-select: none;
   z-index: 0;
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 1.2s var(--ease-out), transform 1.2s var(--ease-out);
 }
 
 /* ---------- Hero ---------- */
@@ -370,6 +444,8 @@ a:hover { color: var(--near-black); }
   margin: 0 auto;
   align-items: center;
   width: 100%;
+  position: relative;
+  z-index: 1;
 }
 
 .hero-text {
@@ -390,6 +466,11 @@ a:hover { color: var(--near-black); }
   text-transform: uppercase;
   color: var(--near-black);
   margin-bottom: var(--sp-2);
+}
+
+.hero-name span {
+  display: inline-block;
+  will-change: transform, opacity;
 }
 
 .hero-tagline {
@@ -432,6 +513,13 @@ a:hover { color: var(--near-black); }
   display: block;
   border-radius: 0;
   filter: grayscale(100%) contrast(1.1);
+  transition: filter var(--dur-med) var(--ease-out),
+              transform var(--dur-med) var(--ease-out);
+}
+
+.avatar-wrapper:hover .avatar {
+  filter: grayscale(60%) contrast(1.05);
+  transform: scale(1.02);
 }
 
 /* 45-degree accent shadow on avatar */
@@ -444,6 +532,11 @@ a:hover { color: var(--near-black); }
   height: 3px;
   background: var(--accent);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 3px 100%);
+  transition: width var(--dur-med) var(--ease-out);
+}
+
+.avatar-wrapper:hover::after {
+  width: 60%;
 }
 
 /* ---------- Buttons ---------- */
@@ -460,6 +553,23 @@ a:hover { color: var(--near-black); }
   cursor: pointer;
   border-radius: 0;
   border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s var(--ease-out);
+}
+
+.btn:hover::before {
+  left: 100%;
 }
 
 .btn-primary {
@@ -470,6 +580,8 @@ a:hover { color: var(--near-black); }
 .btn-primary:hover {
   background: var(--near-black);
   color: var(--white);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 47, 167, 0.25);
 }
 
 .btn-outline {
@@ -481,6 +593,7 @@ a:hover { color: var(--near-black); }
 .btn-outline:hover {
   border-color: var(--accent);
   color: var(--accent);
+  transform: translateY(-2px);
 }
 
 /* ---------- Projects Grid ---------- */
@@ -502,11 +615,12 @@ a:hover { color: var(--near-black); }
   text-decoration: none;
   color: inherit;
   position: relative;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .project-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.10);
 }
 
 .project-card--large { grid-column: span 8; }
@@ -524,10 +638,27 @@ a:hover { color: var(--near-black); }
   background: var(--accent);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 3px 100%);
   opacity: 0;
-  transition: opacity var(--dur-med) var(--ease-out);
+  transition: opacity var(--dur-med) var(--ease-out), width var(--dur-med) var(--ease-out);
   z-index: 2;
 }
-.project-card:hover::after { opacity: 0.9; }
+.project-card:hover::after { opacity: 0.9; width: 60%; }
+
+/* Blueprint overlay */
+.blueprint-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity var(--dur-med) var(--ease-out);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.project-card:hover .blueprint-overlay {
+  opacity: 1;
+}
 
 .project-card-image {
   aspect-ratio: 16/10;
@@ -546,6 +677,12 @@ a:hover { color: var(--near-black); }
   width: 80px;
   height: 80px;
   color: var(--concrete-400);
+  transition: transform var(--dur-med) var(--ease-out), color var(--dur-med) var(--ease-out);
+}
+
+.project-card:hover .project-icon-wrapper {
+  transform: scale(1.1);
+  color: var(--accent);
 }
 
 .project-icon-wrapper svg {
@@ -558,6 +695,8 @@ a:hover { color: var(--near-black); }
   display: flex;
   flex-direction: column;
   gap: var(--sp-1);
+  position: relative;
+  z-index: 2;
 }
 
 .project-card-title {
@@ -596,6 +735,12 @@ a:hover { color: var(--near-black); }
   background: var(--concrete-050);
   padding: 2px 8px;
   border-radius: 0;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.project-card:hover .tag {
+  background: var(--accent);
+  color: var(--white);
 }
 
 /* More Projects card */
@@ -715,6 +860,14 @@ a:hover { color: var(--near-black); }
   border: 1px solid var(--concrete-200);
   padding: var(--sp-5);
   border-radius: 0;
+  transition: transform var(--dur-med) var(--ease-out),
+              box-shadow var(--dur-med) var(--ease-out);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.about-card:hover {
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
 }
 
 .about-card-title {
@@ -763,6 +916,15 @@ a:hover { color: var(--near-black); }
   border: 1px solid var(--concrete-200);
   padding: 4px 12px;
   border-radius: 0;
+  transition: all var(--dur-fast) var(--ease-out);
+  cursor: default;
+}
+
+.skill-tag:hover {
+  background: var(--accent);
+  color: var(--white);
+  border-color: var(--accent);
+  transform: translateY(-2px);
 }
 
 /* ---------- Contact Section ---------- */
@@ -785,16 +947,24 @@ a:hover { color: var(--near-black); }
   transition: all var(--dur-med) var(--ease-out);
   border-radius: 0;
   cursor: pointer;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .contact-card:hover {
   border-color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 47, 167, 0.10);
 }
 
 .contact-icon {
   color: var(--accent);
   margin-bottom: var(--sp-1);
+  transition: transform var(--dur-med) var(--ease-out);
+}
+
+.contact-card:hover .contact-icon {
+  transform: scale(1.15);
 }
 
 .contact-icon svg {
@@ -854,6 +1024,17 @@ a:hover { color: var(--near-black); }
   background: var(--black);
   color: var(--concrete-400);
   text-align: center;
+  position: relative;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: var(--margin-x);
+  right: var(--margin-x);
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--concrete-700) 20%, var(--concrete-700) 80%, transparent);
 }
 
 .footer p {
@@ -900,6 +1081,8 @@ a:hover { color: var(--near-black); }
 
   .nav-links { gap: var(--sp-2); }
   .nav-links a { font-size: 10px; }
+
+  .arch-bg-container { display: none; }
 }
 
 @media (max-width: 480px) {
