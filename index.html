@@ -150,20 +150,61 @@
           </div>
         </a>
 
-        <a href="https://github.com/TAOMA-06?tab=repositories" class="project-card project-card-more" target="_blank" rel="noopener">
+        <div class="project-card project-card-more" id="moreProjectsToggle" role="button" tabindex="0">
           <div class="project-card-image">
             <div class="project-icon-wrapper">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" class="more-arrow-icon">
                 <path d="M5 12h14M12 5l7 7-7 7"/>
               </svg>
             </div>
           </div>
           <div class="project-card-body">
             <h3 class="project-card-title" data-i18n="projects.more.title">More Projects</h3>
-            <p class="project-card-desc" data-i18n="projects.more.desc">Explore all my repositories on GitHub.</p>
+            <p class="project-card-desc" data-i18n="projects.more.desc">Explore more projects and tools.</p>
             <div class="project-card-tags">
-              <span class="tag">GitHub</span>
-              <span class="tag">Open Source</span>
+              <span class="tag more-count-tag">+2</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hidden projects — revealed when "More Projects" is clicked -->
+        <a href="gallery/index.html" class="project-card hidden-project">
+          <div class="project-card-image">
+            <div class="project-icon-wrapper">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                <circle cx="8.5" cy="8.5" r="1.5"/>
+                <polyline points="21 15 16 10 5 21"/>
+              </svg>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <h3 class="project-card-title" data-i18n="projects.gallery.title">🖼️ 图库</h3>
+            <p class="project-card-desc" data-i18n="projects.gallery.desc">高清壁纸收藏 — 浏览、预览并下载原图。</p>
+            <div class="project-card-tags">
+              <span class="tag">Gallery</span>
+              <span class="tag">Wallpapers</span>
+            </div>
+          </div>
+        </a>
+
+        <a href="bounce/index.html" class="project-card hidden-project">
+          <div class="project-card-image">
+            <div class="project-icon-wrapper">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                <circle cx="12" cy="5" r="4"/>
+                <path d="M5 20c0-4 3.1-7 7-7s7 3 7 7"/>
+                <line x1="12" y1="13" x2="12" y2="20" stroke-width="1.5"/>
+              </svg>
+            </div>
+          </div>
+          <div class="project-card-body">
+            <h3 class="project-card-title" data-i18n="projects.bounce.title">🏀 Bounce Ball</h3>
+            <p class="project-card-desc" data-i18n="projects.bounce.desc">物理弹球小游戏 — Canvas 驱动的关卡挑战。</p>
+            <div class="project-card-tags">
+              <span class="tag">Canvas</span>
+              <span class="tag">Physics</span>
+              <span class="tag">Game</span>
             </div>
           </div>
         </a>

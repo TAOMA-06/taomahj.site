@@ -45,7 +45,11 @@ const i18n = {
     'contact.more': '更多',
     'contact.moreHint': '更多联系方式即将上线',
     'projects.more.title': '更多项目',
-    'projects.more.desc': '在 GitHub 上浏览我的全部仓库。',
+    'projects.more.desc': '点击展开查看更多项目与工具。',
+    'projects.gallery.title': '🖼️ 图库',
+    'projects.gallery.desc': '高清壁纸收藏 — 浏览、预览并下载原图。',
+    'projects.bounce.title': '🏀 Bounce Ball',
+    'projects.bounce.desc': '物理弹球小游戏 — Canvas 驱动的关卡挑战。',
     'knowledge.title': '知识图谱',
     'knowledge.desc': '我的 Hermes AI 生态系统 — 技能、智能体、记忆与工作流',
     'footer.built': '用好奇心构建',
@@ -89,7 +93,11 @@ const i18n = {
     'contact.more': 'More',
     'contact.moreHint': 'More ways coming soon',
     'projects.more.title': 'More Projects',
-    'projects.more.desc': 'Browse all my repositories on GitHub.',
+    'projects.more.desc': 'Click to explore more projects and tools.',
+    'projects.gallery.title': '🖼️ Gallery',
+    'projects.gallery.desc': 'HD wallpaper collection — browse, preview and download original images.',
+    'projects.bounce.title': '🏀 Bounce Ball',
+    'projects.bounce.desc': 'Physics bouncing ball game — Canvas-powered level challenges.',
     'knowledge.title': 'Knowledge Graph',
     'knowledge.desc': 'My Hermes AI ecosystem — skills, agents, memory & workflows',
     'footer.built': 'Built with curiosity',
@@ -135,6 +143,54 @@ document.getElementById('langToggle').addEventListener('click', () => {
 // Init
 applyLang();
 updateLangToggle();
+
+// ==================== More Projects Toggle ====================
+
+(function initMoreProjects() {
+  const toggle = document.getElementById('moreProjectsToggle');
+  const hiddenCards = document.querySelectorAll('.hidden-project');
+  const arrowIcon = toggle?.querySelector('.more-arrow-icon');
+  const countTag = toggle?.querySelector('.more-count-tag');
+
+  if (!toggle || hiddenCards.length === 0) return;
+
+  let expanded = false;
+
+  function expand() {
+    expanded = true;
+    hiddenCards.forEach((card, i) => {
+      card.classList.add('visible');
+      card.style.transitionDelay = `${i * 0.08}s`;
+    });
+    toggle.classList.add('expanded');
+    if (arrowIcon) arrowIcon.style.transform = 'rotate(90deg)';
+    if (countTag) countTag.textContent = '收起';
+  }
+
+  function collapse() {
+    expanded = false;
+    hiddenCards.forEach((card, i) => {
+      card.classList.remove('visible');
+      card.style.transitionDelay = `${(hiddenCards.length - 1 - i) * 0.06}s`;
+    });
+    toggle.classList.remove('expanded');
+    if (arrowIcon) arrowIcon.style.transform = 'rotate(0deg)';
+    if (countTag) countTag.textContent = '+2';
+  }
+
+  toggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    expanded ? collapse() : expand();
+  });
+
+  // Keyboard support
+  toggle.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      expanded ? collapse() : expand();
+    }
+  });
+})();
 
 // ==================== Spotlight Cursor ====================
 

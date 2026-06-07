@@ -567,6 +567,49 @@ a:hover { color: var(--accent2); }
 .project-card-more:hover .project-icon-wrapper svg {
   transform: translateX(4px);
 }
+.project-card-more.expanded {
+  border-color: var(--accent);
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.15);
+}
+.project-card-more.expanded .project-icon-wrapper svg {
+  transform: translateX(4px);
+}
+
+.more-arrow-icon {
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.more-count-tag {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-color: var(--accent) !important;
+  transition: all 0.2s;
+}
+
+/* Hidden project cards */
+.hidden-project {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+  border: 1px solid transparent;
+  transform: translateY(-12px);
+  transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease,
+              transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              margin 0.3s ease;
+  pointer-events: none;
+}
+.hidden-project.visible {
+  max-height: 300px;
+  opacity: 1;
+  overflow: visible;
+  margin: inherit;
+  padding: inherit;
+  transform: translateY(0);
+  pointer-events: auto;
+}
 
 .project-card-image {
   height: 180px;
