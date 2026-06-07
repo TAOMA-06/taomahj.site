@@ -1,6 +1,5 @@
 /* ========================================================
-   Personal Website — taomahj
-   Spotlight Cursor · Particles · i18n · Scroll Animations
+   taomahj — Swiss Modernist · i18n · Knowledge Graph · Reveal
    ======================================================== */
 
 // ==================== i18n ====================
@@ -13,20 +12,19 @@ const i18n = {
     'nav.contact': '联系',
     'nav.mixflow': 'MixFlow',
     'nav.perler': 'Perler',
-            'nav.chiwu': 'Chiwu',
-    'nav.gallery': 'Gallery',
+    'nav.chiwu': '持物记录',
+    'nav.gallery': '图库',
     'hero.tagline': '数学 × 电路 × 自动化 × 代码',
     'hero.sub': '探索硬件与软件交汇地带的本科生',
     'hero.viewWork': '查看作品',
     'hero.getInTouch': '联系我',
-    'hero.scroll': '向下滚动',
     'projects.title': '项目',
     'projects.desc': '做过和正在探索的事情',
-                            'projects.mixflow.title': '🍸 MixFlow',
+    'projects.mixflow.title': 'MixFlow',
     'projects.mixflow.desc': 'AI 鸡尾酒配方浏览器 — 发现、搜索并收藏你喜欢的饮品。',
-    'projects.perler.title': '🧩 Perler Bead',
+    'projects.perler.title': 'Perler Bead',
     'projects.perler.desc': '图片转拼豆风格 — 圆润珠子、网格间隙、塑料光泽，纯本地处理无水印。',
-            'projects.chiwu.title': '📦 持物记录',
+    'projects.chiwu.title': '持物记录',
     'projects.chiwu.desc': '记录长期陪伴你的每一件物品 — 本地优先的物品档案 App，iOS · Android · watchOS。',
     'about.title': '关于',
     'about.desc': '我的背景、技能与驱动力',
@@ -46,9 +44,9 @@ const i18n = {
     'contact.moreHint': '更多联系方式即将上线',
     'projects.more.title': '更多项目',
     'projects.more.desc': '点击展开查看更多项目与工具。',
-    'projects.gallery.title': '🖼️ 图库',
+    'projects.gallery.title': '图库',
     'projects.gallery.desc': '高清壁纸收藏 — 浏览、预览并下载原图。',
-    'projects.bounce.title': '🏀 Bounce Ball',
+    'projects.bounce.title': 'Bounce Ball',
     'projects.bounce.desc': '物理弹球小游戏 — Canvas 驱动的关卡挑战。',
     'knowledge.title': '知识图谱',
     'knowledge.desc': '我的 Hermes AI 生态系统 — 技能、智能体、记忆与工作流',
@@ -61,20 +59,19 @@ const i18n = {
     'nav.contact': 'Contact',
     'nav.mixflow': 'MixFlow',
     'nav.perler': 'Perler',
-        'nav.chiwu': 'Chiwu',
+    'nav.chiwu': 'Chiwu',
     'nav.gallery': 'Gallery',
     'hero.tagline': 'Mathematics × Circuits × Automation × Code',
     'hero.sub': 'Undergraduate exploring the intersection of hardware and software',
     'hero.viewWork': 'View My Work',
     'hero.getInTouch': 'Get In Touch',
-    'hero.scroll': 'Scroll down',
     'projects.title': 'Projects',
-    'projects.desc': 'Things I\'ve built and explored',
-                            'projects.mixflow.title': '🍸 MixFlow',
+    'projects.desc': "Things I've built and explored",
+    'projects.mixflow.title': 'MixFlow',
     'projects.mixflow.desc': 'AI-powered cocktail recipe browser — discover, search & save your favorite drinks.',
-    'projects.perler.title': '🧩 Perler Bead',
+    'projects.perler.title': 'Perler Bead',
     'projects.perler.desc': 'Image-to-Perler-Bead converter — rounded beads, grid gaps, plastic shine. Fully client-side with no watermark.',
-            'projects.chiwu.title': '📦 持物记录',
+    'projects.chiwu.title': '持物记录',
     'projects.chiwu.desc': 'Record every item that accompanies you — a local-first item archive app for iOS, Android & watchOS.',
     'about.title': 'About',
     'about.desc': 'Background, skills, and what drives me',
@@ -94,9 +91,9 @@ const i18n = {
     'contact.moreHint': 'More ways coming soon',
     'projects.more.title': 'More Projects',
     'projects.more.desc': 'Click to explore more projects and tools.',
-    'projects.gallery.title': '🖼️ Gallery',
+    'projects.gallery.title': 'Gallery',
     'projects.gallery.desc': 'HD wallpaper collection — browse, preview and download original images.',
-    'projects.bounce.title': '🏀 Bounce Ball',
+    'projects.bounce.title': 'Bounce Ball',
     'projects.bounce.desc': 'Physics bouncing ball game — Canvas-powered level challenges.',
     'knowledge.title': 'Knowledge Graph',
     'knowledge.desc': 'My Hermes AI ecosystem — skills, agents, memory & workflows',
@@ -108,7 +105,6 @@ let currentLang = localStorage.getItem('lang') || 'zh';
 
 function switchLang(lang) {
   if (lang === currentLang) return;
-
   document.body.classList.add('lang-switching');
   setTimeout(() => {
     currentLang = lang;
@@ -123,15 +119,14 @@ function applyLang() {
   const dict = i18n[currentLang];
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
-    if (dict[key]) {
-      el.textContent = dict[key];
-    }
+    if (dict[key]) el.textContent = dict[key];
   });
   document.documentElement.lang = currentLang;
 }
 
 function updateLangToggle() {
   const toggle = document.getElementById('langToggle');
+  if (!toggle) return;
   toggle.classList.toggle('lang-zh-active', currentLang === 'zh');
   toggle.classList.toggle('lang-en-active', currentLang === 'en');
 }
@@ -140,7 +135,6 @@ document.getElementById('langToggle').addEventListener('click', () => {
   switchLang(currentLang === 'zh' ? 'en' : 'zh');
 });
 
-// Init
 applyLang();
 updateLangToggle();
 
@@ -159,20 +153,16 @@ updateLangToggle();
 
   function expand() {
     expanded = true;
-    // Clear any pending collapse timer
     if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
 
     hiddenCards.forEach((card, i) => {
-      // Ensure the card is in the grid flow (flex layout matching other project cards)
       card.style.display = 'flex';
       card.style.flexDirection = 'column';
-      // Start from invisible state
       card.style.opacity = '0';
       card.style.transform = 'translateY(-12px)';
       card.style.pointerEvents = 'none';
       card.classList.remove('visible');
 
-      // Trigger transition on next frame
       requestAnimationFrame(() => {
         requestAnimationFrame(() => {
           card.style.transitionDelay = `${i * 0.08}s`;
@@ -195,7 +185,6 @@ updateLangToggle();
     if (arrowIcon) arrowIcon.style.transform = 'rotate(0deg)';
     if (countTag) countTag.textContent = '+2';
 
-    // After transition completes, remove from grid flow
     collapseTimer = setTimeout(() => {
       if (!expanded) {
         hiddenCards.forEach(card => {
@@ -213,7 +202,6 @@ updateLangToggle();
     expanded ? collapse() : expand();
   });
 
-  // Keyboard support
   toggle.addEventListener('keydown', (e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
@@ -222,249 +210,79 @@ updateLangToggle();
   });
 })();
 
-// ==================== Spotlight Cursor ====================
+// ==================== Scroll Reveal (Intersection Observer) ====================
 
-const spotlight = document.querySelector('.spotlight');
-
-document.addEventListener('mousemove', (e) => {
-  document.documentElement.style.setProperty('--mouse-x', `${e.clientX}px`);
-  document.documentElement.style.setProperty('--mouse-y', `${e.clientY}px`);
-});
-
-// Card-local glow effect
-document.querySelectorAll('.glass-card, .project-card').forEach(card => {
-  card.addEventListener('mousemove', (e) => {
-    const rect = card.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    card.style.setProperty('--card-mouse-x', `${x}%`);
-    card.style.setProperty('--card-mouse-y', `${y}%`);
+(function initScrollReveal() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('revealed');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, {
+    threshold: 0.12,
+    rootMargin: '0px 0px -30px 0px'
   });
-  card.addEventListener('mouseleave', () => {
-    card.style.setProperty('--card-mouse-x', '50%');
-    card.style.setProperty('--card-mouse-y', '50%');
-  });
-});
 
-// Hide spotlight on touch devices
-if ('ontouchstart' in window) {
-  spotlight.style.display = 'none';
-}
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+})();
 
-// ==================== Particle Canvas Background ====================
+// ==================== Nav Active State ====================
 
-const canvas = document.getElementById('particles');
-const ctx = canvas.getContext('2d');
+(function initNavActive() {
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
 
-let particles = [];
-let animationId;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(link => {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { threshold: 0.3, rootMargin: '-64px 0px 0px 0px' });
 
-function resizeCanvas() {
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
-}
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
+  sections.forEach(s => observer.observe(s));
+})();
 
-// Firefly color palette
-const FIREFLY_COLORS = [
-  { r: 240, g: 230, b: 140 }, // warm yellow #f0e68c
-  { r: 127, g: 255, b: 212 }, // aquamarine #7fffd4
-  { r: 255, g: 215, b: 0 },   // gold #ffd700
-  { r: 173, g: 255, b: 47 },  // green-yellow #adff2f
-];
+// ==================== Smooth Scroll ====================
 
-// Determine particle count based on screen size
-function getParticleCount() {
-  const isMobile = canvas.width < 768;
-  if (isMobile) return 20;
-  return 35;
-}
-
-class Particle {
-  constructor() {
-    this.reset();
-  }
-  reset() {
-    this.x = Math.random() * canvas.width;
-    this.y = Math.random() * canvas.height;
-    // Slower drift for firefly feel
-    this.vx = (Math.random() - 0.5) * 0.25;
-    this.vy = (Math.random() - 0.5) * 0.25;
-    this.size = Math.random() * 2 + 1;
-    this.baseOpacity = Math.random() * 0.4 + 0.3;
-    // Slower, more organic pulse
-    this.pulseSpeed = Math.random() * 0.003 + 0.001;
-    this.pulseOffset = Math.random() * Math.PI * 2;
-    // Random direction change timer
-    this.dirChangeTimer = Math.random() * 200;
-    this.dirChangeInterval = 150 + Math.random() * 250;
-    // Pick a warm firefly color
-    this.color = FIREFLY_COLORS[Math.floor(Math.random() * FIREFLY_COLORS.length)];
-  }
-  update(time) {
-    this.x += this.vx;
-    this.y += this.vy;
-
-    // Gentle direction changes for organic movement
-    this.dirChangeTimer++;
-    if (this.dirChangeTimer > this.dirChangeInterval) {
-      this.dirChangeTimer = 0;
-      this.vx += (Math.random() - 0.5) * 0.15;
-      this.vy += (Math.random() - 0.5) * 0.15;
-      // Clamp velocity
-      const maxV = 0.3;
-      this.vx = Math.max(-maxV, Math.min(maxV, this.vx));
-      this.vy = Math.max(-maxV, Math.min(maxV, this.vy));
-    }
-
-    // Wrap around
-    if (this.x < -20) this.x = canvas.width + 20;
-    if (this.x > canvas.width + 20) this.x = -20;
-    if (this.y < -20) this.y = canvas.height + 20;
-    if (this.y > canvas.height + 20) this.y = -20;
-
-    // Breathing glow: slow sine wave with deeper variation
-    const pulse = Math.sin(time * this.pulseSpeed + this.pulseOffset) * 0.5 + 0.5;
-    this.currentOpacity = this.baseOpacity * (0.3 + pulse * 0.7);
-    this.currentSize = this.size * (0.8 + pulse * 0.4);
-  }
-  draw() {
-    const { r, g, b } = this.color;
-    const glowSize = this.currentSize * 4;
-
-    // Outer soft glow
-    const glow = ctx.createRadialGradient(
-      this.x, this.y, 0,
-      this.x, this.y, glowSize
-    );
-    glow.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${this.currentOpacity * 0.6})`);
-    glow.addColorStop(0.4, `rgba(${r}, ${g}, ${b}, ${this.currentOpacity * 0.15})`);
-    glow.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
-
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, glowSize, 0, Math.PI * 2);
-    ctx.fillStyle = glow;
-    ctx.fill();
-
-    // Bright core
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.currentSize * 0.6, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(${r}, ${g}, ${b}, ${this.currentOpacity})`;
-    ctx.fill();
-  }
-}
-
-function initParticles() {
-  particles = [];
-  const count = getParticleCount();
-  for (let i = 0; i < count; i++) {
-    particles.push(new Particle());
-  }
-}
-
-function animateParticles(time) {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  particles.forEach(p => {
-    p.update(time);
-    p.draw();
-  });
-  animationId = requestAnimationFrame(animateParticles);
-}
-
-initParticles();
-animationId = requestAnimationFrame(animateParticles);
-
-// Re-init on resize (debounced)
-let resizeTimeout;
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimeout);
-  resizeTimeout = setTimeout(() => {
-    resizeCanvas();
-    initParticles();
-  }, 300);
-});
-
-// ==================== Scroll Effects ====================
-
-// Nav scroll state
-const nav = document.getElementById('nav');
-window.addEventListener('scroll', () => {
-  nav.classList.toggle('scrolled', window.scrollY > 50);
-});
-
-// Scroll reveal animation
-const revealElements = document.querySelectorAll(
-  '.section-container, .hero-content, .project-card, .about-card, .contact-card'
-);
-
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('reveal', 'visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, {
-  threshold: 0.15,
-  rootMargin: '0px 0px -40px 0px'
-});
-
-revealElements.forEach(el => {
-  el.classList.add('reveal');
-  revealObserver.observe(el);
-});
-
-// Smooth scroll for nav links
 document.querySelectorAll('a[href^="#"]').forEach(link => {
   link.addEventListener('click', (e) => {
     const target = document.querySelector(link.getAttribute('href'));
     if (target) {
       e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth' });
+      const navH = 64;
+      const top = target.getBoundingClientRect().top + window.pageYOffset - navH;
+      window.scrollTo({ top, behavior: 'smooth' });
     }
   });
 });
 
 // ==================== Security Hardening ====================
 
-// Disable console logging in production
 if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-  // Override console methods to prevent info leakage
   const noop = () => {};
-  ['log', 'info', 'warn', 'debug', 'error', 'table', 'trace', 'group', 'groupEnd', 'groupCollapsed', 'time', 'timeEnd', 'timeLog', 'count', 'countReset', 'assert', 'clear', 'dir', 'dirxml'].forEach(method => {
-    if (typeof console[method] === 'function') {
-      console[method] = noop;
-    }
+  ['log','info','warn','debug','error','table','trace','group','groupEnd',
+   'groupCollapsed','time','timeEnd','timeLog','count','countReset','assert',
+   'clear','dir','dirxml'].forEach(method => {
+    if (typeof console[method] === 'function') console[method] = noop;
   });
 }
 
-// Prevent clickjacking: ensure we're not in an iframe
-// Note: Also configure X-Frame-Options: DENY or CSP frame-ancestors 'none' on the server
 if (window.top !== window.self) {
-  // Modern browsers block cross-origin location assignment, so use a defense-in-depth approach
   try {
     window.top.location = window.self.location;
   } catch (e) {
-    // Cross-origin: we can't redirect, so hide the body to prevent UI redressing
     document.body.style.display = 'none';
-    // Attempt to break out using other techniques
-    if (window.parent && window.parent !== window) {
-      window.parent.postMessage({ type: 'frame-bust', location: window.location.href }, '*');
-    }
   }
 }
 
-// Disable right-click on avatar to prevent easy image theft
 document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
   e.preventDefault();
 });
-
-// ==================== Contact Link Placeholder ====================
-
-// These are interfaces — update href when ready
-// GitHub: update href in HTML or set here
-// Social: update href in HTML or set here
 
 // ==================== Knowledge Graph (D3 Force-Directed) ====================
 
@@ -472,7 +290,6 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
   const container = document.getElementById('knowledge-graph');
   if (!container || typeof d3 === 'undefined') return;
 
-  // Check if section is visible before initializing
   const section = document.getElementById('knowledge');
   let initialized = false;
 
@@ -491,7 +308,7 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
   function renderGraph() {
     const rect = container.getBoundingClientRect();
     const W = rect.width || container.offsetWidth || 800;
-    const H = 600;
+    const H = 560;
 
     // === NODES ===
     const nodes = [
@@ -513,7 +330,6 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { id:"profile-default", group:"profile", label:"Default Profile", desc:"Main profile — all skills active", radius:16 },
       { id:"memory-env", group:"memory", label:"Environment", desc:"Development environment configuration", radius:12 },
       { id:"memory-models", group:"memory", label:"Model Config", desc:"AI model configuration settings", radius:12 },
-      // === Skill Categories ===
       { id:"creative-skills", group:"skills", label:"Creative Tools", desc:"ASCII art, p5.js, Manim, ComfyUI, Songwriting — 20+ creative skills", radius:14 },
       { id:"productivity-skills", group:"skills", label:"Productivity", desc:"Notion, Gmail, Airtable, Linear, PowerPoint — 10+ office integrations", radius:14 },
       { id:"dev-skills", group:"skills", label:"Dev Skills", desc:"Plan, TDD, Code Review, Debug, Spike — software engineering workflows", radius:14 },
@@ -522,7 +338,6 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { id:"media-skills", group:"skills", label:"Media", desc:"Spotify, YouTube Transcripts, GIF Search, Song Generation", radius:12 },
       { id:"apple-skills", group:"skills", label:"Apple Tools", desc:"Notes, Reminders, iMessage, FindMy — macOS native integration", radius:13 },
       { id:"social-skills", group:"skills", label:"Social", desc:"X/Twitter via xurl — post, search, DM, media", radius:11 },
-      // === OpenCode Agent System ===
       { id:"opencode", group:"opencode", label:"OpenCode", desc:"Provider-agnostic coding agent — TUI+CLI, multi-agent, skills ecosystem", radius:17 },
       { id:"oc-build", group:"opencode", label:"OC Build", desc:"Full execution: read, edit, bash, web — implements features", radius:13 },
       { id:"oc-plan", group:"opencode", label:"OC Plan", desc:"Read-only planner: analyzes, writes .opencode/plans/*.md", radius:12 },
@@ -568,7 +383,6 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { source:"profile-default", target:"codex", type:"contains" },
       { source:"profile-default", target:"local-agent", type:"contains" },
       { source:"profile-default", target:"ollama", type:"contains" },
-      // === Skill Category Links ===
       { source:"hermes-agent", target:"creative-skills", type:"skills" },
       { source:"hermes-agent", target:"productivity-skills", type:"skills" },
       { source:"hermes-agent", target:"dev-skills", type:"skills" },
@@ -587,7 +401,6 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { source:"dev-skills", target:"code-review", type:"contains" },
       { source:"dev-skills", target:"debug-py", type:"contains" },
       { source:"research-skills", target:"dspy", type:"feeds" },
-      // === OpenCode Agent Links ===
       { source:"hermes-agent", target:"opencode", type:"delegates" },
       { source:"opencode", target:"oc-build", type:"core" },
       { source:"opencode", target:"oc-plan", type:"workflow" },
@@ -601,19 +414,19 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       { source:"opencode", target:"codex", type:"related" },
     ];
 
-    // === COLOR MAP (matches site blue-orange theme) ===
+    // === Group Colors (adapted for light background) ===
     const groupColors = {
-      "core-agent":     "#3b82f6",
-      "orchestration":  "#f97316",
-      "execution":      "#22c55e",
-      "quality":        "#a855f7",
-      "github":         "#64748b",
-      "debug":          "#ef4444",
-      "ml":             "#ec4899",
-      "profile":        "#f59e0b",
-      "memory":         "#e2e8f0",
-      "skills":         "#14b8a6",
-      "opencode":       "#06b6d4",
+      "core-agent":     "#002FA7",
+      "orchestration":  "#1A56D8",
+      "execution":      "#0D6B3D",
+      "quality":        "#7C3AED",
+      "github":         "#4A4742",
+      "debug":          "#C53030",
+      "ml":             "#B13B6B",
+      "profile":        "#8B5E00",
+      "memory":         "#6B6760",
+      "skills":         "#0D7B6B",
+      "opencode":       "#00778B",
     };
 
     const groupLabels = {
@@ -631,31 +444,30 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
     };
 
     const linkTypes = {
-      "delegates":  { dash:"", color:"rgba(59,130,246,0.5)", width:1.5 },
-      "invokes":    { dash:"", color:"rgba(59,130,246,0.4)", width:1.2 },
-      "workflow":   { dash:"5,5", color:"rgba(249,115,22,0.5)", width:1.3 },
-      "core":       { dash:"", color:"rgba(249,115,22,0.7)", width:2 },
-      "orchestrates":{ dash:"", color:"rgba(249,115,22,0.6)", width:1.8 },
-      "executes":   { dash:"5,5", color:"rgba(249,115,22,0.5)", width:1.5 },
-      "quality":    { dash:"3,6", color:"rgba(168,85,247,0.5)", width:1.5 },
-      "dispatches": { dash:"", color:"rgba(34,197,94,0.5)", width:1.5 },
-      "produces":   { dash:"", color:"rgba(100,116,139,0.5)", width:1.5 },
-      "requires":   { dash:"5,5", color:"rgba(100,116,139,0.4)", width:1.2 },
-      "links":      { dash:"8,4", color:"rgba(100,116,139,0.4)", width:1 },
-      "feeds":      { dash:"5,5", color:"rgba(239,68,68,0.4)", width:1.2 },
-      "depends":    { dash:"5,5", color:"rgba(236,72,153,0.4)", width:1.2 },
-      "contains":   { dash:"2,4", color:"rgba(245,158,11,0.5)", width:1 },
-      "informs":    { dash:"8,4", color:"rgba(226,232,240,0.4)", width:1 },
-      "configures": { dash:"2,2", color:"rgba(226,232,240,0.4)", width:1.2 },
-      "uses":        { dash:"", color:"rgba(59,130,246,0.45)", width:1.4 },
-      "manages":     { dash:"4,2", color:"rgba(100,116,139,0.45)", width:1.3 },
-      "leads-to":    { dash:"10,4", color:"rgba(239,68,68,0.35)", width:1.1 },
-      "research":    { dash:"3,6", color:"rgba(236,72,153,0.4)", width:1.2 },
-      "skills":      { dash:"", color:"rgba(20,184,166,0.45)", width:1.3 },
-      "related":     { dash:"2,6", color:"rgba(6,182,212,0.4)", width:1.1 },
+      "delegates":   { dash:"", color:"rgba(0,47,167,0.40)", width:1.5 },
+      "invokes":     { dash:"", color:"rgba(0,47,167,0.30)", width:1.2 },
+      "workflow":    { dash:"5,5", color:"rgba(26,86,216,0.40)", width:1.3 },
+      "core":        { dash:"", color:"rgba(26,86,216,0.60)", width:2 },
+      "orchestrates":{ dash:"", color:"rgba(26,86,216,0.50)", width:1.8 },
+      "executes":    { dash:"5,5", color:"rgba(26,86,216,0.40)", width:1.5 },
+      "quality":     { dash:"3,6", color:"rgba(124,58,237,0.40)", width:1.5 },
+      "dispatches":  { dash:"", color:"rgba(13,107,61,0.40)", width:1.5 },
+      "produces":    { dash:"", color:"rgba(74,71,66,0.40)", width:1.5 },
+      "requires":    { dash:"5,5", color:"rgba(74,71,66,0.30)", width:1.2 },
+      "links":       { dash:"8,4", color:"rgba(74,71,66,0.30)", width:1 },
+      "feeds":       { dash:"5,5", color:"rgba(197,48,48,0.30)", width:1.2 },
+      "depends":     { dash:"5,5", color:"rgba(177,59,107,0.30)", width:1.2 },
+      "contains":    { dash:"2,4", color:"rgba(139,94,0,0.40)", width:1 },
+      "informs":     { dash:"8,4", color:"rgba(107,103,96,0.30)", width:1 },
+      "configures":  { dash:"2,2", color:"rgba(107,103,96,0.30)", width:1.2 },
+      "uses":        { dash:"", color:"rgba(0,47,167,0.35)", width:1.4 },
+      "manages":     { dash:"4,2", color:"rgba(74,71,66,0.35)", width:1.3 },
+      "leads-to":    { dash:"10,4", color:"rgba(197,48,48,0.25)", width:1.1 },
+      "research":    { dash:"3,6", color:"rgba(177,59,107,0.30)", width:1.2 },
+      "skills":      { dash:"", color:"rgba(13,123,107,0.35)", width:1.3 },
+      "related":     { dash:"2,6", color:"rgba(0,119,139,0.30)", width:1.1 },
     };
 
-    // Resolve source/target to node refs
     const nodeMap = new Map(nodes.map(n => [n.id, n]));
     links.forEach(l => {
       l.source = nodeMap.get(l.source) || l.source;
@@ -667,32 +479,27 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
       .attr("width", W).attr("height", H)
       .attr("viewBox", `0 0 ${W} ${H}`);
 
-    // === DEFS: arrow markers & glow filters ===
     const defs = svg.append("defs");
 
-    // Arrow markers per link type
     Object.entries(linkTypes).forEach(([type, style]) => {
       defs.append("marker")
         .attr("id", `arrow-${type}`)
         .attr("viewBox", "0 -5 10 10")
-        .attr("refX", 12)
-        .attr("refY", 0)
-        .attr("markerWidth", 5)
-        .attr("markerHeight", 5)
+        .attr("refX", 12).attr("refY", 0)
+        .attr("markerWidth", 5).attr("markerHeight", 5)
         .attr("orient", "auto")
         .append("path")
         .attr("d", "M0,-4L8,0L0,4")
         .attr("fill", style.color)
-        .attr("opacity", 0.6);
+        .attr("opacity", 0.5);
     });
 
-    // Glow filter for nodes
     const glowFilter = defs.append("filter")
       .attr("id", "node-glow")
       .attr("x", "-50%").attr("y", "-50%")
       .attr("width", "200%").attr("height", "200%");
     glowFilter.append("feGaussianBlur")
-      .attr("stdDeviation", "3")
+      .attr("stdDeviation", "2.5")
       .attr("result", "blur");
     glowFilter.append("feMerge")
       .selectAll("feMergeNode")
@@ -702,44 +509,39 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
 
     const g = svg.append("g");
 
-    // Zoom
     svg.call(d3.zoom()
       .scaleExtent([0.4, 3])
       .on("zoom", (e) => g.attr("transform", e.transform))
     );
 
-    // Tooltip
     const tooltip = d3.select("#knowledge-tooltip");
 
-    // === LINKS ===
     const linkG = g.append("g").attr("class","kg-links");
     const link = linkG.selectAll("line")
       .data(links)
       .join("line")
-        .attr("stroke", d => linkTypes[d.type]?.color || "rgba(255,255,255,0.15)")
+        .attr("stroke", d => linkTypes[d.type]?.color || "rgba(74,71,66,0.15)")
         .attr("stroke-width", d => linkTypes[d.type]?.width || 1)
         .attr("stroke-dasharray", d => linkTypes[d.type]?.dash || "")
-        .attr("opacity", 0.35)
+        .attr("opacity", 0.30)
         .attr("marker-end", d => `url(#arrow-${d.type})`);
 
-    // === NODE GLOW (background circles) ===
     const glowG = g.append("g").attr("class","kg-glows");
     const glow = glowG.selectAll("circle")
       .data(nodes)
       .join("circle")
-        .attr("r", d => d.radius * 2.5)
-        .attr("fill", d => groupColors[d.group] || "#666")
-        .attr("opacity", 0.08)
+        .attr("r", d => d.radius * 2.2)
+        .attr("fill", d => groupColors[d.group] || "#6B6760")
+        .attr("opacity", 0.06)
         .attr("pointer-events", "none");
 
-    // === NODES ===
     const nodeG = g.append("g").attr("class","kg-nodes");
     const node = nodeG.selectAll("circle")
       .data(nodes)
       .join("circle")
         .attr("r", d => d.radius)
-        .attr("fill", d => groupColors[d.group] || "#666")
-        .attr("stroke", d => d3.color(groupColors[d.group]||"#666").brighter(0.8))
+        .attr("fill", d => groupColors[d.group] || "#6B6760")
+        .attr("stroke", d => d3.color(groupColors[d.group]||"#6B6760").darker(0.4))
         .attr("stroke-width", 1.5)
         .attr("opacity", 0.9)
         .attr("cursor", "pointer")
@@ -759,19 +561,17 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
         .attr("r", d.radius * 1.3)
         .transition().duration(200);
 
-      // Highlight connected links
       link
-        .attr("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 0.8 : 0.08)
+        .attr("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 0.7 : 0.06)
         .attr("stroke-width", l => (l.source.id === d.id || l.target.id === d.id)
           ? (linkTypes[l.type]?.width || 1) * 2
-          : (linkTypes[l.type]?.width || 1) * 0.4);
+          : (linkTypes[l.type]?.width || 1) * 0.3);
 
-      // Highlight connected nodes
       node
         .attr("opacity", n => (n.id === d.id || links.some(l =>
           (l.source.id === d.id && l.target.id === n.id) ||
           (l.target.id === d.id && l.source.id === n.id)
-        )) ? 1 : 0.3);
+        )) ? 1 : 0.25);
     }
 
     function onNodeMove(e) {
@@ -790,48 +590,40 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
         .attr("r", d.radius)
         .transition().duration(200);
 
-      // Restore all links
       link
-        .attr("opacity", 0.35)
+        .attr("opacity", 0.30)
         .attr("stroke-width", l => linkTypes[l.type]?.width || 1);
 
-      // Restore all nodes
       node.attr("opacity", 0.9);
     }
 
-    // === DRAG ===
     const drag = d3.drag()
       .on("start", (e, d) => {
         if (!e.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x;
-        d.fy = d.y;
+        d.fx = d.x; d.fy = d.y;
       })
       .on("drag", (e, d) => {
-        d.fx = e.x;
-        d.fy = e.y;
+        d.fx = e.x; d.fy = e.y;
       })
       .on("end", (e, d) => {
         if (!e.active) simulation.alphaTarget(0);
-        d.fx = null;
-        d.fy = null;
+        d.fx = null; d.fy = null;
       });
 
     node.call(drag);
 
-    // === LABELS ===
     const labelG = g.append("g").attr("class","kg-labels");
     const label = labelG.selectAll("text")
       .data(nodes)
       .join("text")
         .text(d => d.label)
         .attr("font-size", d => Math.max(8, d.radius * 0.5))
-        .attr("fill", "#a1a1aa")
+        .attr("fill", "#6B6760")
         .attr("text-anchor", "middle")
         .attr("dy", d => d.radius + 12)
         .attr("pointer-events", "none")
-        .attr("opacity", 0.7);
+        .attr("opacity", 0.65);
 
-    // === FORCE ===
     const simulation = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
         const dists = { "core": 65, "orchestrates": 75, "delegates": 80, "contains": 90, "uses": 85, "depends": 95 };
@@ -848,19 +640,11 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
 
     simulation.on("tick", () => {
       link
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y);
-      node
-        .attr("cx", d => d.x)
-        .attr("cy", d => d.y);
-      glow
-        .attr("cx", d => d.x)
-        .attr("cy", d => d.y);
-      label
-        .attr("x", d => d.x)
-        .attr("y", d => d.y);
+        .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
+      node.attr("cx", d => d.x).attr("cy", d => d.y);
+      glow.attr("cx", d => d.x).attr("cy", d => d.y);
+      label.attr("x", d => d.x).attr("y", d => d.y);
     });
 
     simulation.alpha(0.5).restart();
@@ -870,14 +654,7 @@ document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
     const legendEl = d3.select("#knowledge-legend");
     Object.entries(groupLabels).forEach(([key, lbl]) => {
       legendEl.append("div").attr("class","kg-legend-item")
-        .html(`<div class="kg-legend-dot" style="background:${groupColors[key]};box-shadow:0 0 6px ${groupColors[key]}"></div> ${lbl}`);
+        .html(`<div class="kg-legend-dot" style="background:${groupColors[key]};box-shadow:0 0 5px ${groupColors[key]}40"></div> ${lbl}`);
     });
   }
 })();
-
-console.log('%c🔮 taomahj personal website ready %c| %c✧ %c%c%c',
-  'color: #7c6ff7; font-weight: bold;',
-  '', 'color: #00cec9;',
-  'color: #e4e4ec;', 'font-size: 12px;');
-console.log('%cMouse-following spotlight · Particle canvas · Bilingual · Glassmorphism · Knowledge Graph',
-  'color: #9898a8; font-size: 11px;');
