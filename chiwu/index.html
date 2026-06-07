@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="持物记录 — 记录长期陪伴你的每一件物品。本地优先、隐私安全的物品档案 App。iPhone · Android · Apple Watch。watchOS 开发中，敬请期待。">
   <title>持物记录 — 你的私人物品博物馆</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>📦</text></svg>">
+  <link rel="icon" href="../assets/favicon-chiwu.png">
   <style>
     /* ============================================================
        持物记录 — Apple-style Product Page
@@ -63,15 +63,15 @@
     }
     .nav-links a:hover { color: #f5f5f7; background: rgba(255,255,255,0.06); }
     .nav-cta {
-      background: #3b82f6 !important;
+      background: #002FA7 !important;
       color: #fff !important;
-      border-radius: 20px !important;
+      border-radius: 0 !important;
       font-weight: 600 !important;
       padding: 6px 18px !important;
       transition: all 0.2s !important;
     }
     .nav-cta:hover {
-      background: #60a5fa !important;
+      background: #4A6ACC !important;
       color: #fff !important;
     }
 
@@ -87,8 +87,8 @@
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(59,130,246,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(96,165,250,0.06) 0%, transparent 50%),
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(0,47,167,0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(74,106,204,0.06) 0%, transparent 50%),
         #0a0a0a;
     }
     .hero-badge {
@@ -96,10 +96,10 @@
       align-items: center;
       gap: 6px;
       padding: 6px 16px;
-      border-radius: 20px;
-      background: rgba(59,130,246,0.12);
-      border: 1px solid rgba(59,130,246,0.2);
-      color: #60a5fa;
+      border-radius: 0;
+      background: rgba(0,47,167,0.12);
+      border: 1px solid rgba(0,47,167,0.2);
+      color: #4A6ACC;
       font-size: 0.82rem;
       font-weight: 500;
       margin-bottom: 28px;
@@ -108,7 +108,7 @@
     .hero-badge-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: #3b82f6;
+      background: #002FA7;
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
@@ -161,25 +161,25 @@
       align-items: center;
       gap: 8px;
       padding: 14px 32px;
-      border-radius: 28px;
+      border-radius: 0;
       font-size: 0.95rem;
       font-weight: 600;
       text-decoration: none;
-      background: #3b82f6;
+      background: #002FA7;
       color: #fff;
       transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .btn-primary:hover {
-      background: #60a5fa;
+      background: #4A6ACC;
       transform: translateY(-1px);
-      box-shadow: 0 8px 32px rgba(59,130,246,0.35);
+      box-shadow: 0 8px 32px rgba(0,47,167,0.35);
     }
     .btn-secondary {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 14px 32px;
-      border-radius: 28px;
+      border-radius: 0;
       font-size: 0.95rem;
       font-weight: 500;
       text-decoration: none;
@@ -188,8 +188,8 @@
       transition: all 0.3s;
     }
     .btn-secondary:hover {
-      border-color: rgba(255,255,255,0.35);
-      background: rgba(255,255,255,0.04);
+      border-color: rgba(0,47,167,0.5);
+      background: rgba(0,47,167,0.08);
     }
 
     /* Phone mockup in hero */
@@ -278,7 +278,7 @@
     .phone-title {
       font-size: 0.72rem;
       font-weight: 700;
-      color: #3b82f6;
+      color: #002FA7;
       text-transform: uppercase;
       letter-spacing: 0.1em;
     }
@@ -322,10 +322,10 @@
     }
     .phone-card-badge {
       font-size: 0.54rem;
-      color: #3b82f6;
-      background: rgba(59,130,246,0.08);
+      color: #002FA7;
+      background: rgba(0,47,167,0.08);
       padding: 2px 7px;
-      border-radius: 6px;
+      border-radius: 0;
       flex-shrink: 0;
     }
     /* Bottom tab bar */
@@ -350,7 +350,7 @@
       transform: translate(-50%, -50%);
       width: 320px;
       height: 580px;
-      background: radial-gradient(ellipse, rgba(59,130,246,0.15) 0%, transparent 60%);
+      background: radial-gradient(ellipse, rgba(0,47,167,0.15) 0%, transparent 60%);
       filter: blur(40px);
       pointer-events: none;
       animation: glowPulse 3s ease-in-out infinite;
@@ -374,7 +374,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: #3b82f6;
+      color: #002FA7;
       margin-bottom: 16px;
     }
     .section-heading {
@@ -418,12 +418,12 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(59,130,246,0.08), transparent 50%);
+      background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(0,47,167,0.08), transparent 50%);
       opacity: 0;
       transition: opacity 0.35s;
       pointer-events: none;
     }
-    .feature-tile:hover { border-color: rgba(59,130,246,0.3); transform: translateY(-3px); }
+    .feature-tile:hover { border-color: rgba(0,47,167,0.3); transform: translateY(-3px); }
     .feature-tile:hover::after { opacity: 1; }
     .feature-icon {
       font-size: 28px;
@@ -497,7 +497,7 @@
       width: 100%;
       height: 100%;
       border-radius: 50%;
-      background: rgba(59,130,246,0.08);
+      background: rgba(0,47,167,0.08);
       display: flex;
       align-items: center;
       justify-content: center;

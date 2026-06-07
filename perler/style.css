@@ -14,17 +14,17 @@
   --text-secondary: #a1a1aa;
   --text-muted: #6b6b7b;
 
-  --accent: #ec4899;
-  --accent-glow: rgba(236, 72, 153, 0.35);
-  --accent2: #f97316;
-  --gradient: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+  --accent: #002FA7;
+  --accent-glow: rgba(0, 47, 167, 0.35);
+  --accent2: #4A6ACC;
+  --gradient: linear-gradient(135deg, #002FA7 0%, #4A6ACC 100%);
 
-  --font-sans: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+  --font-sans: 'Helvetica Neue', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   --nav-height: 64px;
-  --radius: 16px;
-  --radius-sm: 10px;
+  --radius: 0px;
+  --radius-sm: 0px;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
