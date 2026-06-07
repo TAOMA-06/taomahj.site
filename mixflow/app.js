@@ -136,7 +136,7 @@ function translateAlcoholic(val) {
   return val;
 }
 
-let currentLang = localStorage.getItem('mixflow_lang') || 'zh';
+let currentLang = localStorage.getItem('lang') || 'zh';
 
 function applyLang() {
   const dict = i18n[currentLang];
@@ -159,7 +159,7 @@ function updateLangToggle() {
 
 function switchLang() {
   currentLang = currentLang === 'zh' ? 'en' : 'zh';
-  localStorage.setItem('mixflow_lang', currentLang);
+  localStorage.setItem('lang', currentLang);
   applyLang();
   updateLangToggle();
   buildCategoryOptions(allRecipes);

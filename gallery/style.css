@@ -220,6 +220,29 @@ body {
 .page-footer a { color: var(--text-secondary); text-decoration: none; }
 .page-footer a:hover { color: var(--text); }
 
+
+/* ---------- Lang Toggle ---------- */
+.lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: inherit;
+}
+.lang-toggle:hover { background: rgba(255,255,255,0.1); }
+.lang-toggle .lang-zh, .lang-toggle .lang-en { opacity: 0.5; transition: opacity 0.2s; }
+.lang-toggle.lang-zh-active .lang-zh { opacity: 1; color: var(--text); }
+.lang-toggle.lang-en-active .lang-en { opacity: 1; color: var(--text); }
+.lang-divider { opacity: 0.3; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .gallery-grid {
