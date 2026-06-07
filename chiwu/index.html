@@ -1327,30 +1327,16 @@
       <div class="section-label reveal" style="text-align:center;" data-i18n="download.label">获取持物记录</div>
       <div class="section-heading reveal" data-i18n="download.heading">选择你的平台。</div>
       <div class="section-body reveal" style="margin:0 auto;">
-        <span data-i18n="download.body">iOS 即将上线 App Store，watchOS 版本正在积极开发中。Android 端目前暂停下载，详见公告。</span>
-      </div>
-      <!-- Announcement -->
-      <div class="download-card" style="border: 1px solid rgba(245,158,11,0.35); background: rgba(245,158,11,0.06); max-width: 640px; margin: 0 auto 32px; text-align: left;">
-        <div style="display: flex; align-items: flex-start; gap: 12px;">
-          <span style="font-size: 1.5rem;">⚠️</span>
-          <div>
-            <h3 style="color: #f59e0b; margin: 0 0 8px;">Android 端维护公告</h3>
-            <p style="color: #a1a1aa; font-size: 0.88rem; line-height: 1.7; margin: 0;">
-              由于近期开发压力较大，<strong style="color: #e5e5e7;">Android 端维护时间可能较长</strong>。
-              当前版本 APK 存在少量已知问题，为保障使用体验，我们决定<strong style="color: #e5e5e7;">暂时下架 APK 下载</strong>。
-              待问题修复后将重新开放。感谢理解 🙏
-            </p>
-          </div>
-        </div>
+        <span data-i18n="download.body">iOS 即将上线 App Store，watchOS 版本正在积极开发中。Android APK 可直接下载安装。</span>
       </div>
       <div class="download-cards">
         <!-- Android -->
-        <div class="download-card reveal" style="opacity: 0.65;">
+        <div class="download-card reveal">
           <div class="download-card-top">
             <span class="download-card-icon">🤖</span>
             <div>
-              <h3>Android <span style="font-size:0.75rem;color:#f59e0b;font-weight:500;margin-left:6px;" data-i18n="download.android.status">维护中</span></h3>
-              <span class="ver" data-i18n="download.android.ver">暂时下架 · 敬请期待</span>
+              <h3>Android</h3>
+              <span class="ver">v1.0.0 · APK 直接下载</span>
             </div>
           </div>
           <ul>
@@ -1358,10 +1344,12 @@
             <li>原生 WebView 封装</li>
             <li>无需 Google Play</li>
           </ul>
-          <div style="padding: 12px 18px; border-radius: 10px; background: rgba(245,158,11,0.08); border: 1px solid rgba(245,158,11,0.15); margin-top: 8px;">
-            <p style="color: #a1a1aa; font-size: 0.82rem; margin: 0; line-height: 1.6;">
-              🚧 当前版本存在少量问题，APK <strong style="color: #f59e0b;">暂不开放下载</strong>。我们正在努力修复，请耐心等待。
-            </p>
+          <a href="chiwu-android.apk" class="btn-primary" style="display: inline-flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 0.9rem; text-decoration: none;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            下载 Android APK
+          </a>
+          <div class="download-note" style="margin-top: 16px;">
+            <p>📱 Android 16+ 设备需在<strong>开发者选项</strong>中同时开启 <strong>USB 调试</strong>、<strong>USB 安装</strong> 和 <strong>USB 调试（安全设置）</strong> 后方可侧载安装。</p>
           </div>
         </div>
         <!-- watchOS -->
@@ -1482,9 +1470,9 @@
         'watchos.body': '手腕上的物品博物馆。\n抬起手腕，一眼看到今天陪伴你最久的物品。\n里程碑提醒、快速浏览、Complication 表盘组件——\n持物记录的温暖，现在戴在手上。',
         'download.label': '获取持物记录',
         'download.heading': '选择你的平台。',
-        'download.body': 'iOS 即将上线 App Store，watchOS 版本正在积极开发中。Android 端目前暂停下载，详见公告。',
-        'download.android.status': '维护中',
-        'download.android.ver': '暂时下架 · 敬请期待',
+        'download.body': 'iOS 即将上线 App Store，watchOS 版本正在积极开发中。Android APK 可直接下载安装。',
+        'download.android.status': '已可用',
+        'download.android.ver': 'v1.0.0 · APK 直接下载',
         'download.watchos.ver': '积极开发中 · Apple Watch',
         'download.ios.ver': '即将上线 App Store',
         'footer': '持物记录 — 记录与物品的羁绊',
@@ -1531,9 +1519,9 @@
         'watchos.body': 'An item museum on your wrist.\nRaise your wrist and see the item that has been with you the longest.\nMilestone reminders, quick browse, Complication watch face widgets —\nthe warmth of Chiwu, now on your wrist.',
         'download.label': 'Get Chiwu',
         'download.heading': 'Choose your platform.',
-        'download.body': 'iOS coming soon to App Store, watchOS actively in development. Android temporarily suspended, see notice for details.',
-        'download.android.status': 'Maintenance',
-        'download.android.ver': 'Temporarily unavailable · Stay tuned',
+        'download.body': 'iOS is coming soon to the App Store. watchOS is under active development. Android APK is available for direct download.',
+        'download.android.status': 'Available',
+        'download.android.ver': 'v1.0.0 · Direct APK',
         'download.watchos.ver': 'In development · Apple Watch',
         'download.ios.ver': 'Coming soon to App Store',
         'footer': 'Chiwu — Recording bonds with your items',
