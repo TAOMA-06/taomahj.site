@@ -765,120 +765,197 @@
       color: #a1a1aa;
     }
 
-    /* Watch Mockup */
+    /* ============================================================
+       Apple Watch — Apple-style product mockup
+       Space Gray Aluminum 45mm, Sport Band
+       ============================================================ */
     .watch-mockup {
       display: flex;
       flex-direction: column;
       align-items: center;
       position: relative;
-      filter: drop-shadow(0 12px 40px rgba(0,0,0,0.25));
+      filter:
+        drop-shadow(0 20px 50px rgba(0,0,0,0.35))
+        drop-shadow(0 4px 12px rgba(0,0,0,0.2));
     }
-    /* Leather band */
+    /* ── Sport Band ── */
     .watch-band-top,
     .watch-band-bottom {
-      width: 56px;
-      height: 48px;
-      background: linear-gradient(
-        180deg,
-        #4a3728 0%, #3d2d20 15%, #4a3728 30%,
-        #3d2d20 50%, #4a3728 70%, #3d2d20 85%, #4a3728 100%
-      );
-      border-radius: 3px;
+      width: 58px;
       position: relative;
+      border-radius: 4px;
+      z-index: 0;
     }
     .watch-band-top {
-      border-radius: 6px 6px 3px 3px;
-      margin-bottom: -3px;
-      box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+      height: 52px;
+      margin-bottom: -4px;
+      background: linear-gradient(
+        180deg,
+        #2c2d32 0%, #222327 30%, #1e1f23 50%, #222327 70%, #2c2d32 100%
+      );
+      border-radius: 8px 8px 4px 4px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.06),
+        0 -1px 2px rgba(0,0,0,0.2);
     }
     .watch-band-bottom {
-      border-radius: 3px 3px 6px 6px;
-      margin-top: -3px;
-      box-shadow: inset 0 -1px 0 rgba(255,255,255,0.08);
+      height: 52px;
+      margin-top: -4px;
+      background: linear-gradient(
+        180deg,
+        #2c2d32 0%, #222327 30%, #1e1f23 50%, #222327 70%, #2c2d32 100%
+      );
+      border-radius: 4px 4px 8px 8px;
+      box-shadow:
+        inset 0 -1px 0 rgba(255,255,255,0.06),
+        0 1px 2px rgba(0,0,0,0.2);
     }
-    /* Stitching detail */
+    /* Band subtle center groove (Sport Band detail) */
     .watch-band-top::after,
     .watch-band-bottom::after {
       content: '';
       position: absolute;
-      left: 6px;
-      right: 6px;
-      height: 1px;
-      background: rgba(180,150,120,0.3);
+      left: 14px;
+      right: 14px;
       top: 50%;
+      transform: translateY(-50%);
+      height: 1px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 1px;
     }
-    /* Watch body */
-    .watch-body {
-      width: 130px;
-      height: 156px;
-      background: linear-gradient(
-        180deg,
-        #3a3a3c 0%, #1c1c1e 30%, #1a1a1c 50%, #1c1c1e 70%, #2a2a2c 100%
-      );
-      border-radius: 34px;
-      position: relative;
-      padding: 4px;
-      box-shadow:
-        0 4px 16px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.05),
-        inset 0 -1px 0 rgba(0,0,0,0.3);
+    /* Band pin (top band) */
+    .watch-band-pin {
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 24px;
+      height: 3px;
+      background: linear-gradient(180deg, #555 0%, #333 100%);
+      border-radius: 2px;
       z-index: 1;
     }
-    /* Watch screen — list view matching real watchOS app */
+    /* ── Watch Body ── */
+    .watch-body {
+      width: 154px;
+      height: 184px;
+      position: relative;
+      padding: 5px;
+      border-radius: 40px;
+      z-index: 1;
+      /* Aluminum body with subtle chamfer */
+      background:
+        linear-gradient(
+          160deg,
+          #55555c 0%,
+          #3a3a42 8%,
+          #2a2a32 20%,
+          #22222a 35%,
+          #202028 50%,
+          #22222a 65%,
+          #2a2a32 80%,
+          #3a3a42 92%,
+          #4a4a52 100%
+        );
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06),
+        inset 0 0 0 1px rgba(255,255,255,0.04),
+        inset 0 1px 2px rgba(255,255,255,0.06),
+        inset 0 -1px 2px rgba(0,0,0,0.4),
+        0 2px 12px rgba(0,0,0,0.3);
+    }
+    /* Chamfered edge ring around screen */
+    .watch-body::before {
+      content: '';
+      position: absolute;
+      inset: 5px;
+      border-radius: 35px;
+      background: transparent;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,0.4);
+      pointer-events: none;
+      z-index: 0;
+    }
+    /* ── Screen ── */
     .watch-screen {
       width: 100%;
       height: 100%;
-      background: #0a0a0a;
-      border-radius: 30px;
+      background: #000;
+      border-radius: 35px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
       position: relative;
+      box-shadow: inset 0 0 1px rgba(255,255,255,0.06);
     }
-    /* Screen glass reflection */
+    /* 2.5D curved glass reflection */
     .watch-screen-reflection {
       position: absolute;
       inset: 0;
-      z-index: 2;
+      z-index: 10;
       pointer-events: none;
-      border-radius: 30px;
-      background: linear-gradient(
-        150deg,
-        rgba(255,255,255,0.08) 0%,
-        transparent 35%,
-        transparent 65%,
-        rgba(255,255,255,0.03) 100%
-      );
+      border-radius: 35px;
+      background:
+        /* Edge highlight — simulates light catching the curved glass edge */
+        radial-gradient(
+          ellipse 120% 100% at 50% 50%,
+          transparent 60%,
+          rgba(255,255,255,0.02) 70%,
+          rgba(255,255,255,0.04) 85%,
+          rgba(255,255,255,0.02) 95%,
+          transparent 100%
+        ),
+        /* Diagonal sheen */
+        linear-gradient(
+          135deg,
+          rgba(255,255,255,0.07) 0%,
+          transparent 30%,
+          transparent 60%,
+          rgba(255,255,255,0.03) 80%,
+          transparent 100%
+        );
     }
-    /* Navigation title */
+    /* ── watchOS Time Display ── */
+    .watch-time {
+      text-align: right;
+      padding: 10px 14px 2px;
+      font-size: 0.48rem;
+      font-weight: 600;
+      color: #f5f5f7;
+      position: relative;
+      z-index: 1;
+      font-variant-numeric: tabular-nums;
+    }
+    /* ── Navigation Title ── */
     .watch-nav-title {
       text-align: center;
-      padding: 8px 0 6px;
-      color: #f5f5f7;
+      padding: 2px 0 8px;
+      color: #8B6F4E;
       font-weight: 600;
-      font-size: 0.5rem;
+      font-size: 0.46rem;
+      letter-spacing: 0.02em;
       position: relative;
       z-index: 1;
     }
-    /* Item list */
+    /* ── Item List ── */
     .watch-list {
       flex: 1;
       display: flex;
       flex-direction: column;
-      padding: 0 10px;
+      padding: 0 12px;
       position: relative;
       z-index: 1;
       overflow: hidden;
     }
     .watch-list-item {
-      padding: 5px 0;
-      border-bottom: 0.5px solid rgba(255,255,255,0.06);
+      padding: 6px 0;
+      border-bottom: 0.5px solid rgba(255,255,255,0.05);
     }
     .watch-list-item:last-child { border-bottom: none; }
     .watch-item-name {
-      font-size: 0.49rem;
+      font-size: 0.48rem;
       font-weight: 600;
       color: #f5f5f7;
+      letter-spacing: -0.01em;
     }
     .watch-item-meta {
       display: flex;
@@ -888,7 +965,7 @@
     }
     .watch-item-cat {
       font-size: 0.34rem;
-      color: #a1a1aa;
+      color: #8e8e93;
     }
     .watch-item-days {
       font-size: 0.34rem;
@@ -896,22 +973,22 @@
       font-weight: 500;
     }
     .watch-item-price {
-      font-size: 0.34rem;
+      font-size: 0.33rem;
       color: #6b6b7b;
       margin-top: 1px;
     }
-    /* Tab bar */
+    /* ── Tab Bar ── */
     .watch-tabbar {
       display: flex;
       justify-content: center;
-      gap: 24px;
-      padding: 4px 0 6px;
-      border-top: 0.5px solid rgba(255,255,255,0.06);
+      gap: 20px;
+      padding: 5px 0 6px;
+      border-top: 0.5px solid rgba(255,255,255,0.05);
       position: relative;
       z-index: 1;
     }
     .watch-tab {
-      opacity: 0.35;
+      opacity: 0.3;
       color: #f5f5f7;
       display: flex;
       align-items: center;
@@ -920,49 +997,65 @@
       opacity: 1;
       color: #8B6F4E;
     }
-    /* Digital Crown */
+    /* ── Digital Crown ── */
     .watch-crown {
       position: absolute;
-      right: -8px;
-      top: 34px;
-      width: 16px;
-      height: 38px;
-      background: linear-gradient(
-        180deg,
-        #4a4a4c 0%, #2a2a2c 20%, #3a3a3c 50%, #2a2a2c 80%, #4a4a4c 100%
-      );
-      border-radius: 8px;
-      box-shadow:
-        0 2px 6px rgba(0,0,0,0.3),
-        inset 0 1px 0 rgba(255,255,255,0.1);
+      right: -5px;
+      top: 38px;
+      width: 11px;
+      height: 36px;
+      border-radius: 6px;
       z-index: 0;
+      background: linear-gradient(
+        90deg,
+        #6a6a72 0%, #4a4a52 15%, #3a3a42 30%,
+        #4a4a52 50%, #3a3a42 70%, #5a5a62 100%
+      );
+      box-shadow:
+        0 2px 6px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.12),
+        inset 0 -1px 0 rgba(0,0,0,0.3);
     }
+    /* Crown ridges (concentric circles) */
     .watch-crown::after {
       content: '';
       position: absolute;
-      top: 4px;
-      left: 3px;
-      right: 3px;
-      bottom: 4px;
-      border-radius: 5px;
+      inset: 5px 2px;
+      border-radius: 4px;
       background: repeating-linear-gradient(
         0deg,
-        transparent,
-        transparent 1.5px,
-        rgba(0,0,0,0.15) 1.5px,
-        rgba(0,0,0,0.15) 2px
+        transparent 0px,
+        transparent 1px,
+        rgba(0,0,0,0.25) 1px,
+        rgba(0,0,0,0.25) 1.5px,
+        rgba(255,255,255,0.06) 1.5px,
+        rgba(255,255,255,0.06) 2px
       );
     }
-    /* Side button */
+    /* Crown cap (top face) */
+    .watch-crown-cap {
+      position: absolute;
+      top: -3px;
+      left: 1px;
+      right: 1px;
+      height: 6px;
+      background: linear-gradient(180deg, #8a8a92, #5a5a62);
+      border-radius: 4px 4px 0 0;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.15);
+      z-index: 1;
+    }
+    /* ── Side Button ── */
     .watch-side-btn {
       position: absolute;
-      right: -8px;
-      top: 82px;
-      width: 6px;
-      height: 28px;
-      background: linear-gradient(180deg, #3a3a3c, #2a2a2c);
-      border-radius: 3px 3px 3px 3px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+      right: -4px;
+      top: 84px;
+      width: 4px;
+      height: 24px;
+      background: linear-gradient(90deg, #555 0%, #3a3a42 40%, #444 100%);
+      border-radius: 2px 3px 3px 2px;
+      box-shadow:
+        0 1px 3px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.08);
       z-index: 0;
     }
 
@@ -1146,12 +1239,15 @@
       .hero-phone .phone-real-card-price { font-size: 0.4rem; }
       .hero h1 { font-size: 2.8rem; }
       .section-heading { font-size: 2rem !important; }
-      .watch-body { width: 110px; height: 132px; border-radius: 28px; }
-      .watch-screen { border-radius: 24px; }
-      .watch-screen-reflection { border-radius: 24px; }
-      .watch-band-top, .watch-band-bottom { width: 48px; height: 38px; }
-      .watch-crown { width: 13px; height: 30px; top: 28px; right: -7px; }
-      .watch-side-btn { height: 22px; top: 68px; }
+      .watch-body { width: 120px; height: 144px; border-radius: 32px; padding: 4px; }
+      .watch-body::before { inset: 4px; border-radius: 28px; }
+      .watch-screen { border-radius: 28px; }
+      .watch-screen-reflection { border-radius: 28px; }
+      .watch-band-top, .watch-band-bottom { width: 46px; height: 38px; }
+      .watch-crown { width: 9px; height: 26px; top: 30px; right: -4px; }
+      .watch-crown-cap { height: 4px; top: -2px; }
+      .watch-side-btn { width: 3px; height: 18px; top: 66px; right: -3px; }
+      .watch-time { font-size: 0.4rem; padding: 8px 10px 1px; }
     }
     @media (max-width: 480px) {
       .hero { padding: 100px 20px 60px; }
@@ -1192,15 +1288,19 @@
       .hero-phone-glow { width: 220px; height: 420px; }
       .hero h1 { font-size: 2.2rem; }
       .nav-links a:not(.nav-cta) { padding: 6px 8px; font-size: 0.78rem; }
-      .watch-body { width: 96px; height: 116px; border-radius: 24px; }
-      .watch-screen { border-radius: 20px; }
-      .watch-screen-reflection { border-radius: 20px; }
-      .watch-band-top, .watch-band-bottom { width: 42px; height: 30px; }
-      .watch-crown { width: 11px; height: 24px; top: 22px; right: -6px; }
-      .watch-side-btn { width: 5px; height: 18px; top: 54px; right: -6px; }
-      .watch-item-name { font-size: 0.44rem; }
-      .watch-item-cat, .watch-item-days, .watch-item-price { font-size: 0.3rem; }
-      .watch-nav-title { font-size: 0.44rem; padding: 6px 0 4px; }
+      .watch-body { width: 100px; height: 120px; border-radius: 26px; padding: 3px; }
+      .watch-body::before { inset: 3px; border-radius: 23px; }
+      .watch-screen { border-radius: 23px; }
+      .watch-screen-reflection { border-radius: 23px; }
+      .watch-band-top, .watch-band-bottom { width: 38px; height: 28px; }
+      .watch-crown { width: 7px; height: 20px; top: 24px; right: -3px; }
+      .watch-crown::after { inset: 3px 1px; }
+      .watch-crown-cap { height: 3px; top: -1px; left: 0; right: 0; }
+      .watch-side-btn { width: 2px; height: 14px; top: 52px; right: -2px; }
+      .watch-item-name { font-size: 0.4rem; }
+      .watch-item-cat, .watch-item-days, .watch-item-price { font-size: 0.26rem; }
+      .watch-nav-title { font-size: 0.36rem; padding: 1px 0 4px; }
+      .watch-time { font-size: 0.34rem; padding: 6px 8px 0; }
     }
   
     /* Lang Toggle */
@@ -1585,12 +1685,16 @@
         </div>
       </div>
       <div class="section-alt-visual reveal" style="justify-content:center;">
-        <!-- Apple Watch CSS Mockup — real watchOS app UI -->
+        <!-- Apple Watch CSS Mockup — Apple-style 45mm Space Gray Aluminum -->
         <div class="watch-mockup">
-          <div class="watch-band-top"></div>
+          <div class="watch-band-top">
+            <div class="watch-band-pin"></div>
+          </div>
           <div class="watch-body">
             <div class="watch-screen">
               <div class="watch-screen-reflection"></div>
+              <!-- watchOS time -->
+              <div class="watch-time">10:09</div>
               <!-- Navigation title -->
               <div class="watch-nav-title">
                 <span>我的物品</span>
@@ -1638,7 +1742,7 @@
                 </span>
               </div>
             </div>
-            <div class="watch-crown"></div>
+            <div class="watch-crown"><div class="watch-crown-cap"></div></div>
             <div class="watch-side-btn"></div>
           </div>
           <div class="watch-band-bottom"></div>
