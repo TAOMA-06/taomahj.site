@@ -3,6 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), ambient-light-sensor=(), autoplay=(), encrypted-media=(), fullscreen=(self), picture-in-picture=(), screen-wake-lock=(), sync-xhr=(), xr-spatial-tracking=()">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
   <meta name="description" content="持物记录 — 记录长期陪伴你的每一件物品。本地优先、隐私安全的物品档案 App。iPhone · Android · Apple Watch。watchOS 开发中，敬请期待。">
   <title>持物记录 — 你的私人物品博物馆</title>
   <link rel="icon" href="../assets/favicon-chiwu.png">
@@ -192,7 +198,7 @@
       background: rgba(0,47,167,0.08);
     }
 
-    /* Phone mockup in hero */
+    /* Phone mockup in hero — matches real app UI */
     .hero-phone-wrap {
       position: relative;
       margin-top: 60px;
@@ -200,8 +206,8 @@
     }
     .hero-phone {
       width: 250px;
-      height: 510px;
-      background: #F2F0EC;
+      height: 520px;
+      background: #F8FAFC;
       border-radius: 44px;
       border: 3px solid #1a1a1a;
       position: relative;
@@ -222,12 +228,12 @@
       border-radius: 41px;
       background: linear-gradient(
         135deg,
-        rgba(255,255,255,0.12) 0%,
-        rgba(255,255,255,0.03) 20%,
+        rgba(255,255,255,0.1) 0%,
+        rgba(255,255,255,0.02) 20%,
         transparent 45%,
         transparent 55%,
         rgba(255,255,255,0.02) 80%,
-        rgba(255,255,255,0.06) 100%
+        rgba(255,255,255,0.05) 100%
       );
     }
     /* Dynamic Island */
@@ -254,94 +260,253 @@
       z-index: 12;
       font-size: 0.55rem;
       font-weight: 600;
-      color: #1C1C1E;
+      color: #111827;
     }
     .phone-status-icons {
       display: flex;
       align-items: center;
       gap: 3px;
-      color: #1C1C1E;
+      color: #111827;
     }
     /* Simulated app screen */
     .phone-screen {
-      padding: 52px 16px 0;
+      padding: 50px 10px 0;
       height: 100%;
       display: flex;
       flex-direction: column;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
-    .phone-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 16px;
+    .phone-screen::-webkit-scrollbar { display: none; }
+
+    /* Dashboard header */
+    .phone-dash-header {
+      padding: 0 4px 6px;
     }
-    .phone-title {
-      font-size: 0.72rem;
+    .phone-dash-title {
+      font-size: 0.82rem;
       font-weight: 700;
-      color: #002FA7;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
+      color: #111827;
+      letter-spacing: -0.02em;
     }
-    .phone-count {
-      font-size: 0.62rem;
-      color: #9E9E9E;
+    .phone-dash-count {
+      font-size: 0.52rem;
+      color: #4B5563;
     }
-    /* Simulated item cards */
-    .phone-card {
+    /* Search bar */
+    .phone-search {
+      margin: 0 4px 6px;
+      height: 22px;
       background: #fff;
-      border-radius: 14px;
-      padding: 10px 12px;
-      margin-bottom: 8px;
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.05), 0 0 0 1px rgba(0,0,0,0.02);
-    }
-    .phone-card-left {
-      flex-shrink: 0;
-    }
-    .phone-card-img {
-      width: 42px;
-      height: 42px;
       border-radius: 10px;
-      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      padding: 0 8px;
+      gap: 4px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
     }
-    .phone-card-text { flex: 1; min-width: 0; }
-    .phone-card-name {
-      font-size: 0.68rem;
+    .phone-search svg { flex-shrink: 0; }
+    .phone-search-text {
+      font-size: 0.44rem;
+      color: #9CA3AF;
+    }
+    /* Stats row */
+    .phone-stats-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin: 0 4px 6px;
+    }
+    .phone-stat-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 6px 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+    }
+    .phone-stat-icon-row {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-bottom: 2px;
+    }
+    .phone-stat-label {
+      font-size: 0.38rem;
+      font-weight: 500;
+      color: #9CA3AF;
+    }
+    .phone-stat-value {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #111827;
+      line-height: 1;
+    }
+    /* Category pills */
+    .phone-cat-row {
+      display: flex;
+      gap: 4px;
+      margin: 0 4px 6px;
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+    .phone-cat-row::-webkit-scrollbar { display: none; }
+    .phone-cat-pill {
+      flex-shrink: 0;
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 0.4rem;
+      font-weight: 500;
+      background: #fff;
+      color: #4B5563;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+    }
+    .phone-cat-pill.active {
+      background: #111827;
+      color: #fff;
+    }
+    .phone-cat-count {
+      margin-left: 2px;
+      padding: 0 3px;
+      border-radius: 4px;
+      font-size: 0.35rem;
+      background: #E5E7EB;
+    }
+    .phone-cat-pill.active .phone-cat-count { background: rgba(255,255,255,0.2); }
+    /* Segmented tab */
+    .phone-seg-tab {
+      margin: 0 4px 6px;
+      display: flex;
+      background: #E5E7EB;
+      border-radius: 10px;
+      padding: 2px;
+    }
+    .phone-seg-btn {
+      flex: 1;
+      padding: 4px 0;
+      text-align: center;
+      border-radius: 8px;
+      font-size: 0.42rem;
+      font-weight: 500;
+      color: #6B7280;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+    }
+    .phone-seg-btn.active {
+      background: #fff;
+      color: #111827;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    /* 2-column card grid */
+    .phone-card-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5px;
+      margin: 0 4px;
+      padding-bottom: 4px;
+    }
+    /* Real item card — image on top */
+    .phone-real-card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+    .phone-real-card-img {
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2rem;
+    }
+    .phone-real-card-body {
+      padding: 4px 6px 5px;
+    }
+    .phone-real-card-name {
+      font-size: 0.48rem;
       font-weight: 600;
-      color: #1C1C1E;
-      margin-bottom: 1px;
+      color: #111827;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
     }
-    .phone-card-date {
-      font-size: 0.56rem;
-      color: #9E9E9E;
+    .phone-real-card-meta {
+      font-size: 0.38rem;
+      color: #9CA3AF;
+      margin-top: 1px;
     }
-    .phone-card-badge {
-      font-size: 0.54rem;
-      color: #002FA7;
-      background: rgba(0,47,167,0.08);
-      padding: 2px 7px;
-      border-radius: 0;
-      flex-shrink: 0;
-    }
-    /* Bottom tab bar */
-    .phone-tabbar {
-      margin-top: auto;
-      padding: 8px 0 12px;
+    .phone-real-card-bottom {
       display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 3px;
+    }
+    .phone-real-card-days {
+      font-size: 0.38rem;
+      color: #9CA3AF;
+    }
+    .phone-real-card-price {
+      font-size: 0.46rem;
+      font-weight: 600;
+      color: #3B82F6;
+    }
+    /* Bottom nav — frosted glass */
+    .phone-nav {
+      margin-top: auto;
+      padding: 0;
+      position: relative;
+    }
+    .phone-nav-bg {
+      position: absolute;
+      inset: 0;
+      background: rgba(248,250,252,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .phone-nav-divider {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: #E5E7EB;
+    }
+    .phone-nav-inner {
+      position: relative;
+      display: flex;
+      align-items: center;
       justify-content: space-around;
-      border-top: 1px solid rgba(0,0,0,0.05);
+      padding: 5px 18px 9px;
+      z-index: 1;
     }
-    .phone-tab {
-      font-size: 0.8rem;
-      opacity: 0.35;
+    .phone-nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1px;
+      font-size: 0.35rem;
+      color: #9CA3AF;
     }
-    .phone-tab.active {
-      opacity: 1;
+    .phone-nav-btn.active {
+      color: #111827;
+    }
+    .phone-nav-icon {
+      width: 14px;
+      height: 14px;
+    }
+    .phone-nav-fab {
+      width: 24px;
+      height: 24px;
+      background: #111827;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+    }
+    .phone-nav-fab svg {
+      width: 12px;
+      height: 12px;
     }
     /* Floating glow behind phone */
     .hero-phone-glow {
@@ -349,8 +514,8 @@
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       width: 320px;
-      height: 580px;
-      background: radial-gradient(ellipse, rgba(0,47,167,0.15) 0%, transparent 60%);
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(59,130,246,0.12) 0%, transparent 60%);
       filter: blur(40px);
       pointer-events: none;
       animation: glowPulse 3s ease-in-out infinite;
@@ -470,22 +635,45 @@
     .section-alt-text .section-heading { margin-bottom: 20px; }
     .section-alt-visual { flex: 1; min-width: 0; display: flex; justify-content: center; }
 
-    /* Visual: Phone mockup */
+    /* Visual: Phone mockup (alternating sections) */
     .visual-phone {
       width: 200px;
-      height: 410px;
-      background: #F2F0EC;
+      height: 416px;
+      background: #F8FAFC;
       border-radius: 32px;
       border: 2.5px solid #2C2C2C;
       position: relative;
       overflow: hidden;
       box-shadow: 0 20px 60px rgba(0,0,0,0.2);
     }
-    .visual-phone .phone-screen { padding: 40px 14px 14px; }
-    .visual-phone .phone-card { padding: 10px; margin-bottom: 8px; }
-    .visual-phone .phone-card-img { width: 36px; height: 36px; border-radius: 8px; }
-    .visual-phone .phone-card-name { font-size: 0.62rem; }
-    .visual-phone .phone-card-date { font-size: 0.54rem; }
+    .visual-phone .phone-screen { padding: 40px 8px 0; }
+    .visual-phone .phone-dash-title { font-size: 0.68rem; }
+    .visual-phone .phone-dash-count { font-size: 0.44rem; }
+    .visual-phone .phone-search { height: 18px; margin: 0 2px 4px; border-radius: 8px; padding: 0 6px; }
+    .visual-phone .phone-search-text { font-size: 0.38rem; }
+    .visual-phone .phone-stats-row { gap: 3px; margin: 0 2px 4px; }
+    .visual-phone .phone-stat-card { padding: 4px 6px; border-radius: 8px; }
+    .visual-phone .phone-stat-label { font-size: 0.32rem; }
+    .visual-phone .phone-stat-value { font-size: 0.6rem; }
+    .visual-phone .phone-cat-row { gap: 2px; margin: 0 2px 4px; }
+    .visual-phone .phone-cat-pill { padding: 2px 5px; border-radius: 6px; font-size: 0.34rem; }
+    .visual-phone .phone-cat-count { font-size: 0.3rem; padding: 0 2px; }
+    .visual-phone .phone-seg-tab { margin: 0 2px 4px; border-radius: 8px; padding: 1px; }
+    .visual-phone .phone-seg-btn { font-size: 0.36rem; padding: 3px 0; border-radius: 6px; }
+    .visual-phone .phone-card-grid { gap: 3px; margin: 0 2px; }
+    .visual-phone .phone-real-card { border-radius: 8px; }
+    .visual-phone .phone-real-card-body { padding: 3px 4px 4px; }
+    .visual-phone .phone-real-card-name { font-size: 0.4rem; }
+    .visual-phone .phone-real-card-meta { font-size: 0.32rem; }
+    .visual-phone .phone-real-card-days { font-size: 0.32rem; }
+    .visual-phone .phone-real-card-price { font-size: 0.38rem; }
+    .visual-phone .phone-real-card-img { font-size: 0.9rem; }
+    .visual-phone .phone-nav { margin-top: auto; }
+    .visual-phone .phone-nav-inner { padding: 3px 14px 6px; }
+    .visual-phone .phone-nav-icon { width: 11px; height: 11px; }
+    .visual-phone .phone-nav-fab { width: 20px; height: 20px; }
+    .visual-phone .phone-nav-fab svg { width: 10px; height: 10px; }
+    .visual-phone .phone-nav-btn { font-size: 0.3rem; }
 
     /* Visual: Lock icon */
     .visual-lock {
@@ -636,7 +824,7 @@
         inset 0 -1px 0 rgba(0,0,0,0.3);
       z-index: 1;
     }
-    /* Screen */
+    /* Watch screen — list view matching real watchOS app */
     .watch-screen {
       width: 100%;
       height: 100%;
@@ -662,62 +850,75 @@
         rgba(255,255,255,0.03) 100%
       );
     }
-    .watch-status-bar {
+    /* Navigation title */
+    .watch-nav-title {
       text-align: center;
-      padding: 10px 0 4px;
+      padding: 8px 0 6px;
       color: #f5f5f7;
       font-weight: 600;
-      font-size: 0.48rem;
+      font-size: 0.5rem;
       position: relative;
       z-index: 1;
     }
-    .watch-content {
+    /* Item list */
+    .watch-list {
       flex: 1;
       display: flex;
       flex-direction: column;
+      padding: 0 10px;
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    .watch-list-item {
+      padding: 5px 0;
+      border-bottom: 0.5px solid rgba(255,255,255,0.06);
+    }
+    .watch-list-item:last-child { border-bottom: none; }
+    .watch-item-name {
+      font-size: 0.49rem;
+      font-weight: 600;
+      color: #f5f5f7;
+    }
+    .watch-item-meta {
+      display: flex;
+      justify-content: space-between;
       align-items: center;
+      margin-top: 1px;
+    }
+    .watch-item-cat {
+      font-size: 0.34rem;
+      color: #a1a1aa;
+    }
+    .watch-item-days {
+      font-size: 0.34rem;
+      color: #8B6F4E;
+      font-weight: 500;
+    }
+    .watch-item-price {
+      font-size: 0.34rem;
+      color: #6b6b7b;
+      margin-top: 1px;
+    }
+    /* Tab bar */
+    .watch-tabbar {
+      display: flex;
       justify-content: center;
-      padding: 0 14px 18px;
-      text-align: center;
+      gap: 24px;
+      padding: 4px 0 6px;
+      border-top: 0.5px solid rgba(255,255,255,0.06);
       position: relative;
       z-index: 1;
     }
-    .watch-complication-label {
-      font-size: 0.38rem;
-      color: #3b82f6;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      margin-bottom: 4px;
-      font-weight: 500;
-    }
-    .watch-complication-item {
-      font-size: 0.72rem;
-      font-weight: 700;
+    .watch-tab {
+      opacity: 0.35;
       color: #f5f5f7;
-      margin-bottom: 1px;
+      display: flex;
+      align-items: center;
     }
-    .watch-complication-days {
-      font-size: 0.52rem;
-      color: #a1a1aa;
-      margin-bottom: 8px;
-    }
-    .watch-progress-bar {
-      width: 78%;
-      height: 3px;
-      background: rgba(255,255,255,0.08);
-      border-radius: 2px;
-      overflow: hidden;
-      margin-bottom: 3px;
-    }
-    .watch-progress-fill {
-      width: 72%;
-      height: 100%;
-      background: linear-gradient(90deg, #3b82f6, #60a5fa);
-      border-radius: 2px;
-    }
-    .watch-complication-hint {
-      font-size: 0.36rem;
-      color: #6b6b7b;
+    .watch-tab.active {
+      opacity: 1;
+      color: #8B6F4E;
     }
     /* Digital Crown */
     .watch-crown {
@@ -936,12 +1137,13 @@
       .section-alt { padding: 80px 24px; min-height: auto; }
       .download-cards { grid-template-columns: 1fr; }
       .stats-grid { grid-template-columns: 1fr; gap: 24px; }
-      .hero-phone { width: 210px; height: 430px; }
+      .hero-phone { width: 210px; height: 440px; }
       .hero-phone .phone-island { width: 66px; height: 22px; top: 7px; }
       .hero-phone .phone-statusbar { top: 16px; left: 24px; right: 24px; font-size: 0.5rem; }
-      .hero-phone .phone-screen { padding-top: 46px; }
-      .hero-phone .phone-card { padding: 8px 10px; }
-      .hero-phone .phone-card-img { width: 34px; height: 34px; }
+      .hero-phone .phone-screen { padding-top: 44px; }
+      .hero-phone .phone-dash-title { font-size: 0.72rem; }
+      .hero-phone .phone-real-card-name { font-size: 0.42rem; }
+      .hero-phone .phone-real-card-price { font-size: 0.4rem; }
       .hero h1 { font-size: 2.8rem; }
       .section-heading { font-size: 2rem !important; }
       .watch-body { width: 110px; height: 132px; border-radius: 28px; }
@@ -953,18 +1155,40 @@
     }
     @media (max-width: 480px) {
       .hero { padding: 100px 20px 60px; }
-      .hero-phone { width: 170px; height: 350px; border-radius: 36px; }
+      .hero-phone { width: 170px; height: 356px; border-radius: 36px; }
       .hero-phone .phone-reflection { border-radius: 33px; }
       .hero-phone .phone-island { width: 54px; height: 18px; top: 6px; }
       .hero-phone .phone-statusbar { top: 13px; left: 20px; right: 20px; font-size: 0.45rem; }
-      .hero-phone .phone-screen { padding: 38px 10px 0; }
-      .hero-phone .phone-card { padding: 6px 8px; margin-bottom: 5px; gap: 6px; border-radius: 10px; }
-      .hero-phone .phone-card-img { width: 28px; height: 28px; border-radius: 7px; }
-      .hero-phone .phone-card-name { font-size: 0.58rem; }
-      .hero-phone .phone-card-date { font-size: 0.5rem; }
-      .hero-phone .phone-card-badge { font-size: 0.48rem; padding: 1px 5px; }
-      .hero-phone .phone-tabbar { padding: 4px 0 8px; }
-      .hero-phone .phone-tab { font-size: 0.68rem; }
+      .hero-phone .phone-screen { padding: 36px 6px 0; }
+      .hero-phone .phone-dash-title { font-size: 0.62rem; }
+      .hero-phone .phone-dash-count { font-size: 0.38rem; }
+      .hero-phone .phone-search { height: 15px; margin: 0 2px 4px; border-radius: 7px; padding: 0 5px; }
+      .hero-phone .phone-search-text { font-size: 0.32rem; }
+      .hero-phone .phone-search svg { width: 6px; height: 6px; }
+      .hero-phone .phone-stats-row { gap: 2px; margin: 0 2px 4px; }
+      .hero-phone .phone-stat-card { padding: 3px 5px; border-radius: 7px; }
+      .hero-phone .phone-stat-icon-row svg { width: 5px; height: 5px; }
+      .hero-phone .phone-stat-label { font-size: 0.28rem; }
+      .hero-phone .phone-stat-value { font-size: 0.5rem; }
+      .hero-phone .phone-cat-row { gap: 2px; margin: 0 2px 3px; }
+      .hero-phone .phone-cat-pill { padding: 1px 4px; border-radius: 5px; font-size: 0.28rem; }
+      .hero-phone .phone-cat-count { font-size: 0.26rem; padding: 0 2px; }
+      .hero-phone .phone-seg-tab { margin: 0 2px 3px; border-radius: 7px; padding: 1px; }
+      .hero-phone .phone-seg-btn { font-size: 0.3rem; padding: 2px 0; border-radius: 6px; }
+      .hero-phone .phone-card-grid { gap: 2px; margin: 0 2px; }
+      .hero-phone .phone-real-card { border-radius: 7px; }
+      .hero-phone .phone-real-card-img { font-size: 0.7rem; }
+      .hero-phone .phone-real-card-body { padding: 2px 3px 3px; }
+      .hero-phone .phone-real-card-name { font-size: 0.32rem; }
+      .hero-phone .phone-real-card-meta { font-size: 0.26rem; }
+      .hero-phone .phone-real-card-days { font-size: 0.26rem; }
+      .hero-phone .phone-real-card-price { font-size: 0.3rem; }
+      .hero-phone .phone-real-card-bottom { margin-top: 1px; }
+      .hero-phone .phone-nav-inner { padding: 2px 10px 4px; }
+      .hero-phone .phone-nav-icon { width: 9px; height: 9px; }
+      .hero-phone .phone-nav-fab { width: 16px; height: 16px; }
+      .hero-phone .phone-nav-fab svg { width: 8px; height: 8px; }
+      .hero-phone .phone-nav-btn { font-size: 0.24rem; }
       .hero-phone-glow { width: 220px; height: 420px; }
       .hero h1 { font-size: 2.2rem; }
       .nav-links a:not(.nav-cta) { padding: 6px 8px; font-size: 0.78rem; }
@@ -974,9 +1198,9 @@
       .watch-band-top, .watch-band-bottom { width: 42px; height: 30px; }
       .watch-crown { width: 11px; height: 24px; top: 22px; right: -6px; }
       .watch-side-btn { width: 5px; height: 18px; top: 54px; right: -6px; }
-      .watch-complication-item { font-size: 0.62rem; }
-      .watch-complication-days { font-size: 0.46rem; }
-      .watch-status-bar { font-size: 0.42rem; padding: 7px 0 2px; }
+      .watch-item-name { font-size: 0.44rem; }
+      .watch-item-cat, .watch-item-days, .watch-item-price { font-size: 0.3rem; }
+      .watch-nav-title { font-size: 0.44rem; padding: 6px 0 4px; }
     }
   
     /* Lang Toggle */
@@ -1047,45 +1271,111 @@
           </span>
         </div>
         <div class="phone-screen">
-          <div class="phone-header-row">
-            <span class="phone-title">持物记录</span>
-            <span class="phone-count">5 件物品</span>
+          <!-- Dashboard header -->
+          <div class="phone-dash-header">
+            <div class="phone-dash-title">我的物品</div>
+            <div class="phone-dash-count">共 8 件物品</div>
           </div>
-          <div class="phone-card">
-            <div class="phone-card-left">
-              <div class="phone-card-img" style="background: linear-gradient(135deg, #D4C5B2 0%, #C4B5A2 100%);"></div>
-            </div>
-            <div class="phone-card-text">
-              <div class="phone-card-name">MacBook Pro</div>
-              <div class="phone-card-date">2023.10 · 已陪伴 965 天</div>
-            </div>
-            <span class="phone-card-badge">数码</span>
+          <!-- Search bar -->
+          <div class="phone-search">
+            <svg width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <span class="phone-search-text">搜索物品...</span>
           </div>
-          <div class="phone-card">
-            <div class="phone-card-left">
-              <div class="phone-card-img" style="background: linear-gradient(135deg, #E8D5C4 0%, #D4C0A8 100%);"></div>
+          <!-- Stats row -->
+          <div class="phone-stats-row">
+            <div class="phone-stat-card">
+              <div class="phone-stat-icon-row">
+                <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.5"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                <span class="phone-stat-label">总持有</span>
+              </div>
+              <div class="phone-stat-value">8</div>
             </div>
-            <div class="phone-card-text">
-              <div class="phone-card-name">机械键盘</div>
-              <div class="phone-card-date">2024.01 · 已陪伴 877 天</div>
+            <div class="phone-stat-card">
+              <div class="phone-stat-icon-row">
+                <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+                <span class="phone-stat-label">平均陪伴</span>
+              </div>
+              <div class="phone-stat-value">426</div>
             </div>
-            <span class="phone-card-badge">桌面</span>
           </div>
-          <div class="phone-card">
-            <div class="phone-card-left">
-              <div class="phone-card-img" style="background: linear-gradient(135deg, #C8B8A8 0%, #B8A898 100%);"></div>
-            </div>
-            <div class="phone-card-text">
-              <div class="phone-card-name">胶片相机</div>
-              <div class="phone-card-date">2022.06 · 已陪伴 1452 天</div>
-            </div>
-            <span class="phone-card-badge">摄影</span>
+          <!-- Category pills -->
+          <div class="phone-cat-row">
+            <span class="phone-cat-pill active">全部<span class="phone-cat-count">8</span></span>
+            <span class="phone-cat-pill">数码<span class="phone-cat-count">3</span></span>
+            <span class="phone-cat-pill">文具<span class="phone-cat-count">2</span></span>
+            <span class="phone-cat-pill">摄影<span class="phone-cat-count">1</span></span>
+            <span class="phone-cat-pill">桌面<span class="phone-cat-count">1</span></span>
+            <span class="phone-cat-pill">其他<span class="phone-cat-count">1</span></span>
           </div>
-          <!-- Bottom nav bar -->
-          <div class="phone-tabbar">
-            <span class="phone-tab active">📋</span>
-            <span class="phone-tab">➕</span>
-            <span class="phone-tab">⚙️</span>
+          <!-- Segmented tab -->
+          <div class="phone-seg-tab">
+            <button class="phone-seg-btn active">最近添加</button>
+            <button class="phone-seg-btn">陪伴最久</button>
+          </div>
+          <!-- 2-column card grid -->
+          <div class="phone-card-grid">
+            <div class="phone-real-card">
+              <div class="phone-real-card-img" style="background:linear-gradient(135deg,#DBEAFE,#BFDBFE);">📷</div>
+              <div class="phone-real-card-body">
+                <div class="phone-real-card-name">胶片相机</div>
+                <div class="phone-real-card-meta">摄影</div>
+                <div class="phone-real-card-bottom">
+                  <span class="phone-real-card-days">1,452 天</span>
+                  <span class="phone-real-card-price">¥800</span>
+                </div>
+              </div>
+            </div>
+            <div class="phone-real-card">
+              <div class="phone-real-card-img" style="background:linear-gradient(135deg,#E0E7FF,#C7D2FE);">⌨️</div>
+              <div class="phone-real-card-body">
+                <div class="phone-real-card-name">机械键盘</div>
+                <div class="phone-real-card-meta">桌面</div>
+                <div class="phone-real-card-bottom">
+                  <span class="phone-real-card-days">877 天</span>
+                  <span class="phone-real-card-price">¥500</span>
+                </div>
+              </div>
+            </div>
+            <div class="phone-real-card">
+              <div class="phone-real-card-img" style="background:linear-gradient(135deg,#F3E8FF,#E9D5FF);">💻</div>
+              <div class="phone-real-card-body">
+                <div class="phone-real-card-name">MacBook Pro</div>
+                <div class="phone-real-card-meta">数码</div>
+                <div class="phone-real-card-bottom">
+                  <span class="phone-real-card-days">965 天</span>
+                  <span class="phone-real-card-price">¥12,000</span>
+                </div>
+              </div>
+            </div>
+            <div class="phone-real-card">
+              <div class="phone-real-card-img" style="background:linear-gradient(135deg,#FEF3C7,#FDE68A);">🖊️</div>
+              <div class="phone-real-card-body">
+                <div class="phone-real-card-name">钢笔</div>
+                <div class="phone-real-card-meta">文具</div>
+                <div class="phone-real-card-bottom">
+                  <span class="phone-real-card-days">1,088 天</span>
+                  <span class="phone-real-card-price">¥200</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Bottom nav — frosted glass -->
+          <div class="phone-nav">
+            <div class="phone-nav-bg"></div>
+            <div class="phone-nav-divider"></div>
+            <div class="phone-nav-inner">
+              <div class="phone-nav-btn active">
+                <svg class="phone-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                <span>物品</span>
+              </div>
+              <div class="phone-nav-fab">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              </div>
+              <div class="phone-nav-btn">
+                <svg class="phone-nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                <span>统计</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -1295,23 +1585,57 @@
         </div>
       </div>
       <div class="section-alt-visual reveal" style="justify-content:center;">
-        <!-- Apple Watch CSS Mockup -->
+        <!-- Apple Watch CSS Mockup — real watchOS app UI -->
         <div class="watch-mockup">
           <div class="watch-band-top"></div>
           <div class="watch-body">
             <div class="watch-screen">
               <div class="watch-screen-reflection"></div>
-              <div class="watch-status-bar">
-                <span>10:09</span>
+              <!-- Navigation title -->
+              <div class="watch-nav-title">
+                <span>我的物品</span>
               </div>
-              <div class="watch-content">
-                <div class="watch-complication-label">陪伴最久</div>
-                <div class="watch-complication-item">📷 胶片相机</div>
-                <div class="watch-complication-days">1,452 天</div>
-                <div class="watch-progress-bar">
-                  <div class="watch-progress-fill"></div>
+              <!-- Item list — matches real watchOS ItemListView -->
+              <div class="watch-list">
+                <div class="watch-list-item">
+                  <div class="watch-item-top">
+                    <span class="watch-item-name">MacBook Pro</span>
+                  </div>
+                  <div class="watch-item-meta">
+                    <span class="watch-item-cat">数码</span>
+                    <span class="watch-item-days">965 天</span>
+                  </div>
+                  <div class="watch-item-price">¥12,000</div>
                 </div>
-                <div class="watch-complication-hint">下一个里程碑 1,500 天</div>
+                <div class="watch-list-item">
+                  <div class="watch-item-top">
+                    <span class="watch-item-name">机械键盘</span>
+                  </div>
+                  <div class="watch-item-meta">
+                    <span class="watch-item-cat">桌面</span>
+                    <span class="watch-item-days">877 天</span>
+                  </div>
+                  <div class="watch-item-price">¥500</div>
+                </div>
+                <div class="watch-list-item">
+                  <div class="watch-item-top">
+                    <span class="watch-item-name">胶片相机</span>
+                  </div>
+                  <div class="watch-item-meta">
+                    <span class="watch-item-cat">摄影</span>
+                    <span class="watch-item-days">1,452 天</span>
+                  </div>
+                  <div class="watch-item-price">¥800</div>
+                </div>
+              </div>
+              <!-- Tab bar -->
+              <div class="watch-tabbar">
+                <span class="watch-tab active">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                </span>
+                <span class="watch-tab">
+                  <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                </span>
               </div>
             </div>
             <div class="watch-crown"></div>
@@ -1563,5 +1887,6 @@
       updateLangToggle();
     });
   </script>
+<script src="../scripts/security.js"></script>
 </body>
 </html>
