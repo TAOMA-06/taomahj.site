@@ -1,6 +1,7 @@
 /* ============================================================
-   Architectural Background — Canvas-driven generative architecture
-   Perspective grid, floating geometric planes, subtle parallax
+   Abstract Geometric Background — Canvas-driven particle grid
+   Floating nodes, connecting lines, subtle parallax
+   Theme-aware colors
    ============================================================ */
 
 (function initArchBg() {
@@ -11,20 +12,28 @@
   let W, H, DPR;
   let mouseX = 0, mouseY = 0;
   let targetMouseX = 0, targetMouseY = 0;
-  let scrollY = 0;
   let time = 0;
 
+  // Get current theme color
+  function getThemeColor() {
+    const style = getComputedStyle(document.documentElement);
+    const primary = style.getPropertyValue('--primary').trim() || '#0891b2';
+    return primary;
+  }
+
+  function hexToRgba(hex, alpha) {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  }
+
   const config = {
-    horizonRatio: 0.55,
-    gridDensity: 24,
-    vanishingPointShift: 0.15,
-    planeCount: 5,
-    lineColor: 'rgba(0, 47, 167, 0.06)',
-    accentLineColor: 'rgba(0, 47, 167, 0.10)',
-    planeColor: 'rgba(0, 47, 167, 0.025)',
-    planeStroke: 'rgba(0, 47, 167, 0.06)',
-    animSpeed: 0.0003,
-    parallaxStrength: 0.03,
+    nodeCount: 60,
+    connectionDistance: 120,
+    nodeBaseRadius: 1.5,
+    animSpeed: 0.0005,
+    parallaxStrength: 0.02,
   };
 
   function resize() {
@@ -36,6 +45,7 @@
     canvas.style.width = W + 'px';
     canvas.style.height = H + 'px';
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    initNodes();
   }
 
   resize();
@@ -46,140 +56,96 @@
     targetMouseY = (e.clientY / H - 0.5) * 2;
   });
 
-  window.addEventListener('scroll', () => {
-    scrollY = window.scrollY;
-  });
-
-  // Perspective grid lines
-  function drawPerspectiveGrid(vpX, vpY) {
-    const horizonY = vpY;
-    const bottomY = H + 100;
-    const topY = -100;
-
-    ctx.strokeStyle = config.lineColor;
-    ctx.lineWidth = 1;
-
-    // Vertical-ish lines radiating from vanishing point
-    const spread = W * 1.5;
-    const step = spread / config.gridDensity;
-    for (let i = -config.gridDensity / 2; i <= config.gridDensity / 2; i++) {
-      const xBase = vpX + i * step;
-      ctx.beginPath();
-      ctx.moveTo(xBase, bottomY);
-      ctx.lineTo(vpX + i * step * 0.02, horizonY);
-      ctx.stroke();
+  // Floating nodes
+  let nodes = [];
+  function initNodes() {
+    nodes = [];
+    for (let i = 0; i < config.nodeCount; i++) {
+      nodes.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        vx: (Math.random() - 0.5) * 0.3,
+        vy: (Math.random() - 0.5) * 0.3,
+        radius: Math.random() * 2 + config.nodeBaseRadius,
+        phase: Math.random() * Math.PI * 2,
+        pulseSpeed: Math.random() * 0.002 + 0.001,
+      });
     }
+  }
+  initNodes();
 
-    // Horizontal receding lines
-    const hLines = 12;
-    for (let i = 1; i <= hLines; i++) {
-      const t = i / hLines;
-      const y = horizonY + (bottomY - horizonY) * (t * t);
-      const widthAtY = spread * t;
-      ctx.beginPath();
-      ctx.moveTo(vpX - widthAtY / 2, y);
-      ctx.lineTo(vpX + widthAtY / 2, y);
-      ctx.stroke();
+  function drawConnections(primaryColor) {
+    for (let i = 0; i < nodes.length; i++) {
+      for (let j = i + 1; j < nodes.length; j++) {
+        const dx = nodes[i].x - nodes[j].x;
+        const dy = nodes[i].y - nodes[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < config.connectionDistance) {
+          const opacity = (1 - dist / config.connectionDistance) * 0.15;
+          ctx.strokeStyle = hexToRgba(primaryColor, opacity);
+          ctx.lineWidth = 0.5;
+          ctx.beginPath();
+          ctx.moveTo(nodes[i].x, nodes[i].y);
+          ctx.lineTo(nodes[j].x, nodes[j].y);
+          ctx.stroke();
+        }
+      }
     }
-
-    // Horizon accent line
-    ctx.strokeStyle = config.accentLineColor;
-    ctx.lineWidth = 1.5;
-    ctx.beginPath();
-    ctx.moveTo(0, horizonY);
-    ctx.lineTo(W, horizonY);
-    ctx.stroke();
   }
 
-  // Floating geometric planes (abstract building blocks)
-  const planes = [];
-  for (let i = 0; i < config.planeCount; i++) {
-    planes.push({
-      x: Math.random() * 0.8 + 0.1,
-      y: Math.random() * 0.6 + 0.2,
-      w: Math.random() * 120 + 60,
-      h: Math.random() * 160 + 80,
-      depth: Math.random() * 0.5 + 0.5,
-      phase: Math.random() * Math.PI * 2,
-      speed: Math.random() * 0.0002 + 0.0001,
-      opacity: Math.random() * 0.03 + 0.02,
+  function drawNodes(primaryColor) {
+    nodes.forEach(node => {
+      const pulse = Math.sin(time * node.pulseSpeed + node.phase) * 0.5 + 0.5;
+      const radius = node.radius + pulse * 1;
+
+      ctx.fillStyle = hexToRgba(primaryColor, 0.2 + pulse * 0.15);
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Glow
+      ctx.fillStyle = hexToRgba(primaryColor, 0.05);
+      ctx.beginPath();
+      ctx.arc(node.x, node.y, radius * 4, 0, Math.PI * 2);
+      ctx.fill();
     });
   }
 
-  function drawPlanes(vpX, vpY) {
-    planes.forEach((p, idx) => {
-      const floatY = Math.sin(time * p.speed + p.phase) * 15;
-      const parallaxX = mouseX * config.parallaxStrength * p.depth * 100;
-      const parallaxY = mouseY * config.parallaxStrength * p.depth * 60 + floatY;
+  function updateNodes() {
+    const parallaxX = mouseX * config.parallaxStrength * 50;
+    const parallaxY = mouseY * config.parallaxStrength * 50;
 
-      const px = p.x * W + parallaxX - p.w / 2;
-      const py = p.y * H + parallaxY - p.h / 2;
+    nodes.forEach(node => {
+      node.x += node.vx + parallaxX * 0.01;
+      node.y += node.vy + parallaxY * 0.01;
 
-      // Draw wireframe box (architectural sketch style)
-      ctx.strokeStyle = config.planeStroke;
-      ctx.fillStyle = config.planeColor;
-      ctx.lineWidth = 1;
-
-      // Front face
-      ctx.fillRect(px, py, p.w, p.h);
-      ctx.strokeRect(px, py, p.w, p.h);
-
-      // Side face (pseudo-3D)
-      const depth = 20 * p.depth;
-      ctx.beginPath();
-      ctx.moveTo(px + p.w, py);
-      ctx.lineTo(px + p.w + depth, py - depth * 0.6);
-      ctx.lineTo(px + p.w + depth, py + p.h - depth * 0.6);
-      ctx.lineTo(px + p.w, py + p.h);
-      ctx.closePath();
-      ctx.fillStyle = `rgba(0, 47, 167, ${p.opacity * 0.5})`;
-      ctx.fill();
-      ctx.stroke();
-
-      // Top face
-      ctx.beginPath();
-      ctx.moveTo(px, py);
-      ctx.lineTo(px + depth, py - depth * 0.6);
-      ctx.lineTo(px + p.w + depth, py - depth * 0.6);
-      ctx.lineTo(px + p.w, py);
-      ctx.closePath();
-      ctx.fillStyle = `rgba(0, 47, 167, ${p.opacity * 0.3})`;
-      ctx.fill();
-      ctx.stroke();
-
-      // Corner accent lines
-      ctx.strokeStyle = config.accentLineColor;
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      ctx.moveTo(px, py);
-      ctx.lineTo(px + p.w + depth, py - depth * 0.6);
-      ctx.stroke();
+      // Wrap around
+      if (node.x < -10) node.x = W + 10;
+      if (node.x > W + 10) node.x = -10;
+      if (node.y < -10) node.y = H + 10;
+      if (node.y > H + 10) node.y = -10;
     });
   }
 
-  // Section divider lines (architectural "floor slabs")
-  function drawFloorSlabs() {
-    const sections = document.querySelectorAll('section[id]');
-    sections.forEach((sec, i) => {
-      const rect = sec.getBoundingClientRect();
-      if (rect.top > H || rect.bottom < 0) return;
+  function drawGrid(primaryColor) {
+    const gridSize = 60;
+    ctx.strokeStyle = hexToRgba(primaryColor, 0.03);
+    ctx.lineWidth = 0.5;
 
-      const y = rect.top + rect.height;
-      const progress = Math.max(0, Math.min(1, 1 - rect.top / H));
+    for (let x = 0; x < W; x += gridSize) {
+      ctx.beginPath();
+      ctx.moveTo(x, 0);
+      ctx.lineTo(x, H);
+      ctx.stroke();
+    }
 
-      ctx.strokeStyle = `rgba(0, 47, 167, ${0.04 * progress})`;
-      ctx.lineWidth = 2;
+    for (let y = 0; y < H; y += gridSize) {
       ctx.beginPath();
       ctx.moveTo(0, y);
-      ctx.lineTo(W * progress, y);
+      ctx.lineTo(W, y);
       ctx.stroke();
-
-      // Small section marker
-      if (progress > 0.3) {
-        ctx.fillStyle = `rgba(0, 47, 167, ${0.08 * progress})`;
-        ctx.fillRect(W * progress - 40, y - 3, 40, 3);
-      }
-    });
+    }
   }
 
   function animate() {
@@ -187,14 +153,14 @@
     mouseX += (targetMouseX - mouseX) * 0.05;
     mouseY += (targetMouseY - mouseY) * 0.05;
 
+    const primaryColor = getThemeColor();
+
     ctx.clearRect(0, 0, W, H);
 
-    const vpX = W * (0.5 + mouseX * config.vanishingPointShift);
-    const vpY = H * config.horizonRatio + mouseY * 20;
-
-    drawPerspectiveGrid(vpX, vpY);
-    drawPlanes(vpX, vpY);
-    drawFloorSlabs();
+    drawGrid(primaryColor);
+    updateNodes();
+    drawConnections(primaryColor);
+    drawNodes(primaryColor);
 
     requestAnimationFrame(animate);
   }

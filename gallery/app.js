@@ -150,21 +150,23 @@ function t(key, vars) {
       const thumb = img.thumbnail || img.filename;
       const thumbPath = img.thumbnail ? `thumbnails/${thumb}` : `images/${thumb}`;
       const imgPath = `images/${img.filename}`;
+      const esc = SecurityUtils.escapeHtml;
+      const escAttr = SecurityUtils.escapeAttr;
 
       return `
         <div class="wallpaper-card" data-index="${i}">
           <div class="card-image-wrap">
-            <img src="${thumbPath}" alt="${img.title}" loading="lazy">
-            ${res ? `<span class="card-resolution">${res}</span>` : ''}
+            <img src="${escAttr(thumbPath)}" alt="${escAttr(img.title)}" loading="lazy">
+            ${res ? `<span class="card-resolution">${esc(res)}</span>` : ''}
           </div>
           <div class="card-body">
             <div style="min-width:0;flex:1;">
-              <div class="card-title" title="${img.title}">${img.title}</div>
-              ${sizeStr ? `<div class="card-meta">${sizeStr}</div>` : ''}
+              <div class="card-title" title="${escAttr(img.title)}">${esc(img.title)}</div>
+              ${sizeStr ? `<div class="card-meta">${esc(sizeStr)}</div>` : ''}
             </div>
-            <a href="${imgPath}" download="${img.filename}" class="btn-download" onclick="event.stopPropagation()" title="${t('download.original')}">
+            <a href="${escAttr(imgPath)}" download="${escAttr(img.filename)}" class="btn-download" onclick="event.stopPropagation()" title="${escAttr(t('download.original'))}">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              ${t('download')}
+              ${esc(t('download'))}
             </a>
           </div>
         </div>`;
@@ -186,12 +188,14 @@ function t(key, vars) {
     currentIndex = index;
     const img = images[index];
     lightboxImg.src = `images/${img.filename}`;
+    const esc = SecurityUtils.escapeHtml;
+    const escAttr = SecurityUtils.escapeAttr;
     lightboxInfo.innerHTML = `
-      <span class="title">${img.title}</span>
-      <span class="meta">${img.resolution || ''}${img.size ? ' · ' + formatSize(img.size) : ''}</span>
-      <a href="images/${img.filename}" download="${img.filename}" class="btn-download" style="margin-left:8px;">
+      <span class="title">${esc(img.title)}</span>
+      <span class="meta">${esc(img.resolution || '')}${img.size ? ' · ' + esc(formatSize(img.size)) : ''}</span>
+      <a href="images/${escAttr(img.filename)}" download="${escAttr(img.filename)}" class="btn-download" style="margin-left:8px;">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        ${t('download.original')}
+        ${esc(t('download.original'))}
       </a>
     `;
     lightbox.classList.add('open');

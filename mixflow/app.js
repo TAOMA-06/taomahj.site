@@ -420,8 +420,11 @@ function createCard(recipe) {
   const glassLabel = translateGlass(glass);
   const fav = isFavorite(id);
 
+  const esc = SecurityUtils.escapeHtml;
+  const escAttr = SecurityUtils.escapeAttr;
+
   const imageHtml = thumb
-    ? `<img class="card-image" src="${escapeHtml(thumb)}" alt="${escapeHtml(name)}" loading="lazy">`
+    ? `<img class="card-image" src="${escAttr(thumb)}" alt="${escAttr(name)}" loading="lazy">`
     : '';
 
   const placeholderHtml = thumb
@@ -429,14 +432,14 @@ function createCard(recipe) {
     : `<div class="card-image-placeholder">🍸</div>`;
 
   return `
-    <div class="cocktail-card" data-id="${escapeHtml(id)}">
+    <div class="cocktail-card" data-id="${escAttr(id)}">
       ${imageHtml}${placeholderHtml}
-      <button class="card-fav ${fav ? 'active' : ''}" data-id="${escapeHtml(id)}" aria-label="favorite">${fav ? '★' : '☆'}</button>
+      <button class="card-fav ${fav ? 'active' : ''}" data-id="${escAttr(id)}" aria-label="favorite">${fav ? '★' : '☆'}</button>
       <div class="card-body">
-        <h3 class="card-title" title="${escapeHtml(name)}">${escapeHtml(name)}</h3>
+        <h3 class="card-title" title="${escAttr(name)}">${esc(name)}</h3>
         <div class="card-meta">
-          ${category ? `<span class="card-category" title="${escapeHtml(category)}">${escapeHtml(catLabel)}</span>` : ''}
-          ${glass ? `<span class="card-glass" title="${escapeHtml(glass)}">${escapeHtml(glassLabel)}</span>` : ''}
+          ${category ? `<span class="card-category" title="${escAttr(category)}">${esc(catLabel)}</span>` : ''}
+          ${glass ? `<span class="card-glass" title="${escAttr(glass)}">${esc(glassLabel)}</span>` : ''}
         </div>
       </div>
     </div>
@@ -457,44 +460,47 @@ function openModal(id) {
   const glassLabel = translateGlass(recipe.strGlass);
   const alcLabel = translateAlcoholic(recipe.strAlcoholic);
 
+  const esc = SecurityUtils.escapeHtml;
+  const escAttr = SecurityUtils.escapeAttr;
+
   const imageHtml = thumb
-    ? `<img class="modal-image" src="${escapeHtml(thumb)}" alt="${escapeHtml(recipe.strDrink)}">`
+    ? `<img class="modal-image" src="${escAttr(thumb)}" alt="${escAttr(recipe.strDrink)}">`
     : `<div class="modal-image-placeholder">🍸</div>`;
 
   const ingredientsHtml = ingredients.map((ing, i) => `
     <li class="ingredient-item">
-      <span class="ingredient-name">${escapeHtml(ing)}</span>
-      ${measures[i] ? `<span class="ingredient-measure">${escapeHtml(measures[i])}</span>` : ''}
+      <span class="ingredient-name">${esc(ing)}</span>
+      ${measures[i] ? `<span class="ingredient-measure">${esc(measures[i])}</span>` : ''}
     </li>
   `).join('');
 
   $modalContent.innerHTML = `
     ${imageHtml}
     <div class="modal-info">
-      <h2 class="modal-title">${escapeHtml(recipe.strDrink)}</h2>
+      <h2 class="modal-title">${esc(recipe.strDrink)}</h2>
       <div class="modal-meta-row">
-        ${recipe.strCategory ? `<span class="modal-badge" title="${escapeHtml(recipe.strCategory)}">${escapeHtml(catLabel)}</span>` : ''}
-        ${recipe.strAlcoholic ? `<span class="modal-badge alcoholic">${escapeHtml(alcLabel)}</span>` : ''}
-        ${recipe.strGlass ? `<span class="modal-badge" title="${escapeHtml(recipe.strGlass)}">${escapeHtml(glassLabel)}</span>` : ''}
-        ${recipe.strIBA ? `<span class="modal-badge">${escapeHtml(recipe.strIBA)}</span>` : ''}
+        ${recipe.strCategory ? `<span class="modal-badge" title="${escAttr(recipe.strCategory)}">${esc(catLabel)}</span>` : ''}
+        ${recipe.strAlcoholic ? `<span class="modal-badge alcoholic">${esc(alcLabel)}</span>` : ''}
+        ${recipe.strGlass ? `<span class="modal-badge" title="${escAttr(recipe.strGlass)}">${esc(glassLabel)}</span>` : ''}
+        ${recipe.strIBA ? `<span class="modal-badge">${esc(recipe.strIBA)}</span>` : ''}
       </div>
 
       ${ingredients.length > 0 ? `
         <div class="modal-section">
-          <h3 class="modal-section-title">${dict['modal.ingredients']}</h3>
+          <h3 class="modal-section-title">${esc(dict['modal.ingredients'])}</h3>
           <ul class="ingredients-list">${ingredientsHtml}</ul>
         </div>
       ` : ''}
 
       ${recipe.strInstructions ? `
         <div class="modal-section">
-          <h3 class="modal-section-title">${dict['modal.instructions']}</h3>
-          <p class="instructions-text">${escapeHtml(recipe.strInstructions)}</p>
+          <h3 class="modal-section-title">${esc(dict['modal.instructions'])}</h3>
+          <p class="instructions-text">${esc(recipe.strInstructions)}</p>
         </div>
       ` : ''}
 
-      <button class="modal-fav-btn ${fav ? 'active' : ''}" id="modalFavBtn" data-id="${escapeHtml(id)}">
-        ${fav ? dict['modal.favorited'] : dict['modal.favorite']}
+      <button class="modal-fav-btn ${fav ? 'active' : ''}" id="modalFavBtn" data-id="${escAttr(id)}">
+        ${fav ? esc(dict['modal.favorited']) : esc(dict['modal.favorite'])}
       </button>
     </div>
   `;
@@ -571,13 +577,15 @@ function shakeRandom() {
   document.querySelector('.random-hero').style.display = 'none';
   const resultEl = document.getElementById('randomResult');
   resultEl.style.display = 'block';
+  const esc = SecurityUtils.escapeHtml;
+  const escAttr = SecurityUtils.escapeAttr;
   resultEl.innerHTML = `
-    <div class="random-result-card" data-id="${escapeHtml(recipe.idDrink)}">
+    <div class="random-result-card" data-id="${escAttr(recipe.idDrink)}">
       <div style="font-size:48px;margin-bottom:12px;">🍸</div>
-      <h3 class="card-title">${escapeHtml(name)}</h3>
+      <h3 class="card-title">${esc(name)}</h3>
       <div class="card-meta" style="justify-content:center;">
-        ${category ? `<span class="card-category" title="${escapeHtml(category)}">${escapeHtml(catLabel)}</span>` : ''}
-        ${glass ? `<span class="card-glass" title="${escapeHtml(glass)}">${escapeHtml(glassLabel)}</span>` : ''}
+        ${category ? `<span class="card-category" title="${escAttr(category)}">${esc(catLabel)}</span>` : ''}
+        ${glass ? `<span class="card-glass" title="${escAttr(glass)}">${esc(glassLabel)}</span>` : ''}
       </div>
     </div>
   `;

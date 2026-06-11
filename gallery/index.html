@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; font-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=(), payment=(), usb=(), magnetometer=(), gyroscope=(), accelerometer=(), ambient-light-sensor=(), autoplay=(), encrypted-media=(), fullscreen=(self), picture-in-picture=(), screen-wake-lock=(), sync-xhr=(), xr-spatial-tracking=()">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta http-equiv="Strict-Transport-Security" content="max-age=63072000; includeSubDomains; preload">
   <meta name="description" content="壁纸图库 — taomahj 收藏的高清壁纸，原图下载无限制。">
   <title data-i18n="page.title">壁纸图库 — taomahj</title>
   <link rel="icon" href="../assets/favicon-gallery.png">
@@ -67,6 +72,7 @@
     <p>&copy; 2026 <a href="../index.html">taomahj</a> · <span data-i18n="footer">壁纸图库</span></p>
   </footer>
 
+  <script src="../scripts/security.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

@@ -2,6 +2,93 @@
    taomahj — Swiss Modernist · i18n · Knowledge Graph · Reveal
    ======================================================== */
 
+// ==================== Theme Switcher ====================
+
+const themes = ['cyan', 'zinc', 'red', 'rose', 'orange', 'green', 'blue', 'violet'];
+const themeNames = {
+  cyan: '青色', zinc: '锌灰', red: '红色', rose: '玫瑰',
+  orange: '橙色', green: '绿色', blue: '蓝色', violet: '紫罗兰'
+};
+
+let currentTheme = localStorage.getItem('theme') || 'cyan';
+
+function applyTheme(theme) {
+  if (!themes.includes(theme)) theme = 'cyan';
+  currentTheme = theme;
+  document.documentElement.setAttribute('data-theme', theme);
+  localStorage.setItem('theme', theme);
+
+  // Update sidebar display
+  const dot = document.getElementById('currentThemeDot');
+  const name = document.getElementById('currentThemeName');
+  const btn = document.querySelector(`.theme-color-btn[data-theme="${theme}"]`);
+
+  if (dot && btn) {
+    dot.style.background = btn.style.background;
+  }
+  if (name) {
+    name.textContent = themeNames[theme] || theme;
+  }
+
+  // Update active button state
+  document.querySelectorAll('.theme-color-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.theme === theme);
+  });
+
+  // Update light orbs
+  updateLightOrbs();
+}
+
+function updateLightOrbs() {
+  const style = getComputedStyle(document.documentElement);
+  const primary = style.getPropertyValue('--primary').trim();
+  const orbs = document.querySelectorAll('.light-orb--1, .light-orb--2');
+  orbs.forEach(orb => {
+    orb.style.background = `radial-gradient(circle, ${primary}18 0%, transparent 70%)`;
+  });
+}
+
+function randomTheme() {
+  const available = themes.filter(t => t !== currentTheme);
+  const next = available[Math.floor(Math.random() * available.length)];
+  applyTheme(next);
+}
+
+// Initialize theme buttons
+document.querySelectorAll('.theme-color-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    applyTheme(btn.dataset.theme);
+  });
+});
+
+// Shuffle button
+document.getElementById('shuffleTheme')?.addEventListener('click', randomTheme);
+
+// Mobile sidebar toggle
+const sidebar = document.getElementById('sidebar');
+const sidebarOverlay = document.getElementById('sidebarOverlay');
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
+
+function openSidebar() {
+  sidebar.classList.add('open');
+  sidebarOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSidebar() {
+  sidebar.classList.remove('open');
+  sidebarOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+mobileMenuBtn?.addEventListener('click', openSidebar);
+sidebarCloseBtn?.addEventListener('click', closeSidebar);
+sidebarOverlay?.addEventListener('click', closeSidebar);
+
+// Apply initial theme
+applyTheme(currentTheme);
+
 // ==================== i18n ====================
 
 const i18n = {
@@ -259,29 +346,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       window.scrollTo({ top, behavior: 'smooth' });
     }
   });
-});
-
-// ==================== Security Hardening ====================
-
-if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
-  const noop = () => {};
-  ['log','info','warn','debug','error','table','trace','group','groupEnd',
-   'groupCollapsed','time','timeEnd','timeLog','count','countReset','assert',
-   'clear','dir','dirxml'].forEach(method => {
-    if (typeof console[method] === 'function') console[method] = noop;
-  });
-}
-
-if (window.top !== window.self) {
-  try {
-    window.top.location = window.self.location;
-  } catch (e) {
-    document.body.style.display = 'none';
-  }
-}
-
-document.querySelector('.avatar')?.addEventListener('contextmenu', (e) => {
-  e.preventDefault();
 });
 
 // ==================== Knowledge Graph (D3 Force-Directed) ====================
