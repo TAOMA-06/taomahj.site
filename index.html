@@ -276,44 +276,22 @@
                   </div>
                 </div>
               </a>
-              <!-- More Projects Toggle -->
-              <div class="project-mini-card" id="moreProjectsToggle" role="button" tabindex="0" style="cursor:pointer;border:1px dashed var(--border);border-radius:var(--radius-md);display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:200px;transition:all var(--dur-med) var(--ease-out);" onmouseover="this.style.borderColor='var(--primary)';" onmouseout="this.style.borderColor='var(--border)';">
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="var(--muted-foreground)" stroke-width="1.5" style="margin-bottom:0.5rem;">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" y1="8" x2="12" y2="16"/>
-                  <line x1="8" y1="12" x2="16" y2="12"/>
-                </svg>
-                <span style="font-size:13px;font-weight:600;color:var(--muted-foreground);" data-i18n="projects.more.title">更多项目</span>
-                <span class="more-count-tag" style="font-size:11px;color:var(--muted-foreground);opacity:0.7;">+2</span>
-              </div>
-            </div>
-
-            <!-- Hidden projects -->
-            <div id="hiddenProjects" style="display:none;margin-top:1rem;">
-              <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;">
-                <a href="gallery/index.html" style="text-decoration:none;color:inherit;">
-                  <div class="project-mini-card">
-                    <div style="aspect-ratio:16/10;overflow:hidden;border-radius:var(--radius-md);">
-                      <img src="assets/projects/gallery.jpg" alt="Gallery" style="width:100%;height:100%;object-fit:cover;">
-                    </div>
-                    <div style="padding:0.75rem 0;">
-                      <h3 style="font-size:14px;font-weight:600;" data-i18n="projects.gallery.title">图库</h3>
-                      <p style="font-size:12px;color:var(--muted-foreground);" data-i18n="projects.gallery.desc">高清壁纸收藏</p>
+              <!-- Gallery -->
+              <a href="gallery/index.html" style="text-decoration:none;color:inherit;">
+                <div class="project-mini-card">
+                  <div style="aspect-ratio:16/10;overflow:hidden;border-radius:var(--radius-md);">
+                    <img src="assets/projects/gallery.jpg" alt="Gallery" style="width:100%;height:100%;object-fit:cover;transition:transform var(--dur-med) var(--ease-out);" onmouseover="this.style.transform='scale(1.05)';" onmouseout="this.style.transform='scale(1)';">
+                  </div>
+                  <div style="padding:0.75rem 0;">
+                    <h3 style="font-size:14px;font-weight:600;" data-i18n="projects.gallery.title">图库</h3>
+                    <p style="font-size:12px;color:var(--muted-foreground);" data-i18n="projects.gallery.desc">高清壁纸收藏</p>
+                    <div style="display:flex;gap:0.375rem;margin-top:0.5rem;flex-wrap:wrap;">
+                      <span class="badge">Wallpaper</span>
+                      <span class="badge">Gallery</span>
                     </div>
                   </div>
-                </a>
-                <a href="bounce/index.html" style="text-decoration:none;color:inherit;">
-                  <div class="project-mini-card">
-                    <div style="aspect-ratio:16/10;overflow:hidden;border-radius:var(--radius-md);">
-                      <img src="assets/projects/bounce.jpg" alt="Bounce" style="width:100%;height:100%;object-fit:cover;">
-                    </div>
-                    <div style="padding:0.75rem 0;">
-                      <h3 style="font-size:14px;font-weight:600;" data-i18n="projects.bounce.title">Bounce Ball</h3>
-                      <p style="font-size:12px;color:var(--muted-foreground);" data-i18n="projects.bounce.desc">物理弹球小游戏</p>
-                    </div>
-                  </div>
-                </a>
-              </div>
+                </div>
+              </a>
             </div>
           </div>
         </div>

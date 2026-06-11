@@ -133,8 +133,6 @@ const i18n = {
     'projects.more.desc': '点击展开查看更多项目与工具。',
     'projects.gallery.title': '图库',
     'projects.gallery.desc': '高清壁纸收藏 — 浏览、预览并下载原图。',
-    'projects.bounce.title': 'Bounce Ball',
-    'projects.bounce.desc': '物理弹球小游戏 — Canvas 驱动的关卡挑战。',
     'knowledge.title': '知识图谱',
     'knowledge.desc': '我的 Hermes AI 生态系统 — 技能、智能体、记忆与工作流',
     'footer.built': '用好奇心构建',
@@ -180,8 +178,6 @@ const i18n = {
     'projects.more.desc': 'Click to explore more projects and tools.',
     'projects.gallery.title': 'Gallery',
     'projects.gallery.desc': 'HD wallpaper collection — browse, preview and download original images.',
-    'projects.bounce.title': 'Bounce Ball',
-    'projects.bounce.desc': 'Physics bouncing ball game — Canvas-powered level challenges.',
     'knowledge.title': 'Knowledge Graph',
     'knowledge.desc': 'My Hermes AI ecosystem — skills, agents, memory & workflows',
     'footer.built': 'Built with curiosity',
@@ -409,7 +405,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       { id:"project-perler", group:"projects", label:"Perler", desc:"图片转拼豆风格转换器", radius:12 },
       { id:"project-chiwu", group:"projects", label:"持物记录", desc:"本地优先物品档案 App", radius:14 },
       { id:"project-gallery", group:"projects", label:"Gallery", desc:"高清壁纸收藏图库", radius:12 },
-      { id:"project-bounce", group:"projects", label:"Bounce", desc:"物理弹球小游戏", radius:12 },
       { id:"project-website", group:"projects", label:"taomahj.site", desc:"个人网站 v2 — 建筑感重设计", radius:15 },
     ];
 
@@ -469,7 +464,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       // Projects
       { source:"creative-skills", target:"project-perler", type:"creates" },
       { source:"creative-skills", target:"project-gallery", type:"creates" },
-      { source:"creative-skills", target:"project-bounce", type:"creates" },
       { source:"dev-skills", target:"project-mixflow", type:"creates" },
       { source:"dev-skills", target:"project-chiwu", type:"creates" },
       { source:"dev-skills", target:"project-website", type:"creates" },
