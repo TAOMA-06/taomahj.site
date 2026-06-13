@@ -1,169 +1,253 @@
 /* ============================================================
-   Abstract Geometric Background — Canvas-driven particle grid
-   Floating nodes, connecting lines, subtle parallax
-   Theme-aware colors
+   taomahj — Geometric Decorations
+   Swiss International Style × Modern Architecture
+   Architectural geometric shapes with subtle animations
    ============================================================ */
 
-(function initArchBg() {
-  const canvas = document.getElementById('arch-canvas');
-  if (!canvas) return;
+(function initGeometricBackground() {
+  const container = document.querySelector('.bg-geometric');
+  if (!container) return;
 
-  const ctx = canvas.getContext('2d');
-  let W, H, DPR;
-  let mouseX = 0, mouseY = 0;
-  let targetMouseX = 0, targetMouseY = 0;
-  let time = 0;
-
-  // Get current theme color
-  function getThemeColor() {
-    const style = getComputedStyle(document.documentElement);
-    const primary = style.getPropertyValue('--primary').trim() || '#0891b2';
-    return primary;
+  // Helper to create element
+  function createEl(type, styles) {
+    const el = document.createElement(type);
+    el.style.cssText = styles;
+    return el;
   }
 
-  function hexToRgba(hex, alpha) {
-    const r = parseInt(hex.slice(1, 3), 16);
-    const g = parseInt(hex.slice(3, 5), 16);
-    const b = parseInt(hex.slice(5, 7), 16);
-    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-  }
+  // === CIRCLES ===
+  const circles = [
+    { x: '8%', y: '12%', size: 240, opacity: 0.08, anim: 'float', dur: '28s' },
+    { x: '88%', y: '18%', size: 160, opacity: 0.06, anim: 'float-slow', dur: '35s' },
+    { x: '85%', y: '78%', size: 180, opacity: 0.07, anim: 'float', dur: '32s' },
+    { x: '12%', y: '65%', size: 100, opacity: 0.05, anim: 'breathe', dur: '20s' },
+    { x: '50%', y: '45%', size: 300, opacity: 0.03, anim: 'none', dur: null },
+    { x: '92%', y: '55%', size: 80, opacity: 0.04, anim: 'drift', dur: '40s' },
+  ];
 
-  const config = {
-    nodeCount: 60,
-    connectionDistance: 120,
-    nodeBaseRadius: 1.5,
-    animSpeed: 0.0005,
-    parallaxStrength: 0.02,
-  };
-
-  function resize() {
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
-    W = canvas.parentElement ? canvas.parentElement.offsetWidth : window.innerWidth;
-    H = canvas.parentElement ? canvas.parentElement.offsetHeight : window.innerHeight;
-    canvas.width = W * DPR;
-    canvas.height = H * DPR;
-    canvas.style.width = W + 'px';
-    canvas.style.height = H + 'px';
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    initNodes();
-  }
-
-  resize();
-  window.addEventListener('resize', resize);
-
-  document.addEventListener('mousemove', (e) => {
-    targetMouseX = (e.clientX / W - 0.5) * 2;
-    targetMouseY = (e.clientY / H - 0.5) * 2;
+  circles.forEach(c => {
+    const el = createEl('div', `
+      left: ${c.x}; top: ${c.y};
+      width: ${c.size}px; height: ${c.size}px;
+      opacity: ${c.opacity};
+      transform: translate(-50%, -50%);
+      animation: ${c.anim || 'none'} ${c.dur || '0s'} ease-in-out infinite;
+    `);
+    el.className = 'geo-circle';
+    container.appendChild(el);
   });
 
-  // Floating nodes
-  let nodes = [];
-  function initNodes() {
-    nodes = [];
-    for (let i = 0; i < config.nodeCount; i++) {
-      nodes.push({
-        x: Math.random() * W,
-        y: Math.random() * H,
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        radius: Math.random() * 2 + config.nodeBaseRadius,
-        phase: Math.random() * Math.PI * 2,
-        pulseSpeed: Math.random() * 0.002 + 0.001,
-      });
-    }
-  }
-  initNodes();
+  // === SQUARES ===
+  const squares = [
+    { x: '5%', y: '45%', size: 80, opacity: 0.06, anim: 'rotate-slow', dur: '80s', rotate: true },
+    { x: '92%', y: '35%', size: 60, opacity: 0.05, anim: 'float', dur: '30s' },
+    { x: '45%', y: '88%', size: 120, opacity: 0.04, anim: 'rotate-reverse', dur: '100s', rotate: true },
+    { x: '70%', y: '60%', size: 40, opacity: 0.06, anim: 'drift', dur: '25s' },
+    { x: '25%', y: '25%', size: 50, opacity: 0.04, anim: 'float-slow', dur: '45s' },
+  ];
 
-  function drawConnections(primaryColor) {
-    for (let i = 0; i < nodes.length; i++) {
-      for (let j = i + 1; j < nodes.length; j++) {
-        const dx = nodes[i].x - nodes[j].x;
-        const dy = nodes[i].y - nodes[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+  squares.forEach(s => {
+    const el = createEl('div', `
+      left: ${s.x}; top: ${s.y};
+      width: ${s.size}px; height: ${s.size}px;
+      opacity: ${s.opacity};
+      transform: translate(-50%, -50%) ${s.rotate ? 'rotate(45deg)' : ''};
+      animation: ${s.anim} ${s.dur} ease-in-out infinite;
+    `);
+    el.className = 'geo-square';
+    container.appendChild(el);
+  });
 
-        if (dist < config.connectionDistance) {
-          const opacity = (1 - dist / config.connectionDistance) * 0.15;
-          ctx.strokeStyle = hexToRgba(primaryColor, opacity);
-          ctx.lineWidth = 0.5;
-          ctx.beginPath();
-          ctx.moveTo(nodes[i].x, nodes[i].y);
-          ctx.lineTo(nodes[j].x, nodes[j].y);
-          ctx.stroke();
-        }
-      }
-    }
-  }
+  // === TRIANGLES ===
+  const triangles = [
+    { x: '75%', y: '22%', size: 70, opacity: 0.06, anim: 'rotate-slow', dur: '90s' },
+    { x: '18%', y: '75%', size: 55, opacity: 0.05, anim: 'float', dur: '35s' },
+    { x: '88%', y: '70%', size: 45, opacity: 0.04, anim: 'rotate-reverse', dur: '70s' },
+    { x: '55%', y: '15%', size: 40, opacity: 0.05, anim: 'drift', dur: '50s' },
+  ];
 
-  function drawNodes(primaryColor) {
-    nodes.forEach(node => {
-      const pulse = Math.sin(time * node.pulseSpeed + node.phase) * 0.5 + 0.5;
-      const radius = node.radius + pulse * 1;
+  triangles.forEach(t => {
+    const el = createEl('div', `
+      left: ${t.x}; top: ${t.y};
+      width: 0; height: 0;
+      border-left: ${t.size / 2}px solid transparent;
+      border-right: ${t.size / 2}px solid transparent;
+      border-bottom: ${t.size}px solid var(--border-light);
+      opacity: ${t.opacity};
+      animation: ${t.anim} ${t.dur} ease-in-out infinite;
+    `);
+    el.className = 'geo-triangle';
+    container.appendChild(el);
+  });
 
-      ctx.fillStyle = hexToRgba(primaryColor, 0.2 + pulse * 0.15);
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, radius, 0, Math.PI * 2);
-      ctx.fill();
+  // === ARCHES ===
+  const arches = [
+    { x: '60%', y: '40%', width: 140, height: 70, opacity: 0.06, anim: 'none' },
+    { x: '30%', y: '85%', width: 100, height: 50, opacity: 0.05, anim: 'float-slow', dur: '40s' },
+  ];
 
-      // Glow
-      ctx.fillStyle = hexToRgba(primaryColor, 0.05);
-      ctx.beginPath();
-      ctx.arc(node.x, node.y, radius * 4, 0, Math.PI * 2);
-      ctx.fill();
-    });
-  }
+  arches.forEach(a => {
+    const el = createEl('div', `
+      left: ${a.x}; top: ${a.y};
+      width: ${a.width}px; height: ${a.height}px;
+      border: 1px solid var(--border-light);
+      border-bottom: none;
+      border-radius: ${a.width / 2}px ${a.width / 2}px 0 0;
+      opacity: ${a.opacity};
+      transform: translate(-50%, -50%);
+      animation: ${a.anim || 'none'} ${a.dur || '0s'} ease-in-out infinite;
+    `);
+    el.className = 'geo-arch';
+    container.appendChild(el);
+  });
 
-  function updateNodes() {
-    const parallaxX = mouseX * config.parallaxStrength * 50;
-    const parallaxY = mouseY * config.parallaxStrength * 50;
+  // === FRAMES ===
+  const frames = [
+    { x: '82%', y: '25%', size: 110, opacity: 0.05, anim: 'float', dur: '38s' },
+    { x: '15%', y: '35%', size: 90, opacity: 0.04, anim: 'rotate-slow', dur: '120s' },
+    { x: '68%', y: '82%', size: 70, opacity: 0.04, anim: 'breathe', dur: '30s' },
+  ];
 
-    nodes.forEach(node => {
-      node.x += node.vx + parallaxX * 0.01;
-      node.y += node.vy + parallaxY * 0.01;
+  frames.forEach(f => {
+    const el = createEl('div', `
+      left: ${f.x}; top: ${f.y};
+      width: ${f.size}px; height: ${f.size}px;
+      border: 1px solid var(--border-medium);
+      opacity: ${f.opacity};
+      transform: translate(-50%, -50%);
+      animation: ${f.anim} ${f.dur} ease-in-out infinite;
+    `);
+    el.className = 'geo-frame';
+    container.appendChild(el);
+  });
 
-      // Wrap around
-      if (node.x < -10) node.x = W + 10;
-      if (node.x > W + 10) node.x = -10;
-      if (node.y < -10) node.y = H + 10;
-      if (node.y > H + 10) node.y = -10;
-    });
-  }
+  // === HORIZONTAL LINES ===
+  const hLines = [
+    { x: '0%', y: '20%', width: '28%', opacity: 0.2, anim: 'none' },
+    { x: '72%', y: '45%', width: '22%', opacity: 0.15, anim: 'none' },
+    { x: '10%', y: '72%', width: '18%', opacity: 0.18, anim: 'none' },
+    { x: '60%', y: '88%', width: '30%', opacity: 0.12, anim: 'none' },
+    { x: '0%', y: '55%', width: '12%', opacity: 0.15, anim: 'none' },
+  ];
 
-  function drawGrid(primaryColor) {
-    const gridSize = 60;
-    ctx.strokeStyle = hexToRgba(primaryColor, 0.03);
-    ctx.lineWidth = 0.5;
+  hLines.forEach(l => {
+    const el = createEl('div', `
+      left: ${l.x}; top: ${l.y};
+      width: ${l.width}; height: 1px;
+      background: var(--border-light);
+      opacity: ${l.opacity};
+    `);
+    el.className = 'geo-line';
+    container.appendChild(el);
+  });
 
-    for (let x = 0; x < W; x += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, H);
-      ctx.stroke();
-    }
+  // === VERTICAL LINES ===
+  const vLines = [
+    { x: '18%', y: '0%', height: '35%', opacity: 0.2, anim: 'none' },
+    { x: '85%', y: '40%', height: '40%', opacity: 0.15, anim: 'none' },
+    { x: '5%', y: '60%', height: '35%', opacity: 0.12, anim: 'none' },
+    { x: '95%', y: '0%', height: '25%', opacity: 0.18, anim: 'none' },
+  ];
 
-    for (let y = 0; y < H; y += gridSize) {
-      ctx.beginPath();
-      ctx.moveTo(0, y);
-      ctx.lineTo(W, y);
-      ctx.stroke();
-    }
-  }
+  vLines.forEach(l => {
+    const el = createEl('div', `
+      left: ${l.x}; top: ${l.y};
+      width: 1px; height: ${l.height};
+      background: var(--border-light);
+      opacity: ${l.opacity};
+    `);
+    el.className = 'geo-vline';
+    container.appendChild(el);
+  });
+
+  // === DASHED LINES ===
+  const dashedLines = [
+    { x: '25%', y: '30%', width: '15%', opacity: 0.15, anim: 'none' },
+    { x: '75%', y: '65%', width: '12%', opacity: 0.12, anim: 'none' },
+  ];
+
+  dashedLines.forEach(l => {
+    const el = createEl('div', `
+      left: ${l.x}; top: ${l.y};
+      width: ${l.width}; height: 0;
+      border-top: 1px dashed var(--border-light);
+      opacity: ${l.opacity};
+    `);
+    el.className = 'geo-dashed';
+    container.appendChild(el);
+  });
+
+  // === STRUCTURAL GRID OVERLAY ===
+  const gridOverlay = createEl('div', `
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(var(--border-light) 1px, transparent 1px),
+      linear-gradient(90deg, var(--border-light) 1px, transparent 1px);
+    background-size: 120px 120px;
+    opacity: 0.04;
+    pointer-events: none;
+  `);
+  container.appendChild(gridOverlay);
+
+})();
+
+// Mouse parallax effect
+(function initMouseParallax() {
+  const geos = document.querySelectorAll('.bg-geometric > *:not(.geo-line):not(.geo-vline):not(.geo-dashed)');
+  if (geos.length === 0) return;
+
+  let mouseX = 0, mouseY = 0;
+  let currentX = 0, currentY = 0;
+  const factor = 0.02;
+
+  document.addEventListener('mousemove', (e) => {
+    mouseX = (e.clientX / window.innerWidth - 0.5) * 2;
+    mouseY = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
 
   function animate() {
-    time += 16;
-    mouseX += (targetMouseX - mouseX) * 0.05;
-    mouseY += (targetMouseY - mouseY) * 0.05;
+    currentX += (mouseX - currentX) * 0.05;
+    currentY += (mouseY - currentY) * 0.05;
 
-    const primaryColor = getThemeColor();
-
-    ctx.clearRect(0, 0, W, H);
-
-    drawGrid(primaryColor);
-    updateNodes();
-    drawConnections(primaryColor);
-    drawNodes(primaryColor);
+    geos.forEach((geo, i) => {
+      const speed = 0.3 + (i % 5) * 0.15;
+      const x = currentX * speed * factor * 100;
+      const y = currentY * speed * factor * 100;
+      const baseTransform = geo.style.transform.split('translate')[0] || '';
+      geo.style.transform = `${baseTransform} translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+    });
 
     requestAnimationFrame(animate);
   }
 
   animate();
+})();
+
+// Scroll parallax
+(function initScrollParallax() {
+  const geos = document.querySelectorAll('.bg-geometric > *');
+  if (geos.length === 0) return;
+
+  let ticking = false;
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+
+        geos.forEach((geo, i) => {
+          const speed = 0.05 + (i * 0.01);
+          const baseTransform = geo.style.transform.split('translate')[0] || '';
+          const match = geo.style.transform.match(/translate\([^)]+\)$/);
+          const translatePart = match ? match[0] : 'translate(-50%, -50%)';
+
+          geo.style.transform = baseTransform + translatePart;
+        });
+
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
 })();

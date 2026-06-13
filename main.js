@@ -1,50 +1,23 @@
-/* ========================================================
-   taomahj — Swiss Modernist · i18n · Knowledge Graph · Reveal
-   ======================================================== */
+/* ============================================================
+   taomahj — Theme Switcher · i18n · Knowledge Graph · Animations
+   Swiss International Style × Modern Architecture
+   ============================================================ */
 
 // ==================== Theme Switcher ====================
 
-const themes = ['cyan', 'zinc', 'red', 'rose', 'orange', 'green', 'blue', 'violet'];
-const themeNames = {
-  cyan: '青色', zinc: '锌灰', red: '红色', rose: '玫瑰',
-  orange: '橙色', green: '绿色', blue: '蓝色', violet: '紫罗兰'
-};
+const themes = ['classic', 'bauhaus', 'modern', 'warm', 'concrete'];
 
-let currentTheme = localStorage.getItem('theme') || 'cyan';
+let currentTheme = localStorage.getItem('theme') || 'classic';
 
 function applyTheme(theme) {
-  if (!themes.includes(theme)) theme = 'cyan';
+  if (!themes.includes(theme)) theme = 'classic';
   currentTheme = theme;
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
 
-  // Update sidebar display
-  const dot = document.getElementById('currentThemeDot');
-  const name = document.getElementById('currentThemeName');
-  const btn = document.querySelector(`.theme-color-btn[data-theme="${theme}"]`);
-
-  if (dot && btn) {
-    dot.style.background = btn.style.background;
-  }
-  if (name) {
-    name.textContent = themeNames[theme] || theme;
-  }
-
   // Update active button state
-  document.querySelectorAll('.theme-color-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.theme === theme);
-  });
-
-  // Update light orbs
-  updateLightOrbs();
-}
-
-function updateLightOrbs() {
-  const style = getComputedStyle(document.documentElement);
-  const primary = style.getPropertyValue('--primary').trim();
-  const orbs = document.querySelectorAll('.light-orb--1, .light-orb--2');
-  orbs.forEach(orb => {
-    orb.style.background = `radial-gradient(circle, ${primary}18 0%, transparent 70%)`;
+  document.querySelectorAll('.theme-color-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.theme === theme);
   });
 }
 
@@ -54,6 +27,20 @@ function randomTheme() {
   applyTheme(next);
 }
 
+// Theme panel toggle
+const themePanel = document.getElementById('themePanel');
+const themeToggle = document.getElementById('themeToggle');
+
+themeToggle?.addEventListener('click', () => {
+  themePanel.classList.toggle('active');
+});
+
+document.addEventListener('click', (e) => {
+  if (!themePanel?.contains(e.target) && !themeToggle?.contains(e.target)) {
+    themePanel?.classList.remove('active');
+  }
+});
+
 // Initialize theme buttons
 document.querySelectorAll('.theme-color-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -61,33 +48,41 @@ document.querySelectorAll('.theme-color-btn').forEach(btn => {
   });
 });
 
-// Shuffle button
 document.getElementById('shuffleTheme')?.addEventListener('click', randomTheme);
-
-// Mobile sidebar toggle
-const sidebar = document.getElementById('sidebar');
-const sidebarOverlay = document.getElementById('sidebarOverlay');
-const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const sidebarCloseBtn = document.getElementById('sidebarCloseBtn');
-
-function openSidebar() {
-  sidebar.classList.add('open');
-  sidebarOverlay.classList.add('active');
-  document.body.style.overflow = 'hidden';
-}
-
-function closeSidebar() {
-  sidebar.classList.remove('open');
-  sidebarOverlay.classList.remove('active');
-  document.body.style.overflow = '';
-}
-
-mobileMenuBtn?.addEventListener('click', openSidebar);
-sidebarCloseBtn?.addEventListener('click', closeSidebar);
-sidebarOverlay?.addEventListener('click', closeSidebar);
 
 // Apply initial theme
 applyTheme(currentTheme);
+
+// ==================== Mobile Navigation ====================
+
+const mobileNavOverlay = document.getElementById('mobileNavOverlay');
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileNavClose = document.getElementById('mobileNavClose');
+const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+function openMobileNav() {
+  mobileNavOverlay.classList.add('active');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileNav() {
+  mobileNavOverlay.classList.remove('active');
+  document.body.style.overflow = '';
+}
+
+mobileMenuBtn?.addEventListener('click', openMobileNav);
+mobileNavClose?.addEventListener('click', closeMobileNav);
+mobileNavOverlay?.addEventListener('click', (e) => {
+  if (e.target === mobileNavOverlay) closeMobileNav();
+});
+
+mobileNavLinks.forEach(link => {
+  link.addEventListener('click', closeMobileNav);
+});
+
+document.getElementById('mobileLangToggle')?.addEventListener('click', () => {
+  switchLang(currentLang === 'zh' ? 'en' : 'zh');
+});
 
 // ==================== i18n ====================
 
@@ -97,11 +92,7 @@ const i18n = {
     'nav.knowledge': '知识库',
     'nav.about': '关于',
     'nav.contact': '联系',
-    'nav.mixflow': 'MixFlow',
-    'nav.perler': 'Perler',
-    'nav.chiwu': '持物记录',
-    'nav.gallery': '图库',
-    'hero.tagline': '数学 × 电路 × 自动化 × 代码',
+    'hero.tagline': 'Mathematics × Circuits × Automation × Code',
     'hero.sub': '探索硬件与软件交汇地带的本科生',
     'hero.viewWork': '查看作品',
     'hero.getInTouch': '联系我',
@@ -113,28 +104,21 @@ const i18n = {
     'projects.perler.desc': '图片转拼豆风格 — 圆润珠子、网格间隙、塑料光泽，纯本地处理无水印。',
     'projects.chiwu.title': '持物记录',
     'projects.chiwu.desc': '记录长期陪伴你的每一件物品 — 本地优先的物品档案 App，iOS · Android · watchOS。',
+    'projects.gallery.title': 'Gallery',
+    'projects.gallery.desc': '高清壁纸收藏 — 浏览、预览并下载原图。',
     'about.title': '关于',
-    'about.desc': '我的背景、技能与驱动力',
     'about.education.title': '教育背景',
-    'about.education.school': '本科生',
-    'about.education.major': '自动化 · 人工智能',
+    'about.education.text': '自动化专业本科生，专注于人工智能方向，探索硬件与软件交汇地带的无限可能。',
     'about.skills.title': '技能',
     'about.interests.title': '兴趣',
-    'about.interests.content': '赛车与摄影——在赛道上感受速度与操控的极致，在镜头下捕捉光影与瞬间。用不同的方式探索世界的边界。',
+    'about.interests.text': '赛车与摄影——在赛道上感受速度与操控的极致，在镜头下捕捉光影与瞬间。',
+    'knowledge.title': '知识图谱',
+    'knowledge.desc': '我的 Hermes AI 生态系统 — 技能、智能体、记忆与工作流',
     'contact.title': '联系我',
     'contact.desc': '随时欢迎有趣的交流',
-    'contact.github': 'TAOMA-06',
     'contact.qq': '添加 QQ 号',
     'contact.wechatLabel': '微信',
     'contact.wechat': '添加微信号',
-    'contact.more': '更多',
-    'contact.moreHint': '更多联系方式即将上线',
-    'projects.more.title': '更多项目',
-    'projects.more.desc': '点击展开查看更多项目与工具。',
-    'projects.gallery.title': '图库',
-    'projects.gallery.desc': '高清壁纸收藏 — 浏览、预览并下载原图。',
-    'knowledge.title': '知识图谱',
-    'knowledge.desc': '我的 Hermes AI 生态系统 — 技能、智能体、记忆与工作流',
     'footer.built': '用好奇心构建',
   },
   en: {
@@ -142,13 +126,9 @@ const i18n = {
     'nav.knowledge': 'Knowledge',
     'nav.about': 'About',
     'nav.contact': 'Contact',
-    'nav.mixflow': 'MixFlow',
-    'nav.perler': 'Perler',
-    'nav.chiwu': 'Chiwu',
-    'nav.gallery': 'Gallery',
     'hero.tagline': 'Mathematics × Circuits × Automation × Code',
     'hero.sub': 'Undergraduate exploring the intersection of hardware and software',
-    'hero.viewWork': 'View My Work',
+    'hero.viewWork': 'View Work',
     'hero.getInTouch': 'Get In Touch',
     'projects.title': 'Projects',
     'projects.desc': "Things I've built and explored",
@@ -158,28 +138,21 @@ const i18n = {
     'projects.perler.desc': 'Image-to-Perler-Bead converter — rounded beads, grid gaps, plastic shine. Fully client-side with no watermark.',
     'projects.chiwu.title': '持物记录',
     'projects.chiwu.desc': 'Record every item that accompanies you — a local-first item archive app for iOS, Android & watchOS.',
+    'projects.gallery.title': 'Gallery',
+    'projects.gallery.desc': 'HD wallpaper collection — browse, preview and download original images.',
     'about.title': 'About',
-    'about.desc': 'Background, skills, and what drives me',
     'about.education.title': 'Education',
-    'about.education.school': 'Undergraduate Student',
-    'about.education.major': 'Automation · Artificial Intelligence',
+    'about.education.text': 'Automation major undergraduate, focused on AI, exploring the infinite possibilities at the intersection of hardware and software.',
     'about.skills.title': 'Skills',
     'about.interests.title': 'Interests',
-    'about.interests.content': 'Racing & Photography — feeling speed and control on the track, capturing light and moments through the lens. Exploring the world in different ways.',
+    'about.interests.text': 'Racing & Photography — feeling speed and control on the track, capturing light and moments through the lens.',
+    'knowledge.title': 'Knowledge Graph',
+    'knowledge.desc': 'My Hermes AI ecosystem — skills, agents, memory & workflows',
     'contact.title': 'Get In Touch',
     'contact.desc': 'Always open to interesting conversations',
-    'contact.github': 'TAOMA-06',
     'contact.qq': 'Add QQ number',
     'contact.wechatLabel': 'WeChat',
     'contact.wechat': 'Add WeChat ID',
-    'contact.more': 'More',
-    'contact.moreHint': 'More ways coming soon',
-    'projects.more.title': 'More Projects',
-    'projects.more.desc': 'Click to explore more projects and tools.',
-    'projects.gallery.title': 'Gallery',
-    'projects.gallery.desc': 'HD wallpaper collection — browse, preview and download original images.',
-    'knowledge.title': 'Knowledge Graph',
-    'knowledge.desc': 'My Hermes AI ecosystem — skills, agents, memory & workflows',
     'footer.built': 'Built with curiosity',
   }
 };
@@ -188,14 +161,10 @@ let currentLang = localStorage.getItem('lang') || 'zh';
 
 function switchLang(lang) {
   if (lang === currentLang) return;
-  document.body.classList.add('lang-switching');
-  setTimeout(() => {
-    currentLang = lang;
-    localStorage.setItem('lang', lang);
-    applyLang();
-    updateLangToggle();
-    document.body.classList.remove('lang-switching');
-  }, 200);
+  currentLang = lang;
+  localStorage.setItem('lang', lang);
+  applyLang();
+  updateLangToggle();
 }
 
 function applyLang() {
@@ -208,92 +177,21 @@ function applyLang() {
 }
 
 function updateLangToggle() {
-  const toggle = document.getElementById('langToggle');
-  if (!toggle) return;
-  toggle.classList.toggle('lang-zh-active', currentLang === 'zh');
-  toggle.classList.toggle('lang-en-active', currentLang === 'en');
+  const toggles = document.querySelectorAll('.lang-toggle');
+  toggles.forEach(toggle => {
+    toggle.classList.toggle('lang-zh-active', currentLang === 'zh');
+    toggle.classList.toggle('lang-en-active', currentLang === 'en');
+  });
 }
 
-document.getElementById('langToggle').addEventListener('click', () => {
+document.getElementById('langToggle')?.addEventListener('click', () => {
   switchLang(currentLang === 'zh' ? 'en' : 'zh');
 });
 
 applyLang();
 updateLangToggle();
 
-// ==================== More Projects Toggle ====================
-
-(function initMoreProjects() {
-  const toggle = document.getElementById('moreProjectsToggle');
-  const hiddenCards = document.querySelectorAll('.hidden-project');
-  const arrowIcon = toggle?.querySelector('.more-arrow-icon');
-  const countTag = toggle?.querySelector('.more-count-tag');
-
-  if (!toggle || hiddenCards.length === 0) return;
-
-  let expanded = false;
-  let collapseTimer = null;
-
-  function expand() {
-    expanded = true;
-    if (collapseTimer) { clearTimeout(collapseTimer); collapseTimer = null; }
-
-    hiddenCards.forEach((card, i) => {
-      card.style.display = 'flex';
-      card.style.flexDirection = 'column';
-      card.style.opacity = '0';
-      card.style.transform = 'translateY(-12px)';
-      card.style.pointerEvents = 'none';
-      card.classList.remove('visible');
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          card.style.transitionDelay = `${i * 0.08}s`;
-          card.classList.add('visible');
-        });
-      });
-    });
-    toggle.classList.add('expanded');
-    if (arrowIcon) arrowIcon.style.transform = 'rotate(90deg)';
-    if (countTag) countTag.textContent = '收起';
-  }
-
-  function collapse() {
-    expanded = false;
-    hiddenCards.forEach((card, i) => {
-      card.style.transitionDelay = `${(hiddenCards.length - 1 - i) * 0.06}s`;
-      card.classList.remove('visible');
-    });
-    toggle.classList.remove('expanded');
-    if (arrowIcon) arrowIcon.style.transform = 'rotate(0deg)';
-    if (countTag) countTag.textContent = '+2';
-
-    collapseTimer = setTimeout(() => {
-      if (!expanded) {
-        hiddenCards.forEach(card => {
-          card.style.display = 'none';
-          card.style.opacity = '';
-          card.style.transform = '';
-          card.style.transitionDelay = '';
-        });
-      }
-    }, 450);
-  }
-
-  toggle.addEventListener('click', (e) => {
-    e.preventDefault();
-    expanded ? collapse() : expand();
-  });
-
-  toggle.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter' || e.key === ' ') {
-      e.preventDefault();
-      expanded ? collapse() : expand();
-    }
-  });
-})();
-
-// ==================== Scroll Reveal (Intersection Observer) ====================
+// ==================== Scroll Reveal ====================
 
 (function initScrollReveal() {
   const observer = new IntersectionObserver((entries) => {
@@ -304,8 +202,8 @@ updateLangToggle();
       }
     });
   }, {
-    threshold: 0.12,
-    rootMargin: '0px 0px -30px 0px'
+    threshold: 0.1,
+    rootMargin: '0px 0px -40px 0px'
   });
 
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
@@ -315,7 +213,7 @@ updateLangToggle();
 
 (function initNavActive() {
   const sections = document.querySelectorAll('section[id]');
-  const navLinks = document.querySelectorAll('.nav-links a[href^="#"]');
+  const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
 
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
@@ -368,7 +266,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
   function renderGraph() {
     const rect = container.getBoundingClientRect();
     const W = rect.width || container.offsetWidth || 800;
-    const H = 560;
+    const H = 500;
 
     // === NODES ===
     const nodes = [
@@ -405,7 +303,7 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       { id:"project-perler", group:"projects", label:"Perler", desc:"图片转拼豆风格转换器", radius:12 },
       { id:"project-chiwu", group:"projects", label:"持物记录", desc:"本地优先物品档案 App", radius:14 },
       { id:"project-gallery", group:"projects", label:"Gallery", desc:"高清壁纸收藏图库", radius:12 },
-      { id:"project-website", group:"projects", label:"taomahj.site", desc:"个人网站 v2 — 建筑感重设计", radius:15 },
+      { id:"project-website", group:"projects", label:"taomahj.site", desc:"个人网站 v3 — 瑞士国际主义风格", radius:15 },
     ];
 
     // === LINKS ===
@@ -461,7 +359,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       { source:"dev-skills", target:"code-review", type:"contains" },
       { source:"dev-skills", target:"debug-py", type:"contains" },
       { source:"research-skills", target:"dspy", type:"feeds" },
-      // Projects
       { source:"creative-skills", target:"project-perler", type:"creates" },
       { source:"creative-skills", target:"project-gallery", type:"creates" },
       { source:"dev-skills", target:"project-mixflow", type:"creates" },
@@ -474,16 +371,16 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
 
     // === Group Colors (adapted for light background) ===
     const groupColors = {
-      "core-agent":     "#002FA7",
-      "orchestration":  "#1A56D8",
-      "execution":      "#0D6B3D",
-      "quality":        "#7C3AED",
-      "github":         "#4A4742",
-      "debug":          "#C53030",
-      "ml":             "#B13B6B",
-      "memory":         "#6B6760",
-      "skills":         "#0D7B6B",
-      "projects":       "#0A8A7A",
+      "core-agent":     "#c9382a",
+      "orchestration":  "#0047ab",
+      "execution":      "#2d8659",
+      "quality":        "#9b2335",
+      "github":         "#4a4a4a",
+      "debug":          "#b87333",
+      "ml":             "#7b3fa0",
+      "memory":         "#5a5a5a",
+      "skills":         "#0066a1",
+      "projects":       "#2d6a4f",
     };
 
     const groupLabels = {
@@ -500,31 +397,31 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     };
 
     const linkTypes = {
-      "delegates":   { dash:"", color:"rgba(0,47,167,0.40)", width:1.5 },
-      "invokes":     { dash:"", color:"rgba(0,47,167,0.30)", width:1.2 },
-      "workflow":    { dash:"5,5", color:"rgba(26,86,216,0.40)", width:1.3 },
-      "core":        { dash:"", color:"rgba(26,86,216,0.60)", width:2 },
-      "orchestrates":{ dash:"", color:"rgba(26,86,216,0.50)", width:1.8 },
-      "executes":    { dash:"5,5", color:"rgba(26,86,216,0.40)", width:1.5 },
-      "quality":     { dash:"3,6", color:"rgba(124,58,237,0.40)", width:1.5 },
-      "dispatches":  { dash:"", color:"rgba(13,107,61,0.40)", width:1.5 },
-      "produces":    { dash:"", color:"rgba(74,71,66,0.40)", width:1.5 },
-      "requires":    { dash:"5,5", color:"rgba(74,71,66,0.30)", width:1.2 },
-      "links":       { dash:"8,4", color:"rgba(74,71,66,0.30)", width:1 },
-      "feeds":       { dash:"5,5", color:"rgba(197,48,48,0.30)", width:1.2 },
-      "depends":     { dash:"5,5", color:"rgba(177,59,107,0.30)", width:1.2 },
-      "contains":    { dash:"2,4", color:"rgba(139,94,0,0.40)", width:1 },
-      "informs":     { dash:"8,4", color:"rgba(107,103,96,0.30)", width:1 },
-      "configures":  { dash:"2,2", color:"rgba(107,103,96,0.30)", width:1.2 },
-      "uses":        { dash:"", color:"rgba(0,47,167,0.35)", width:1.4 },
-      "manages":     { dash:"4,2", color:"rgba(74,71,66,0.35)", width:1.3 },
-      "leads-to":    { dash:"10,4", color:"rgba(197,48,48,0.25)", width:1.1 },
-      "research":    { dash:"3,6", color:"rgba(177,59,107,0.30)", width:1.2 },
-      "skills":      { dash:"", color:"rgba(13,123,107,0.35)", width:1.3 },
-      "memory":      { dash:"2,4", color:"rgba(107,103,96,0.35)", width:1.2 },
-      "creates":     { dash:"", color:"rgba(10,138,122,0.40)", width:1.5 },
-      "supports":    { dash:"5,5", color:"rgba(10,138,122,0.30)", width:1.2 },
-      "companion":   { dash:"3,3", color:"rgba(0,47,167,0.30)", width:1.2 },
+      "delegates":   { dash:"", color:"rgba(201,56,42,0.4)", width:1.5 },
+      "invokes":     { dash:"", color:"rgba(201,56,42,0.3)", width:1.2 },
+      "workflow":    { dash:"5,5", color:"rgba(0,71,171,0.4)", width:1.3 },
+      "core":        { dash:"", color:"rgba(201,56,42,0.6)", width:2 },
+      "orchestrates":{ dash:"", color:"rgba(0,71,171,0.5)", width:1.8 },
+      "executes":    { dash:"5,5", color:"rgba(0,71,171,0.4)", width:1.5 },
+      "quality":     { dash:"3,6", color:"rgba(155,35,53,0.4)", width:1.5 },
+      "dispatches":  { dash:"", color:"rgba(45,134,89,0.4)", width:1.5 },
+      "produces":    { dash:"", color:"rgba(74,74,74,0.4)", width:1.5 },
+      "requires":    { dash:"5,5", color:"rgba(74,74,74,0.3)", width:1.2 },
+      "links":       { dash:"8,4", color:"rgba(74,74,74,0.3)", width:1 },
+      "feeds":       { dash:"5,5", color:"rgba(184,115,51,0.3)", width:1.2 },
+      "depends":     { dash:"5,5", color:"rgba(123,63,160,0.3)", width:1.2 },
+      "contains":    { dash:"2,4", color:"rgba(0,102,161,0.4)", width:1 },
+      "informs":     { dash:"8,4", color:"rgba(90,90,90,0.3)", width:1 },
+      "configures":  { dash:"2,2", color:"rgba(90,90,90,0.3)", width:1.2 },
+      "uses":        { dash:"", color:"rgba(201,56,42,0.35)", width:1.4 },
+      "manages":     { dash:"4,2", color:"rgba(74,74,74,0.35)", width:1.3 },
+      "leads-to":    { dash:"10,4", color:"rgba(184,115,51,0.25)", width:1.1 },
+      "research":    { dash:"3,6", color:"rgba(123,63,160,0.3)", width:1.2 },
+      "skills":      { dash:"", color:"rgba(0,102,161,0.35)", width:1.3 },
+      "memory":      { dash:"2,4", color:"rgba(90,90,90,0.35)", width:1.2 },
+      "creates":     { dash:"", color:"rgba(45,106,79,0.4)", width:1.5 },
+      "supports":    { dash:"5,5", color:"rgba(45,106,79,0.3)", width:1.2 },
+      "companion":   { dash:"3,3", color:"rgba(201,56,42,0.3)", width:1.2 },
     };
 
     const nodeMap = new Map(nodes.map(n => [n.id, n]));
@@ -550,21 +447,8 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
         .append("path")
         .attr("d", "M0,-4L8,0L0,4")
         .attr("fill", style.color)
-        .attr("opacity", 0.5);
+        .attr("opacity", 0.6);
     });
-
-    const glowFilter = defs.append("filter")
-      .attr("id", "node-glow")
-      .attr("x", "-50%").attr("y", "-50%")
-      .attr("width", "200%").attr("height", "200%");
-    glowFilter.append("feGaussianBlur")
-      .attr("stdDeviation", "2.5")
-      .attr("result", "blur");
-    glowFilter.append("feMerge")
-      .selectAll("feMergeNode")
-      .data(["blur", "SourceGraphic"])
-      .join("feMergeNode")
-      .attr("in", d => d);
 
     const g = svg.append("g");
 
@@ -579,32 +463,22 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     const link = linkG.selectAll("line")
       .data(links)
       .join("line")
-        .attr("stroke", d => linkTypes[d.type]?.color || "rgba(74,71,66,0.15)")
+        .attr("stroke", d => linkTypes[d.type]?.color || "rgba(74,74,74,0.15)")
         .attr("stroke-width", d => linkTypes[d.type]?.width || 1)
         .attr("stroke-dasharray", d => linkTypes[d.type]?.dash || "")
-        .attr("opacity", 0.30)
+        .attr("opacity", 0.35)
         .attr("marker-end", d => `url(#arrow-${d.type})`);
-
-    const glowG = g.append("g").attr("class","kg-glows");
-    const glow = glowG.selectAll("circle")
-      .data(nodes)
-      .join("circle")
-        .attr("r", d => d.radius * 2.2)
-        .attr("fill", d => groupColors[d.group] || "#6B6760")
-        .attr("opacity", 0.06)
-        .attr("pointer-events", "none");
 
     const nodeG = g.append("g").attr("class","kg-nodes");
     const node = nodeG.selectAll("circle")
       .data(nodes)
       .join("circle")
         .attr("r", d => d.radius)
-        .attr("fill", d => groupColors[d.group] || "#6B6760")
-        .attr("stroke", d => d3.color(groupColors[d.group]||"#6B6760").darker(0.4))
-        .attr("stroke-width", 1.5)
-        .attr("opacity", 0.9)
+        .attr("fill", d => groupColors[d.group] || "#6b6b6b")
+        .attr("stroke", "#ffffff")
+        .attr("stroke-width", 2)
+        .attr("opacity", 0.95)
         .attr("cursor", "pointer")
-        .attr("filter", "url(#node-glow)")
         .on("mouseenter", onNodeEnter)
         .on("mousemove", onNodeMove)
         .on("mouseleave", onNodeLeave);
@@ -617,11 +491,11 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       d3.select(e.target)
         .attr("stroke-width", 3)
         .attr("opacity", 1)
-        .attr("r", d.radius * 1.3)
+        .attr("r", d.radius * 1.25)
         .transition().duration(200);
 
       link
-        .attr("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 0.7 : 0.06)
+        .attr("opacity", l => (l.source.id === d.id || l.target.id === d.id) ? 0.75 : 0.08)
         .attr("stroke-width", l => (l.source.id === d.id || l.target.id === d.id)
           ? (linkTypes[l.type]?.width || 1) * 2
           : (linkTypes[l.type]?.width || 1) * 0.3);
@@ -630,11 +504,11 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
         .attr("opacity", n => (n.id === d.id || links.some(l =>
           (l.source.id === d.id && l.target.id === n.id) ||
           (l.target.id === d.id && l.source.id === n.id)
-        )) ? 1 : 0.25);
+        )) ? 1 : 0.2);
     }
 
     function onNodeMove(e) {
-      const wrapper = document.querySelector('.knowledge-graph-wrapper');
+      const wrapper = document.querySelector('.knowledge-graph-container');
       const wrapRect = wrapper.getBoundingClientRect();
       tooltip
         .style("left", (e.clientX - wrapRect.left + 12) + "px")
@@ -644,16 +518,16 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     function onNodeLeave(e, d) {
       tooltip.style("opacity", 0);
       d3.select(e.target)
-        .attr("stroke-width", 1.5)
-        .attr("opacity", 0.9)
+        .attr("stroke-width", 2)
+        .attr("opacity", 0.95)
         .attr("r", d.radius)
         .transition().duration(200);
 
       link
-        .attr("opacity", 0.30)
+        .attr("opacity", 0.35)
         .attr("stroke-width", l => linkTypes[l.type]?.width || 1);
 
-      node.attr("opacity", 0.9);
+      node.attr("opacity", 0.95);
     }
 
     const drag = d3.drag()
@@ -676,12 +550,13 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
       .data(nodes)
       .join("text")
         .text(d => d.label)
-        .attr("font-size", d => Math.max(8, d.radius * 0.5))
-        .attr("fill", "#6B6760")
+        .attr("font-size", d => Math.max(8, d.radius * 0.48))
+        .attr("fill", "#4a4a4a")
+        .attr("font-weight", "500")
         .attr("text-anchor", "middle")
-        .attr("dy", d => d.radius + 12)
+        .attr("dy", d => d.radius + 13)
         .attr("pointer-events", "none")
-        .attr("opacity", 0.65);
+        .attr("opacity", 0.7);
 
     const simulation = d3.forceSimulation(nodes)
       .force("link", d3.forceLink(links).id(d => d.id).distance(d => {
@@ -702,7 +577,6 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
         .attr("x1", d => d.source.x).attr("y1", d => d.source.y)
         .attr("x2", d => d.target.x).attr("y2", d => d.target.y);
       node.attr("cx", d => d.x).attr("cy", d => d.y);
-      glow.attr("cx", d => d.x).attr("cy", d => d.y);
       label.attr("x", d => d.x).attr("y", d => d.y);
     });
 
@@ -713,8 +587,8 @@ document.querySelectorAll('a[href^="#"]').forEach(link => {
     const legendEl = d3.select("#knowledge-legend");
     legendEl.html('');
     Object.entries(groupLabels).forEach(([key, lbl]) => {
-      legendEl.append("div").attr("class","kg-legend-item")
-        .html(`<div class="kg-legend-dot" style="background:${groupColors[key]};box-shadow:0 0 5px ${groupColors[key]}40"></div> ${lbl}`);
+      legendEl.append("div").attr("class","knowledge-legend-item")
+        .html(`<div class="knowledge-legend-dot" style="background:${groupColors[key]}"></div> ${lbl}`);
     });
   }
 })();
