@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="taomahj — Personal Website">
+  <meta name="description" content="taomahj — Portfolio of web apps, automation experiments, and AI tooling.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://d3js.org; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'; frame-ancestors 'none';">
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
@@ -11,345 +11,262 @@
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>⚡</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css?v=mimo-20260615">
 </head>
 <body>
-
-  <!-- Background Layers -->
   <div class="bg-base"></div>
   <div class="bg-grid"></div>
-  <div class="bg-geometric"></div>
+  <div class="bg-geometric" aria-hidden="true"></div>
 
-  <!-- App Layout -->
-  <div class="app-layout">
-
-    <!-- Navigation -->
-    <nav class="top-nav">
-      <div class="top-nav-inner">
-        <a href="#" class="top-nav-logo">taomahj</a>
-        <div class="top-nav-links">
-          <a href="#projects" class="nav-link" data-i18n="nav.projects">Projects</a>
-          <a href="#knowledge" class="nav-link" data-i18n="nav.knowledge">Knowledge</a>
-          <a href="#about" class="nav-link" data-i18n="nav.about">About</a>
-          <a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a>
-          <button class="lang-toggle" id="langToggle" aria-label="Switch language">
-            <span class="lang-zh">中</span>
-            <span class="lang-divider">/</span>
-            <span class="lang-en">EN</span>
-          </button>
-        </div>
-        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Open menu">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="6" x2="21" y2="6"/>
-            <line x1="3" y1="12" x2="21" y2="12"/>
-            <line x1="3" y1="18" x2="21" y2="18"/>
-          </svg>
+  <nav class="top-nav">
+    <div class="top-nav-inner">
+      <a href="#hero" class="top-nav-logo" aria-label="taomahj home">taomahj</a>
+      <div class="top-nav-links" aria-label="Primary navigation">
+        <a href="#projects" class="nav-link" data-i18n="nav.projects">Works</a>
+        <a href="#about" class="nav-link" data-i18n="nav.about">About</a>
+        <a href="#knowledge" class="nav-link" data-i18n="nav.knowledge">Ecosystem</a>
+        <a href="#contact" class="nav-link" data-i18n="nav.contact">Contact</a>
+        <button class="lang-toggle" id="langToggle" type="button" aria-label="Switch language">
+          <span class="lang-zh">中</span>
+          <span class="lang-divider">/</span>
+          <span class="lang-en">EN</span>
         </button>
       </div>
-    </nav>
-
-    <!-- Mobile Navigation Overlay -->
-    <div class="mobile-nav-overlay" id="mobileNavOverlay">
-      <button class="mobile-nav-close" id="mobileNavClose">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open menu">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="4" y1="7" x2="20" y2="7"></line>
+          <line x1="4" y1="12" x2="20" y2="12"></line>
+          <line x1="4" y1="17" x2="20" y2="17"></line>
         </svg>
       </button>
-      <div class="mobile-nav-content">
-        <div class="mobile-nav-links">
-          <a href="#projects" class="mobile-nav-link" data-i18n="nav.projects">Projects</a>
-          <a href="#knowledge" class="mobile-nav-link" data-i18n="nav.knowledge">Knowledge</a>
-          <a href="#about" class="mobile-nav-link" data-i18n="nav.about">About</a>
-          <a href="#contact" class="mobile-nav-link" data-i18n="nav.contact">Contact</a>
-        </div>
-        <button class="lang-toggle" id="mobileLangToggle">
-          <span class="lang-zh">中文</span>
-          <span class="lang-divider">/</span>
-          <span class="lang-en">English</span>
-        </button>
-      </div>
     </div>
+  </nav>
 
-    <!-- Main Content -->
-    <main class="main-content">
-
-      <!-- Hero Section -->
-      <section class="hero" id="hero">
-        <div class="hero-content">
-          <p class="hero-eyebrow">taomahj</p>
-          <h1 class="hero-title">taomahj</h1>
-          <p class="hero-subtitle" data-i18n="hero.tagline">Mathematics × Circuits × Automation × Code</p>
-          <p class="hero-description" data-i18n="hero.sub">探索硬件与软件交汇地带的本科生</p>
-          <div class="hero-actions">
-            <a href="#projects" class="btn btn-primary" data-i18n="hero.viewWork">查看作品</a>
-            <a href="#contact" class="btn btn-outline" data-i18n="hero.getInTouch">联系我</a>
-          </div>
-        </div>
-        <div class="scroll-indicator">
-          <span>Scroll</span>
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="6 9 12 15 18 9"/>
-          </svg>
-        </div>
-      </section>
-
-      <!-- Projects Section -->
-      <section class="section" id="projects">
-        <div class="container">
-          <div class="section-header-inline">
-            <div>
-              <p class="section-title">Projects</p>
-              <h2 class="section-heading" data-i18n="projects.title">项目</h2>
-              <p class="section-desc" data-i18n="projects.desc">做过和正在探索的事情</p>
-            </div>
-          </div>
-
-          <div class="projects-grid">
-            <!-- MixFlow -->
-            <a href="mixflow/index.html" class="project-card reveal">
-              <div class="project-card-image">
-                <img src="assets/projects/mixflow.jpg" alt="MixFlow" loading="lazy">
-              </div>
-              <div class="project-card-body">
-                <h3 class="project-card-title" data-i18n="projects.mixflow.title">MixFlow</h3>
-                <p class="project-card-desc" data-i18n="projects.mixflow.desc">AI 鸡尾酒配方浏览器</p>
-                <div class="project-card-tags">
-                  <span class="tag">Web App</span>
-                  <span class="tag">Cocktails</span>
-                </div>
-              </div>
-            </a>
-
-            <!-- Perler -->
-            <a href="perler/index.html" class="project-card reveal reveal-d1">
-              <div class="project-card-image">
-                <img src="assets/projects/perler.jpg" alt="Perler" loading="lazy">
-              </div>
-              <div class="project-card-body">
-                <h3 class="project-card-title" data-i18n="projects.perler.title">Perler Bead</h3>
-                <p class="project-card-desc" data-i18n="projects.perler.desc">图片转拼豆风格</p>
-                <div class="project-card-tags">
-                  <span class="tag">Canvas</span>
-                  <span class="tag">Pixel Art</span>
-                </div>
-              </div>
-            </a>
-
-            <!-- Chiwu -->
-            <a href="chiwu/index.html" class="project-card reveal reveal-d2">
-              <div class="project-card-image">
-                <img src="assets/projects/chiwu.jpg" alt="持物记录" loading="lazy">
-              </div>
-              <div class="project-card-body">
-                <h3 class="project-card-title" data-i18n="projects.chiwu.title">持物记录</h3>
-                <p class="project-card-desc" data-i18n="projects.chiwu.desc">本地优先物品档案 App</p>
-                <div class="project-card-tags">
-                  <span class="tag">React</span>
-                  <span class="tag">iOS</span>
-                  <span class="tag">Android</span>
-                </div>
-              </div>
-            </a>
-
-            <!-- Gallery -->
-            <a href="gallery/index.html" class="project-card reveal reveal-d3">
-              <div class="project-card-image">
-                <img src="assets/projects/gallery.jpg" alt="Gallery" loading="lazy">
-              </div>
-              <div class="project-card-body">
-                <h3 class="project-card-title" data-i18n="projects.gallery.title">Gallery</h3>
-                <p class="project-card-desc" data-i18n="projects.gallery.desc">高清壁纸收藏</p>
-                <div class="project-card-tags">
-                  <span class="tag">Wallpaper</span>
-                  <span class="tag">Gallery</span>
-                </div>
-              </div>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Knowledge Graph Section -->
-      <section class="section" id="knowledge">
-        <div class="container">
-          <div class="section-header-inline">
-            <div>
-              <p class="section-title">Knowledge</p>
-              <h2 class="section-heading" data-i18n="knowledge.title">知识图谱</h2>
-              <p class="section-desc" data-i18n="knowledge.desc">我的 Hermes AI 生态系统</p>
-            </div>
-          </div>
-
-          <div class="knowledge-card reveal">
-            <div class="knowledge-graph-container">
-              <div id="knowledge-graph"></div>
-            </div>
-            <div class="knowledge-legend" id="knowledge-legend"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- About Section -->
-      <section class="section" id="about">
-        <div class="container">
-          <div class="section-header-inline">
-            <div>
-              <p class="section-title">About</p>
-              <h2 class="section-heading" data-i18n="about.title">关于</h2>
-            </div>
-          </div>
-
-          <div class="about-grid reveal">
-            <div class="about-sidebar">
-              <div class="about-avatar">
-                <span>T</span>
-              </div>
-              <div class="about-social">
-                <a href="https://github.com/TAOMA-06" target="_blank" rel="noopener noreferrer" class="social-link">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                  </svg>
-                  <span class="social-link-text">GitHub</span>
-                </a>
-                <a href="mailto:taomahj834225@outlook.com" class="social-link">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                    <rect x="2" y="4" width="20" height="16" rx="2"/>
-                    <path d="M22 4L12 13 2 4"/>
-                  </svg>
-                  <span class="social-link-text">Email</span>
-                </a>
-              </div>
-            </div>
-
-            <div class="about-content">
-              <div class="about-section">
-                <h3 data-i18n="about.education.title">教育背景</h3>
-                <p data-i18n="about.education.text">自动化专业本科生，专注于人工智能方向，探索硬件与软件交汇地带的无限可能。</p>
-              </div>
-
-              <div class="about-section">
-                <h3 data-i18n="about.skills.title">技能</h3>
-                <div class="skills-grid">
-                  <span class="skill-tag">Python</span>
-                  <span class="skill-tag">C</span>
-                  <span class="skill-tag">MATLAB</span>
-                  <span class="skill-tag">LaTeX</span>
-                  <span class="skill-tag">Circuit Design</span>
-                  <span class="skill-tag">Control Systems</span>
-                  <span class="skill-tag">Ollama</span>
-                  <span class="skill-tag">Linux</span>
-                  <span class="skill-tag">Git</span>
-                  <span class="skill-tag">Machine Learning</span>
-                </div>
-              </div>
-
-              <div class="about-section">
-                <h3 data-i18n="about.interests.title">兴趣</h3>
-                <p data-i18n="about.interests.text">赛车与摄影——在赛道上感受速度与操控的极致，在镜头下捕捉光影与瞬间。</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Contact Section -->
-      <section class="section" id="contact">
-        <div class="container">
-          <div class="section-header-inline">
-            <div>
-              <p class="section-title">Contact</p>
-              <h2 class="section-heading" data-i18n="contact.title">联系我</h2>
-              <p class="section-desc" data-i18n="contact.desc">随时欢迎有趣的交流</p>
-            </div>
-          </div>
-
-          <div class="contact-grid">
-            <a href="mailto:taomahj834225@outlook.com" class="contact-card reveal">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <rect x="2" y="4" width="20" height="16" rx="2"/>
-                <path d="M22 4L12 13 2 4"/>
-              </svg>
-              <div class="contact-card-info">
-                <p class="contact-card-title">Email</p>
-                <p class="contact-card-value">taomahj834225@outlook.com</p>
-              </div>
-            </a>
-
-            <a href="https://github.com/TAOMA-06" target="_blank" rel="noopener noreferrer" class="contact-card reveal reveal-d1">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-              </svg>
-              <div class="contact-card-info">
-                <p class="contact-card-title">GitHub</p>
-                <p class="contact-card-value">TAOMA-06</p>
-              </div>
-            </a>
-
-            <div class="contact-card reveal reveal-d2" id="qqCard">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
-                <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
-                <line x1="9" y1="9" x2="9.01" y2="9"/>
-                <line x1="15" y1="9" x2="15.01" y2="9"/>
-              </svg>
-              <div class="contact-card-info">
-                <p class="contact-card-title">QQ</p>
-                <p class="contact-card-value" data-i18n="contact.qq">添加 QQ 号</p>
-              </div>
-            </div>
-
-            <div class="contact-card reveal reveal-d3" id="wechatCard">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
-              </svg>
-              <div class="contact-card-info">
-                <p class="contact-card-title" data-i18n="contact.wechatLabel">微信</p>
-                <p class="contact-card-value" data-i18n="contact.wechat">添加微信号</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Footer -->
-      <footer class="footer">
-        <p>&copy; 2026 taomahj — <span data-i18n="footer.built">用好奇心构建</span></p>
-      </footer>
-
-    </main>
+  <div class="mobile-nav-overlay" id="mobileNavOverlay" aria-hidden="true">
+    <button class="mobile-nav-close" id="mobileNavClose" type="button" aria-label="Close menu">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+      </svg>
+    </button>
+    <div class="mobile-nav-content">
+      <a href="#projects" class="mobile-nav-link" data-i18n="nav.projects">Works</a>
+      <a href="#about" class="mobile-nav-link" data-i18n="nav.about">About</a>
+      <a href="#knowledge" class="mobile-nav-link" data-i18n="nav.knowledge">Ecosystem</a>
+      <a href="#contact" class="mobile-nav-link" data-i18n="nav.contact">Contact</a>
+      <button class="lang-toggle mobile-lang-toggle" id="mobileLangToggle" type="button">
+        <span class="lang-zh">中文</span>
+        <span class="lang-divider">/</span>
+        <span class="lang-en">English</span>
+      </button>
+    </div>
   </div>
 
-  <!-- Floating Control Panel -->
+  <main class="site-main">
+    <section class="hero" id="hero">
+      <div class="hero-kicker">
+        <span data-i18n="hero.issue">Portfolio / 2026</span>
+        <span data-i18n="hero.place">Automation undergraduate · AI direction</span>
+      </div>
+      <div class="hero-layout">
+        <div class="hero-copy">
+          <p class="eyebrow" data-i18n="hero.featuredLabel">Featured work</p>
+          <h1 class="hero-title" data-i18n="hero.title">taomahj</h1>
+          <p class="hero-lede" data-i18n="hero.lede">我是 taomahj，自动化专业本科生，正在把 Web 应用、AI 工作流和硬件思维做成可用的作品。</p>
+          <div class="hero-actions">
+            <a href="mixflow/index.html" class="btn btn-primary" data-i18n="hero.openFeatured">打开 MixFlow</a>
+            <a href="#projects" class="text-link" data-i18n="hero.viewIndex">浏览作品索引</a>
+          </div>
+        </div>
+
+        <a href="mixflow/index.html" class="hero-feature" aria-label="Open MixFlow">
+          <div class="hero-feature-media">
+            <img src="assets/projects/mixflow.jpg" alt="MixFlow project cover">
+          </div>
+          <div class="hero-feature-caption">
+            <span class="feature-number">01</span>
+            <div>
+              <p class="feature-title">MixFlow</p>
+              <p class="feature-desc" data-i18n="hero.featuredDesc">AI cocktail recipe browser with search, discovery, and saved drinks.</p>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <div class="hero-meta" aria-label="Selected capabilities">
+        <span>Web App</span>
+        <span>Canvas</span>
+        <span>Local-first</span>
+        <span>AI Workflow</span>
+      </div>
+    </section>
+
+    <section class="section projects-section" id="projects">
+      <div class="section-shell">
+        <div class="section-heading-block">
+          <p class="eyebrow" data-i18n="projects.kicker">Project index</p>
+          <h2 data-i18n="projects.title">作品索引</h2>
+          <p data-i18n="projects.desc">从可玩的 Web 应用到本地优先产品页，这里按“能打开、能使用、能理解”的标准组织。</p>
+        </div>
+
+        <div class="featured-project reveal">
+          <a href="mixflow/index.html" class="featured-project-media">
+            <img src="assets/projects/mixflow.jpg" alt="MixFlow project preview" loading="lazy">
+          </a>
+          <div class="featured-project-copy">
+            <p class="project-meta">01 / Featured</p>
+            <h3 data-i18n="projects.mixflow.title">MixFlow</h3>
+            <p data-i18n="projects.mixflow.desc">AI 鸡尾酒配方浏览器，用搜索、分类和收藏把配方数据变成轻量好用的饮品探索工具。</p>
+            <div class="project-tags">
+              <span>Web App</span>
+              <span>Recipe Data</span>
+              <span>Interaction</span>
+            </div>
+            <a href="mixflow/index.html" class="btn btn-outline" data-i18n="projects.openCase">查看项目</a>
+          </div>
+        </div>
+
+        <div class="project-index" aria-label="Project index">
+          <a href="perler/index.html" class="project-row reveal">
+            <span class="project-row-number">02</span>
+            <img src="assets/projects/perler.jpg" alt="Perler Bead project cover" loading="lazy">
+            <div class="project-row-copy">
+              <h3 data-i18n="projects.perler.title">Perler Bead</h3>
+              <p data-i18n="projects.perler.desc">图片转拼豆风格：圆润珠子、网格间隙、塑料光泽，纯本地处理。</p>
+            </div>
+            <span class="project-row-type">Canvas</span>
+          </a>
+
+          <a href="chiwu/index.html" class="project-row reveal reveal-d1">
+            <span class="project-row-number">03</span>
+            <img src="assets/projects/chiwu.jpg" alt="持物记录 project cover" loading="lazy">
+            <div class="project-row-copy">
+              <h3 data-i18n="projects.chiwu.title">持物记录</h3>
+              <p data-i18n="projects.chiwu.desc">记录长期陪伴你的每一件物品，本地优先的物品档案 App 产品页。</p>
+            </div>
+            <span class="project-row-type">Product</span>
+          </a>
+
+          <a href="gallery/index.html" class="project-row reveal reveal-d2">
+            <span class="project-row-number">04</span>
+            <img src="assets/projects/gallery.jpg" alt="Gallery project cover" loading="lazy">
+            <div class="project-row-copy">
+              <h3 data-i18n="projects.gallery.title">Gallery</h3>
+              <p data-i18n="projects.gallery.desc">高清壁纸收藏：manifest 驱动的浏览、预览和原图下载体验。</p>
+            </div>
+            <span class="project-row-type">Gallery</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section class="section about-section" id="about">
+      <div class="section-shell about-layout">
+        <div class="about-portrait reveal">
+          <img src="assets/avatar.jpg" alt="taomahj portrait" loading="lazy">
+        </div>
+        <div class="about-copy reveal reveal-d1">
+          <p class="eyebrow" data-i18n="about.kicker">About</p>
+          <h2 data-i18n="about.title">用工程方法做有质感的小工具。</h2>
+          <p data-i18n="about.body">我关注硬件与软件交汇的地方：控制、自动化、AI 工具链，以及能在浏览器里直接使用的轻量产品。</p>
+          <div class="capability-grid">
+            <div>
+              <span>01</span>
+              <strong data-i18n="about.capabilityBuild">Build</strong>
+              <p data-i18n="about.capabilityBuildText">Web apps, product pages, and local-first utilities.</p>
+            </div>
+            <div>
+              <span>02</span>
+              <strong data-i18n="about.capabilitySystems">Systems</strong>
+              <p data-i18n="about.capabilitySystemsText">Automation, circuits, control systems, and Linux workflows.</p>
+            </div>
+            <div>
+              <span>03</span>
+              <strong data-i18n="about.capabilityAI">AI</strong>
+              <p data-i18n="about.capabilityAIText">Ollama, agents, memory, and practical AI-assisted development.</p>
+            </div>
+          </div>
+          <div class="skills-strip" aria-label="Skills">
+            <span>Python</span>
+            <span>C</span>
+            <span>MATLAB</span>
+            <span>LaTeX</span>
+            <span>Linux</span>
+            <span>Git</span>
+            <span>Machine Learning</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section knowledge-section" id="knowledge">
+      <div class="section-shell">
+        <div class="section-heading-block compact">
+          <p class="eyebrow" data-i18n="knowledge.kicker">AI workflow</p>
+          <h2 data-i18n="knowledge.title">Tooling Ecosystem</h2>
+          <p data-i18n="knowledge.desc">一个靠后的互动附加层：展示我的 Hermes AI 生态、智能体、记忆、技能和项目之间的关系。</p>
+        </div>
+
+        <div class="knowledge-card reveal">
+          <div class="knowledge-graph-container">
+            <div id="knowledge-graph"></div>
+          </div>
+          <div class="knowledge-legend" id="knowledge-legend"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="contact-strip" id="contact">
+      <div class="contact-inner">
+        <div>
+          <p class="eyebrow" data-i18n="contact.kicker">Contact</p>
+          <h2 data-i18n="contact.title">一起聊点有趣的东西。</h2>
+        </div>
+        <div class="contact-actions">
+          <a href="mailto:taomahj834225@outlook.com" class="contact-pill">
+            <span>Email</span>
+            <strong>taomahj834225@outlook.com</strong>
+          </a>
+          <a href="https://github.com/TAOMA-06" target="_blank" rel="noopener noreferrer" class="contact-pill">
+            <span>GitHub</span>
+            <strong>TAOMA-06</strong>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>&copy; 2026 taomahj — <span data-i18n="footer.built">用好奇心构建</span></p>
+  </footer>
+
   <div class="control-panel">
     <div class="theme-panel" id="themePanel">
       <p class="theme-panel-title">Theme</p>
       <div class="theme-colors">
-        <button class="theme-color-btn active" data-theme="classic" style="background:#c9382a" aria-label="Classic"></button>
-        <button class="theme-color-btn" data-theme="bauhaus" style="background:#0047ab" aria-label="Bauhaus"></button>
-        <button class="theme-color-btn" data-theme="modern" style="background:#1a1a1a" aria-label="Modern"></button>
-        <button class="theme-color-btn" data-theme="warm" style="background:#c17f4e" aria-label="Warm"></button>
-        <button class="theme-color-btn" data-theme="concrete" style="background:#6b6b6b" aria-label="Concrete"></button>
+        <button class="theme-color-btn active" data-theme="classic" style="background:#c9382a" type="button" aria-label="Classic"></button>
+        <button class="theme-color-btn" data-theme="bauhaus" style="background:#0047ab" type="button" aria-label="Bauhaus"></button>
+        <button class="theme-color-btn" data-theme="modern" style="background:#1a1a1a" type="button" aria-label="Modern"></button>
+        <button class="theme-color-btn" data-theme="warm" style="background:#c17f4e" type="button" aria-label="Warm"></button>
+        <button class="theme-color-btn" data-theme="concrete" style="background:#6b6b6b" type="button" aria-label="Concrete"></button>
       </div>
-      <button class="shuffle-btn" id="shuffleTheme">Random</button>
+      <button class="shuffle-btn" id="shuffleTheme" type="button">Random</button>
     </div>
-    <button class="control-panel-btn" id="themeToggle" aria-label="Toggle theme panel">
+    <button class="control-panel-btn" id="themeToggle" type="button" aria-label="Toggle theme panel">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-        <circle cx="12" cy="12" r="5"/>
-        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+        <circle cx="12" cy="12" r="5"></circle>
+        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
       </svg>
     </button>
   </div>
 
-  <!-- Tooltip for Knowledge Graph -->
   <div id="knowledge-tooltip" class="kg-tooltip"></div>
 
-  <!-- Scripts -->
   <script src="scripts/security.js"></script>
-  <script src="https://d3js.org/d3.v7.min.js" crossorigin="anonymous"></script>
-  <script src="main.js"></script>
-  <script src="arch-bg.js"></script>
-  <script src="arch-animations.js"></script>
+  <script src="https://d3js.org/d3.v7.min.js" crossorigin="anonymous" async></script>
+  <script src="main.js?v=mimo-20260615"></script>
+  <script src="arch-bg.js?v=mimo-20260615"></script>
+  <script src="arch-animations.js?v=mimo-20260615"></script>
 </body>
 </html>
