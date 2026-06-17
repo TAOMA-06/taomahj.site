@@ -48,6 +48,11 @@ const i18n = {
     'knowledge.kicker': 'AI workflow',
     'knowledge.title': 'Tooling Ecosystem',
     'knowledge.desc': '一个靠后的互动附加层：展示我的 Hermes AI 生态、智能体、记忆、技能和项目之间的关系。',
+    'knowledge.resetView': '全局视图',
+    'knowledge.focusMode': '焦点模式',
+    'knowledge.connections': '连接',
+    'knowledge.neighbors': '相关节点',
+    'knowledge.help': '点击节点进入焦点视图；拖拽调整位置；滚轮缩放。',
 
     'contact.kicker': 'Contact',
     'contact.title': '一起聊点有趣的东西。',
@@ -94,6 +99,11 @@ const i18n = {
     'knowledge.kicker': 'AI workflow',
     'knowledge.title': 'Tooling Ecosystem',
     'knowledge.desc': 'A later interactive layer showing how my Hermes AI ecosystem, agents, memory, skills, and projects connect.',
+    'knowledge.resetView': 'Global view',
+    'knowledge.focusMode': 'Focus mode',
+    'knowledge.connections': 'Connections',
+    'knowledge.neighbors': 'Related nodes',
+    'knowledge.help': 'Click a node to focus; drag to rearrange; scroll to zoom.',
 
     'contact.kicker': 'Contact',
     'contact.title': 'Let’s talk about interesting things.',
@@ -276,27 +286,146 @@ function initKnowledgeGraph() {
   observer.observe(section);
 }
 
+const knowledgeData = {
+  nodes: [
+    { id: 'hermes', group: 'orchestration', label: 'Hermes', desc: 'Personal AI workflow layer for planning, delegation, tools, and memory.', radius: 26 },
+    { id: 'codex', group: 'agent', label: 'Codex', desc: 'Coding, review, local implementation, and browser verification.', radius: 20 },
+    { id: 'local-agent', group: 'agent', label: 'Local Agent', desc: 'Ollama-backed local task execution and experiments.', radius: 18 },
+    { id: 'memory', group: 'memory', label: 'Memory', desc: 'Long-running project context across sessions.', radius: 18 },
+    { id: 'skills', group: 'skills', label: 'Skills', desc: 'Reusable workflows for research, coding, documents, media, and automation.', radius: 20 },
+    { id: 'review', group: 'quality', label: 'Review', desc: 'Quality gates, security checks, and implementation feedback.', radius: 16 },
+    { id: 'github', group: 'quality', label: 'GitHub', desc: 'Branches, PRs, issues, CI, and release flow.', radius: 16 },
+    { id: 'ollama', group: 'ai', label: 'Ollama', desc: 'Local model runtime and model configuration.', radius: 19 },
+    { id: 'dspy', group: 'ai', label: 'DSPy', desc: 'Declarative LM programs and RAG research experiments.', radius: 16 },
+    { id: 'rag', group: 'concepts', label: 'RAG', desc: 'Retrieval-augmented generation for grounded answers.', radius: 15 },
+    { id: 'prompt-engineering', group: 'concepts', label: 'Prompt Engineering', desc: 'Designing effective instructions for language models.', radius: 15 },
+    { id: 'llm', group: 'concepts', label: 'LLM', desc: 'Large language models as reasoning and generation engines.', radius: 15 },
+    { id: 'machine-learning', group: 'concepts', label: 'Machine Learning', desc: 'Learning patterns from data for prediction and control.', radius: 16 },
+    { id: 'mixflow', group: 'projects', label: 'MixFlow', desc: 'AI cocktail recipe browser and featured portfolio project.', radius: 19 },
+    { id: 'perler', group: 'projects', label: 'Perler', desc: 'Local image-to-bead style converter.', radius: 15 },
+    { id: 'chiwu', group: 'projects', label: '持物记录', desc: 'Local-first item archive product page.', radius: 16 },
+    { id: 'gallery', group: 'projects', label: 'Gallery', desc: 'Manifest-driven wallpaper gallery.', radius: 15 },
+    { id: 'website', group: 'projects', label: 'Portfolio', desc: 'This static website, rebuilt as a project-first portfolio.', radius: 17 },
+    { id: 'python', group: 'tools', label: 'Python', desc: 'Primary language for automation, ML, and prototyping.', radius: 18 },
+    { id: 'c', group: 'tools', label: 'C', desc: 'Low-level systems, embedded, and control programming.', radius: 16 },
+    { id: 'matlab', group: 'tools', label: 'MATLAB', desc: 'Control systems analysis and numerical computing.', radius: 15 },
+    { id: 'linux', group: 'tools', label: 'Linux', desc: 'Daily driver OS and server workflows.', radius: 16 },
+    { id: 'git', group: 'tools', label: 'Git', desc: 'Version control and collaboration.', radius: 15 },
+    { id: 'latex', group: 'tools', label: 'LaTeX', desc: 'Technical writing and publication-quality documents.', radius: 14 },
+    { id: 'control-systems', group: 'concepts', label: 'Control Systems', desc: 'Feedback, stability, and dynamic system design.', radius: 17 },
+    { id: 'embedded', group: 'concepts', label: 'Embedded Systems', desc: 'Microcontrollers, sensors, and hardware-software interface.', radius: 16 },
+    { id: 'computer-vision', group: 'concepts', label: 'Computer Vision', desc: 'Extracting meaning from images and video.', radius: 15 },
+    { id: 'web-development', group: 'concepts', label: 'Web Development', desc: 'Browser-based products, HTML/CSS/JS, and user interfaces.', radius: 17 },
+    { id: 'local-first', group: 'concepts', label: 'Local-First', desc: 'Data stays on device; sync when needed.', radius: 16 },
+    { id: 'ui-ux', group: 'concepts', label: 'UI/UX', desc: 'Interface design, usability, and product feel.', radius: 15 },
+    { id: 'automation', group: 'concepts', label: 'Automation', desc: 'Automating repetitive tasks and workflows.', radius: 16 },
+    { id: 'documentation', group: 'concepts', label: 'Documentation', desc: 'Writing, organizing, and maintaining project knowledge.', radius: 14 },
+    { id: 'open-source', group: 'concepts', label: 'Open Source', desc: 'Public code, collaboration, and reusable tools.', radius: 14 },
+  ],
+  links: [
+    { source: 'hermes', target: 'codex' },
+    { source: 'hermes', target: 'local-agent' },
+    { source: 'hermes', target: 'memory' },
+    { source: 'hermes', target: 'skills' },
+    { source: 'hermes', target: 'review' },
+    { source: 'review', target: 'github' },
+    { source: 'local-agent', target: 'ollama' },
+    { source: 'skills', target: 'dspy' },
+    { source: 'skills', target: 'rag' },
+    { source: 'skills', target: 'prompt-engineering' },
+    { source: 'skills', target: 'mixflow' },
+    { source: 'skills', target: 'perler' },
+    { source: 'skills', target: 'chiwu' },
+    { source: 'skills', target: 'gallery' },
+    { source: 'skills', target: 'review' },
+    { source: 'codex', target: 'website' },
+    { source: 'codex', target: 'mixflow' },
+    { source: 'memory', target: 'website' },
+    { source: 'memory', target: 'rag' },
+    { source: 'ollama', target: 'dspy' },
+    { source: 'ollama', target: 'llm' },
+    { source: 'ollama', target: 'local-first' },
+    { source: 'github', target: 'website' },
+    { source: 'github', target: 'open-source' },
+    { source: 'github', target: 'git' },
+    { source: 'mixflow', target: 'web-development' },
+    { source: 'mixflow', target: 'ui-ux' },
+    { source: 'mixflow', target: 'local-first' },
+    { source: 'perler', target: 'web-development' },
+    { source: 'perler', target: 'computer-vision' },
+    { source: 'chiwu', target: 'local-first' },
+    { source: 'chiwu', target: 'ui-ux' },
+    { source: 'gallery', target: 'web-development' },
+    { source: 'gallery', target: 'local-first' },
+    { source: 'website', target: 'web-development' },
+    { source: 'website', target: 'ui-ux' },
+    { source: 'website', target: 'documentation' },
+    { source: 'python', target: 'machine-learning' },
+    { source: 'python', target: 'computer-vision' },
+    { source: 'python', target: 'control-systems' },
+    { source: 'python', target: 'automation' },
+    { source: 'python', target: 'dspy' },
+    { source: 'c', target: 'embedded' },
+    { source: 'c', target: 'control-systems' },
+    { source: 'c', target: 'linux' },
+    { source: 'matlab', target: 'control-systems' },
+    { source: 'matlab', target: 'automation' },
+    { source: 'linux', target: 'embedded' },
+    { source: 'linux', target: 'automation' },
+    { source: 'linux', target: 'ollama' },
+    { source: 'git', target: 'github' },
+    { source: 'git', target: 'open-source' },
+    { source: 'latex', target: 'documentation' },
+    { source: 'machine-learning', target: 'computer-vision' },
+    { source: 'machine-learning', target: 'llm' },
+    { source: 'automation', target: 'control-systems' },
+    { source: 'automation', target: 'embedded' },
+    { source: 'web-development', target: 'ui-ux' },
+    { source: 'web-development', target: 'local-first' },
+    { source: 'rag', target: 'llm' },
+  ],
+};
+
 function renderStaticKnowledgeGraph(container) {
   const rect = container.getBoundingClientRect();
   const width = Math.max(320, rect.width || container.offsetWidth || 800);
   const height = width < 560 ? 360 : 480;
   const svgNS = 'http://www.w3.org/2000/svg';
-  const nodes = [
-    { label: 'Hermes', group: 'Orchestration', x: 0.5, y: 0.18, color: '#204b88' },
-    { label: 'Codex', group: 'Agent', x: 0.25, y: 0.38, color: '#c9382a' },
-    { label: 'Skills', group: 'Skills', x: 0.75, y: 0.38, color: '#006a7a' },
-    { label: 'Memory', group: 'Memory', x: 0.5, y: 0.52, color: '#62645d' },
-    { label: 'Ollama', group: 'AI/ML', x: 0.25, y: 0.72, color: '#7b4aa0' },
-    { label: 'Projects', group: 'Projects', x: 0.75, y: 0.72, color: '#2f6b4f' },
-  ];
-  const links = [
-    [0, 1],
-    [0, 2],
-    [0, 3],
-    [1, 4],
-    [2, 5],
-    [3, 5],
-  ];
+
+  const colors = {
+    agent: '#c9382a',
+    orchestration: '#204b88',
+    memory: '#62645d',
+    skills: '#006a7a',
+    quality: '#8f3d4a',
+    ai: '#7b4aa0',
+    projects: '#2f6b4f',
+    tools: '#c17f4e',
+    concepts: '#4c7dff',
+  };
+
+  const labels = {
+    agent: 'Agents',
+    orchestration: 'Orchestration',
+    memory: 'Memory',
+    skills: 'Skills',
+    quality: 'Quality',
+    ai: 'AI/ML',
+    projects: 'Projects',
+    tools: 'Tools',
+    concepts: 'Concepts',
+  };
+
+  const nodes = knowledgeData.nodes.map((n, i) => {
+    const angle = (i / knowledgeData.nodes.length) * Math.PI * 2 - Math.PI / 2;
+    const r = Math.min(width, height) * 0.34;
+    return {
+      ...n,
+      x: width / 2 + r * Math.cos(angle),
+      y: height / 2 + r * Math.sin(angle),
+      color: colors[n.group] || '#62645d',
+    };
+  });
 
   container.innerHTML = '';
   const svg = document.createElementNS(svgNS, 'svg');
@@ -306,28 +435,31 @@ function renderStaticKnowledgeGraph(container) {
   svg.setAttribute('role', 'img');
   svg.setAttribute('aria-label', 'Static tooling ecosystem graph');
 
-  links.forEach(([sourceIndex, targetIndex]) => {
-    const source = nodes[sourceIndex];
-    const target = nodes[targetIndex];
+  const nodeById = Object.fromEntries(nodes.map((n) => [n.id, n]));
+
+  knowledgeData.links.forEach(({ source, target }) => {
+    const s = nodeById[source];
+    const t = nodeById[target];
+    if (!s || !t) return;
     const line = document.createElementNS(svgNS, 'line');
-    line.setAttribute('x1', source.x * width);
-    line.setAttribute('y1', source.y * height);
-    line.setAttribute('x2', target.x * width);
-    line.setAttribute('y2', target.y * height);
-    line.setAttribute('stroke', 'rgba(21,21,21,0.26)');
-    line.setAttribute('stroke-width', '1.5');
+    line.setAttribute('x1', s.x);
+    line.setAttribute('y1', s.y);
+    line.setAttribute('x2', t.x);
+    line.setAttribute('y2', t.y);
+    line.setAttribute('stroke', 'rgba(21,21,21,0.16)');
+    line.setAttribute('stroke-width', '1.2');
     svg.appendChild(line);
   });
 
   nodes.forEach((node) => {
     const group = document.createElementNS(svgNS, 'g');
-    const x = node.x * width;
-    const y = node.y * height;
+    const x = node.x;
+    const y = node.y;
 
     const circle = document.createElementNS(svgNS, 'circle');
     circle.setAttribute('cx', x);
     circle.setAttribute('cy', y);
-    circle.setAttribute('r', width < 560 ? 18 : 24);
+    circle.setAttribute('r', node.radius);
     circle.setAttribute('fill', node.color);
     circle.setAttribute('stroke', '#fff');
     circle.setAttribute('stroke-width', '2');
@@ -335,10 +467,10 @@ function renderStaticKnowledgeGraph(container) {
 
     const label = document.createElementNS(svgNS, 'text');
     label.setAttribute('x', x);
-    label.setAttribute('y', y + (width < 560 ? 36 : 44));
+    label.setAttribute('y', y + node.radius + 14);
     label.setAttribute('text-anchor', 'middle');
     label.setAttribute('font-family', 'Inter, sans-serif');
-    label.setAttribute('font-size', width < 560 ? '12' : '14');
+    label.setAttribute('font-size', Math.max(9, node.radius * 0.55));
     label.setAttribute('font-weight', '700');
     label.setAttribute('fill', '#4b4b46');
     label.textContent = node.label;
@@ -352,14 +484,14 @@ function renderStaticKnowledgeGraph(container) {
   const legend = document.getElementById('knowledge-legend');
   if (!legend) return;
   legend.innerHTML = '';
-  nodes.forEach((node) => {
+  Object.entries(labels).forEach(([key, text]) => {
     const item = document.createElement('div');
     item.className = 'knowledge-legend-item';
     const dot = document.createElement('span');
     dot.className = 'knowledge-legend-dot';
-    dot.style.background = node.color;
+    dot.style.background = colors[key];
     item.appendChild(dot);
-    item.appendChild(document.createTextNode(node.group));
+    item.appendChild(document.createTextNode(text));
     legend.appendChild(item);
   });
 }
@@ -371,42 +503,8 @@ function renderKnowledgeGraph(container) {
 
   container.innerHTML = '';
 
-  const nodes = [
-    { id: 'hermes', group: 'orchestration', label: 'Hermes', desc: 'Personal AI workflow layer for planning, delegation, tools, and memory.', radius: 24 },
-    { id: 'codex', group: 'agent', label: 'Codex', desc: 'Coding, review, local implementation, and browser verification.', radius: 18 },
-    { id: 'local-agent', group: 'agent', label: 'Local Agent', desc: 'Ollama-backed local task execution and experiments.', radius: 16 },
-    { id: 'memory', group: 'memory', label: 'Memory', desc: 'Long-running project context across sessions.', radius: 16 },
-    { id: 'skills', group: 'skills', label: 'Skills', desc: 'Reusable workflows for research, coding, documents, media, and automation.', radius: 18 },
-    { id: 'review', group: 'quality', label: 'Review', desc: 'Quality gates, security checks, and implementation feedback.', radius: 15 },
-    { id: 'github', group: 'quality', label: 'GitHub', desc: 'Branches, PRs, issues, CI, and release flow.', radius: 15 },
-    { id: 'ollama', group: 'ai', label: 'Ollama', desc: 'Local model runtime and model configuration.', radius: 17 },
-    { id: 'dspy', group: 'ai', label: 'DSPy', desc: 'Declarative LM programs and RAG research experiments.', radius: 15 },
-    { id: 'mixflow', group: 'projects', label: 'MixFlow', desc: 'AI cocktail recipe browser and featured portfolio project.', radius: 17 },
-    { id: 'perler', group: 'projects', label: 'Perler', desc: 'Local image-to-bead style converter.', radius: 14 },
-    { id: 'chiwu', group: 'projects', label: '持物记录', desc: 'Local-first item archive product page.', radius: 15 },
-    { id: 'gallery', group: 'projects', label: 'Gallery', desc: 'Manifest-driven wallpaper gallery.', radius: 14 },
-    { id: 'website', group: 'projects', label: 'Portfolio', desc: 'This static website, rebuilt as a project-first portfolio.', radius: 16 },
-  ];
-
-  const links = [
-    { source: 'hermes', target: 'codex' },
-    { source: 'hermes', target: 'local-agent' },
-    { source: 'hermes', target: 'memory' },
-    { source: 'hermes', target: 'skills' },
-    { source: 'hermes', target: 'review' },
-    { source: 'review', target: 'github' },
-    { source: 'local-agent', target: 'ollama' },
-    { source: 'skills', target: 'dspy' },
-    { source: 'skills', target: 'mixflow' },
-    { source: 'skills', target: 'perler' },
-    { source: 'skills', target: 'chiwu' },
-    { source: 'skills', target: 'gallery' },
-    { source: 'codex', target: 'website' },
-    { source: 'codex', target: 'mixflow' },
-    { source: 'memory', target: 'website' },
-    { source: 'ollama', target: 'dspy' },
-    { source: 'github', target: 'website' },
-  ];
+  const nodes = knowledgeData.nodes.map((n) => ({ ...n }));
+  const links = knowledgeData.links.map((l) => ({ ...l }));
 
   const colors = {
     agent: '#c9382a',
@@ -416,6 +514,8 @@ function renderKnowledgeGraph(container) {
     quality: '#8f3d4a',
     ai: '#7b4aa0',
     projects: '#2f6b4f',
+    tools: '#c17f4e',
+    concepts: '#4c7dff',
   };
 
   const labels = {
@@ -426,6 +526,8 @@ function renderKnowledgeGraph(container) {
     quality: 'Quality',
     ai: 'AI/ML',
     projects: 'Projects',
+    tools: 'Tools',
+    concepts: 'Concepts',
   };
 
   const svg = d3.select(container)
@@ -436,26 +538,40 @@ function renderKnowledgeGraph(container) {
 
   const group = svg.append('g');
 
-  svg.call(d3.zoom()
-    .scaleExtent([0.55, 2.2])
-    .on('zoom', (event) => group.attr('transform', event.transform)));
+  const zoom = d3.zoom()
+    .scaleExtent([0.45, 2.4])
+    .on('zoom', (event) => group.attr('transform', event.transform));
+
+  svg.call(zoom);
 
   const link = group.append('g')
-    .attr('stroke', 'rgba(21,21,21,0.25)')
+    .attr('stroke', 'rgba(21,21,21,0.22)')
     .attr('stroke-width', 1.2)
     .selectAll('line')
     .data(links)
     .join('line');
 
-  const node = group.append('g')
-    .selectAll('circle')
+  const nodeGroup = group.append('g')
+    .selectAll('g')
     .data(nodes)
-    .join('circle')
+    .join('g')
+    .attr('class', 'kg-node')
+    .attr('cursor', 'pointer');
+
+  const focusRing = nodeGroup.append('circle')
+    .attr('class', 'kg-focus-ring')
+    .attr('r', (d) => d.radius + 5)
+    .attr('fill', 'none')
+    .attr('stroke', 'var(--accent)')
+    .attr('stroke-width', 2.5)
+    .attr('opacity', 0)
+    .attr('pointer-events', 'none');
+
+  const nodeCircle = nodeGroup.append('circle')
     .attr('r', (d) => d.radius)
     .attr('fill', (d) => colors[d.group] || '#62645d')
     .attr('stroke', '#fff')
-    .attr('stroke-width', 2)
-    .attr('cursor', 'pointer');
+    .attr('stroke-width', 2);
 
   const label = group.append('g')
     .selectAll('text')
@@ -463,7 +579,7 @@ function renderKnowledgeGraph(container) {
     .join('text')
     .text((d) => d.label)
     .attr('font-family', 'Inter, sans-serif')
-    .attr('font-size', (d) => Math.max(9, d.radius * 0.56))
+    .attr('font-size', (d) => Math.max(9, d.radius * 0.55))
     .attr('font-weight', 700)
     .attr('text-anchor', 'middle')
     .attr('dy', (d) => d.radius + 14)
@@ -471,6 +587,11 @@ function renderKnowledgeGraph(container) {
     .attr('pointer-events', 'none');
 
   const tooltip = d3.select('#knowledge-tooltip');
+  const detailPanel = document.getElementById('knowledge-detail');
+  const detailContent = document.getElementById('knowledge-detail-content');
+  const resetButton = document.getElementById('kg-reset');
+  const helpButton = document.getElementById('kg-help');
+  let focusedNodeId = null;
 
   function safeText(text) {
     if (window.SecurityUtils?.escapeHtml) return window.SecurityUtils.escapeHtml(text);
@@ -483,6 +604,77 @@ function renderKnowledgeGraph(container) {
     })[char]);
   }
 
+  function getConnectedNodes(nodeId) {
+    const direct = new Set();
+    const second = new Set();
+    links.forEach((l) => {
+      const s = l.source.id || l.source;
+      const t = l.target.id || l.target;
+      if (s === nodeId) {
+        direct.add(t);
+        links.forEach((l2) => {
+          const s2 = l2.source.id || l2.source;
+          const t2 = l2.target.id || l2.target;
+          if (s2 === t && t2 !== nodeId) second.add(t2);
+          if (t2 === t && s2 !== nodeId) second.add(s2);
+        });
+      }
+      if (t === nodeId) {
+        direct.add(s);
+        links.forEach((l2) => {
+          const s2 = l2.source.id || l2.source;
+          const t2 = l2.target.id || l2.target;
+          if (s2 === s && t2 !== nodeId) second.add(t2);
+          if (t2 === s && s2 !== nodeId) second.add(s2);
+        });
+      }
+    });
+    return { direct: Array.from(direct), second: Array.from(second) };
+  }
+
+  function isInFocus(d) {
+    if (!focusedNodeId) return true;
+    if (d.id === focusedNodeId) return true;
+    const { direct, second } = getConnectedNodes(focusedNodeId);
+    return direct.includes(d.id) || second.includes(d.id);
+  }
+
+  function isLinkInFocus(l) {
+    if (!focusedNodeId) return true;
+    const s = l.source.id || l.source;
+    const t = l.target.id || l.target;
+    if (s === focusedNodeId || t === focusedNodeId) return true;
+    const { direct } = getConnectedNodes(focusedNodeId);
+    return direct.includes(s) && direct.includes(t);
+  }
+
+  function applyFocus() {
+    const isFocused = !!focusedNodeId;
+
+    nodeGroup
+      .classed('kg-dimmed', (d) => isFocused && !isInFocus(d))
+      .classed('kg-focused', (d) => focusedNodeId === d.id);
+
+    focusRing.attr('opacity', (d) => (focusedNodeId === d.id ? 1 : 0));
+
+    link
+      .attr('opacity', (l) => (isFocused && !isLinkInFocus(l) ? 0.08 : 1))
+      .attr('stroke-width', (l) => {
+        if (!isFocused) return 1.2;
+        const s = l.source.id || l.source;
+        const t = l.target.id || l.target;
+        return (s === focusedNodeId || t === focusedNodeId) ? 2.6 : 1;
+      });
+
+    label
+      .attr('opacity', (d) => (isFocused && !isInFocus(d) ? 0.25 : 1));
+
+    if (resetButton) {
+      resetButton.disabled = !isFocused;
+      resetButton.classList.toggle('disabled', !isFocused);
+    }
+  }
+
   function showTooltip(event, d) {
     tooltip
       .style('opacity', 1)
@@ -490,37 +682,141 @@ function renderKnowledgeGraph(container) {
         <div class="kg-tooltip-category">${safeText(labels[d.group] || d.group)}</div>
         <div class="kg-tooltip-desc">${safeText(d.desc)}</div>`);
 
-    node.attr('opacity', (n) => {
-      const related = links.some((l) => (
-        (l.source.id === d.id && l.target.id === n.id) ||
-        (l.target.id === d.id && l.source.id === n.id)
-      ));
-      return n.id === d.id || related ? 1 : 0.25;
-    });
+    if (!focusedNodeId) {
+      nodeGroup.attr('opacity', (n) => {
+        const related = links.some((l) => {
+          const s = l.source.id || l.source;
+          const t = l.target.id || l.target;
+          return (s === d.id && t === n.id) || (t === d.id && s === n.id);
+        });
+        return n.id === d.id || related ? 1 : 0.28;
+      });
 
-    link
-      .attr('opacity', (l) => (l.source.id === d.id || l.target.id === d.id ? 0.9 : 0.12))
-      .attr('stroke-width', (l) => (l.source.id === d.id || l.target.id === d.id ? 2.4 : 0.8));
+      link
+        .attr('opacity', (l) => {
+          const s = l.source.id || l.source;
+          const t = l.target.id || l.target;
+          return s === d.id || t === d.id ? 0.9 : 0.12;
+        })
+        .attr('stroke-width', (l) => {
+          const s = l.source.id || l.source;
+          const t = l.target.id || l.target;
+          return s === d.id || t === d.id ? 2.4 : 0.8;
+        });
+    }
   }
 
   function moveTooltip(event) {
     const wrapper = document.querySelector('.knowledge-graph-container');
     const bounds = wrapper.getBoundingClientRect();
+    const x = event.clientX - bounds.left + 14;
+    const y = event.clientY - bounds.top - 12;
     tooltip
-      .style('left', `${event.clientX - bounds.left + 14}px`)
-      .style('top', `${event.clientY - bounds.top - 12}px`);
+      .style('left', `${x}px`)
+      .style('top', `${y}px`);
   }
 
   function hideTooltip() {
     tooltip.style('opacity', 0);
-    node.attr('opacity', 1);
-    link.attr('opacity', 1).attr('stroke-width', 1.2);
+    if (!focusedNodeId) {
+      nodeGroup.attr('opacity', 1);
+      link.attr('opacity', 1).attr('stroke-width', 1.2);
+    }
   }
 
-  node
-    .on('mouseenter', showTooltip)
-    .on('mousemove', moveTooltip)
-    .on('mouseleave', hideTooltip);
+  function renderDetailPanel(d) {
+    if (!detailContent || !detailPanel) return;
+    const { direct, second } = getConnectedNodes(d.id);
+    const directNodes = nodes.filter((n) => direct.includes(n.id));
+    const secondNodes = nodes.filter((n) => second.includes(n.id) && !direct.includes(n.id));
+
+    const connectedHtml = (list) => list.map((n) => `
+      <button class="kg-detail-node" data-node-id="${safeText(n.id)}" type="button">
+        <span class="knowledge-legend-dot" style="background:${colors[n.group]}"></span>
+        <span>${safeText(n.label)}</span>
+      </button>
+    `).join('');
+
+    detailContent.innerHTML = `
+      <div class="kg-detail-header">
+        <span class="kg-detail-category" style="color:${colors[d.group]}">${safeText(labels[d.group] || d.group)}</span>
+        <h3 class="kg-detail-title">${safeText(d.label)}</h3>
+        <p class="kg-detail-desc">${safeText(d.desc)}</p>
+      </div>
+      <div class="kg-detail-section">
+        <h4>${safeText((i18n[currentLang] || i18n.zh)['knowledge.connections'])} (${direct.length})</h4>
+        <div class="kg-detail-nodes">${connectedHtml(directNodes)}</div>
+      </div>
+      ${second.length ? `
+      <div class="kg-detail-section">
+        <h4>${safeText((i18n[currentLang] || i18n.zh)['knowledge.neighbors'])} (${second.length})</h4>
+        <div class="kg-detail-nodes">${connectedHtml(secondNodes)}</div>
+      </div>
+      ` : ''}
+    `;
+
+    detailContent.querySelectorAll('.kg-detail-node').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.dataset.nodeId;
+        const target = nodes.find((n) => n.id === targetId);
+        if (target) focusOnNode(target);
+      });
+    });
+
+    detailPanel.setAttribute('aria-hidden', 'false');
+    detailPanel.classList.add('active');
+  }
+
+  function focusOnNode(d) {
+    focusedNodeId = d.id;
+    applyFocus();
+    renderDetailPanel(d);
+
+    const targetScale = 1.15;
+    const x = -d.x * targetScale + width / 2;
+    const y = -d.y * targetScale + height / 2;
+    svg.transition().duration(520).call(
+      zoom.transform,
+      d3.zoomIdentity.translate(x, y).scale(targetScale)
+    );
+  }
+
+  function resetFocus() {
+    focusedNodeId = null;
+    applyFocus();
+    if (detailPanel) {
+      detailPanel.setAttribute('aria-hidden', 'true');
+      detailPanel.classList.remove('active');
+    }
+    svg.transition().duration(520).call(
+      zoom.transform,
+      d3.zoomIdentity
+    );
+  }
+
+  nodeGroup
+    .on('mouseenter', (event, d) => showTooltip(event, d))
+    .on('mousemove', (event) => moveTooltip(event))
+    .on('mouseleave', hideTooltip)
+    .on('click', (event, d) => {
+      event.stopPropagation();
+      focusOnNode(d);
+    });
+
+  svg.on('click', () => {
+    if (focusedNodeId) resetFocus();
+  });
+
+  resetButton?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    resetFocus();
+  });
+
+  helpButton?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    const dict = i18n[currentLang] || i18n.zh;
+    alert(dict['knowledge.help']);
+  });
 
   const drag = d3.drag()
     .on('start', (event, d) => {
@@ -538,15 +834,15 @@ function renderKnowledgeGraph(container) {
       d.fy = null;
     });
 
-  node.call(drag);
+  nodeGroup.call(drag);
 
   const simulation = d3.forceSimulation(nodes)
-    .force('link', d3.forceLink(links).id((d) => d.id).distance(width < 560 ? 76 : 112).strength(0.42))
-    .force('charge', d3.forceManyBody().strength((d) => -d.radius * 28))
+    .force('link', d3.forceLink(links).id((d) => d.id).distance(width < 560 ? 64 : 98).strength(0.45))
+    .force('charge', d3.forceManyBody().strength((d) => -d.radius * (d.group === 'orchestration' ? 42 : 26)))
     .force('center', d3.forceCenter(width / 2, height / 2))
-    .force('collision', d3.forceCollide().radius((d) => d.radius + 20))
-    .force('x', d3.forceX(width / 2).strength(0.05))
-    .force('y', d3.forceY(height / 2).strength(0.05));
+    .force('collision', d3.forceCollide().radius((d) => d.radius + 22))
+    .force('x', d3.forceX(width / 2).strength(0.045))
+    .force('y', d3.forceY(height / 2).strength(0.045));
 
   simulation.on('tick', () => {
     link
@@ -555,9 +851,7 @@ function renderKnowledgeGraph(container) {
       .attr('x2', (d) => d.target.x)
       .attr('y2', (d) => d.target.y);
 
-    node
-      .attr('cx', (d) => d.x)
-      .attr('cy', (d) => d.y);
+    nodeGroup.attr('transform', (d) => `translate(${d.x},${d.y})`);
 
     label
       .attr('x', (d) => d.x)
@@ -571,6 +865,13 @@ function renderKnowledgeGraph(container) {
       .attr('class', 'knowledge-legend-item')
       .html(`<span class="knowledge-legend-dot" style="background:${colors[key]}"></span>${safeText(labelText)}`);
   });
+
+  document.getElementById('knowledge-detail-close')?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    resetFocus();
+  });
+
+  applyFocus();
 }
 
 initThemeControls();

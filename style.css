@@ -810,6 +810,206 @@ button {
   font-size: 13px;
 }
 
+.knowledge-graph-container .kg-tooltip {
+  left: 0;
+  top: 0;
+}
+
+.knowledge-graph-controls {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 10;
+  display: flex;
+  gap: 8px;
+}
+
+.kg-control-btn {
+  min-height: 32px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 8px 24px rgba(42, 52, 82, 0.08);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    opacity var(--duration-fast) var(--ease-out);
+}
+
+.kg-control-btn:hover:not(:disabled) {
+  transform: translateY(-1px);
+  background: var(--bg-solid);
+}
+
+.kg-control-btn:disabled,
+.kg-control-btn.disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.kg-help-btn {
+  width: 32px;
+  padding: 0;
+}
+
+.knowledge-detail-panel {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  bottom: 14px;
+  z-index: 10;
+  width: min(320px, calc(100% - 28px));
+  padding: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.78);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: var(--shadow-card);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(12px);
+  transition:
+    opacity var(--duration-normal) var(--ease-out),
+    visibility var(--duration-normal) var(--ease-out),
+    transform var(--duration-normal) var(--ease-out);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.knowledge-detail-panel.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.knowledge-detail-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  color: var(--text-muted);
+  background: rgba(20, 22, 29, 0.06);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.knowledge-detail-close:hover {
+  color: var(--text-primary);
+  background: rgba(20, 22, 29, 0.1);
+}
+
+.knowledge-detail-content {
+  overflow-y: auto;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(20, 22, 29, 0.18) transparent;
+}
+
+.kg-detail-header {
+  padding-right: 24px;
+  margin-bottom: 18px;
+}
+
+.kg-detail-category {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.kg-detail-title {
+  margin: 0 0 10px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+}
+
+.kg-detail-desc {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.kg-detail-section {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(20, 22, 29, 0.08);
+}
+
+.kg-detail-section h4 {
+  margin: 0 0 10px;
+  color: var(--text-muted);
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.kg-detail-nodes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.kg-detail-node {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 30px;
+  padding: 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.62);
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+
+.kg-detail-node:hover {
+  transform: translateY(-1px);
+  background: var(--bg-solid);
+}
+
+.kg-node {
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.kg-node.kg-dimmed {
+  opacity: 0.22;
+}
+
+.kg-node.kg-focused .kg-focus-ring {
+  opacity: 1;
+}
+
+.kg-focus-ring {
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
 .contact-strip {
   max-width: calc(var(--content-max-width) - var(--content-padding) * 2);
   margin: var(--section-gap) auto 44px;
@@ -1148,7 +1348,25 @@ button {
   }
 
   .knowledge-graph-container {
-    height: 360px;
+    height: 420px;
+  }
+
+  .knowledge-detail-panel {
+    top: auto;
+    right: 14px;
+    bottom: 14px;
+    left: 14px;
+    width: auto;
+    max-height: 46%;
+    transform: translateY(12px);
+  }
+
+  .knowledge-detail-panel.active {
+    transform: translateY(0);
+  }
+
+  .kg-detail-title {
+    font-size: 20px;
   }
 
   .contact-strip {

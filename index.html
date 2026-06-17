@@ -211,6 +211,15 @@
         <div class="knowledge-card reveal">
           <div class="knowledge-graph-container">
             <div id="knowledge-graph"></div>
+            <div id="knowledge-tooltip" class="kg-tooltip"></div>
+            <div class="knowledge-graph-controls">
+              <button id="kg-reset" class="kg-control-btn" type="button" data-i18n="knowledge.resetView">全局视图</button>
+              <button id="kg-help" class="kg-control-btn kg-help-btn" type="button" aria-label="Graph help">?</button>
+            </div>
+            <aside class="knowledge-detail-panel" id="knowledge-detail" aria-hidden="true">
+              <button class="knowledge-detail-close" id="knowledge-detail-close" type="button" aria-label="Close details">×</button>
+              <div class="knowledge-detail-content" id="knowledge-detail-content"></div>
+            </aside>
           </div>
           <div class="knowledge-legend" id="knowledge-legend"></div>
         </div>
@@ -260,8 +269,6 @@
       </svg>
     </button>
   </div>
-
-  <div id="knowledge-tooltip" class="kg-tooltip"></div>
 
   <script src="scripts/security.js"></script>
   <script src="https://d3js.org/d3.v7.min.js" crossorigin="anonymous" async></script>
