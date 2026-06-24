@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'taomahj',
-  description: 'Apple-inspired personal homepage for taomahj.'
+  description: 'taomahj on AI workflows, automation systems, and personal tools.'
 };
 
 export default function RootLayout({

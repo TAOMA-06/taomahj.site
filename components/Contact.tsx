@@ -5,11 +5,11 @@ export default function Contact() {
         <div>
           <p className="section-kicker text-white/46">Contact</p>
           <h2 className="mt-5 max-w-4xl text-[clamp(52px,8vw,128px)] font-semibold leading-[0.88] tracking-[-0.075em]">
-            Let’s build something quiet and useful.
+            如果你也在思考工具、系统和人的关系。
           </h2>
         </div>
         <a href="mailto:taomahj834225@outlook.com" className="contact-button">
-          <span>Say hello</span>
+          <span>写信给我</span>
           <span className="contact-arrow" aria-hidden="true">
             →
           </span>

@@ -5,9 +5,12 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { projects } from '@/data/projects';
+import { projectArguments } from '@/data/siteContent';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+const argumentById = new Map(projectArguments.map((argument) => [argument.id, argument]));
 
 export default function FeaturedProjects() {
   const scope = useRef<HTMLElement>(null);
@@ -66,18 +69,25 @@ export default function FeaturedProjects() {
   return (
     <section id="featured" ref={scope} className="bg-[#f5f5f7] text-ink">
       <div className="mx-auto px-6 py-24 sm:px-10 md:hidden">
-        <p className="section-kicker">Featured Projects</p>
+        <p className="section-kicker">Selected Works as Arguments</p>
         <div className="mt-10 space-y-14">
-          {projects.map((project) => (
-            <article key={project.id}>
-              <a href={project.href} className="block overflow-hidden rounded-[28px] bg-white">
-                <img src={project.image} alt={`${project.title} screenshot`} className="aspect-[1.08/1] w-full object-cover" />
-              </a>
-              <span className="mt-6 block text-sm font-semibold text-mist">{project.index}</span>
-              <h2 className="mt-3 text-[46px] font-semibold leading-[0.92] tracking-[-0.06em]">{project.title}</h2>
-              <p className="mt-5 text-lg leading-7 text-graphite/66">{project.description}</p>
-            </article>
-          ))}
+          {projects.map((project) => {
+            const argument = argumentById.get(project.id);
+
+            return (
+              <article key={project.id}>
+                <a href={project.href} className="block overflow-hidden rounded-[28px] bg-white">
+                  <img src={project.image} alt={`${project.title} screenshot`} className="aspect-[1.08/1] w-full object-cover" />
+                </a>
+                <span className="mt-6 block text-sm font-semibold text-mist">{project.index}</span>
+                <h2 className="mt-3 text-[46px] font-semibold leading-[0.92] tracking-[-0.06em]">{project.title}</h2>
+                <p className="mt-5 text-lg font-semibold leading-7 tracking-[-0.02em] text-graphite">
+                  {argument?.question ?? project.description}
+                </p>
+                <p className="mt-4 text-base leading-7 text-graphite/62">{argument?.argument ?? project.detail}</p>
+              </article>
+            );
+          })}
         </div>
       </div>
 
@@ -99,20 +109,29 @@ export default function FeaturedProjects() {
         </div>
 
         <div className="relative min-h-[360px]">
-          <p className="section-kicker">Featured Projects</p>
+          <p className="section-kicker">Selected Works as Arguments</p>
           <div className="mt-10 md:absolute md:inset-x-0">
-            {projects.map((project) => (
-              <article key={project.id} className="story-copy mb-12 md:absolute md:inset-x-0 md:mb-0 md:opacity-0">
-                <span className="text-sm font-semibold text-mist">{project.index}</span>
-                <h2 className="mt-5 text-[clamp(48px,7vw,104px)] font-semibold leading-[0.88] tracking-[-0.07em]">
-                  {project.title}
-                </h2>
-                <p className="mt-7 max-w-xl text-xl leading-8 tracking-[-0.02em] text-graphite/66">{project.description}</p>
-                <a href={project.href} className="mt-8 inline-flex text-[15px] font-semibold text-graphite">
-                  查看项目
-                </a>
-              </article>
-            ))}
+            {projects.map((project) => {
+              const argument = argumentById.get(project.id);
+
+              return (
+                <article key={project.id} className="story-copy mb-12 md:absolute md:inset-x-0 md:mb-0 md:opacity-0">
+                  <span className="text-sm font-semibold text-mist">{project.index}</span>
+                  <h2 className="mt-5 text-[clamp(48px,7vw,104px)] font-semibold leading-[0.88] tracking-[-0.07em]">
+                    {project.title}
+                  </h2>
+                  <p className="mt-7 max-w-xl text-xl font-semibold leading-8 tracking-[-0.025em] text-graphite">
+                    {argument?.question ?? project.description}
+                  </p>
+                  <p className="mt-5 max-w-xl text-lg leading-8 tracking-[-0.02em] text-graphite/62">
+                    {argument?.argument ?? project.detail}
+                  </p>
+                  <a href={project.href} className="mt-8 inline-flex text-[15px] font-semibold text-graphite">
+                    查看作品
+                  </a>
+                </article>
+              );
+            })}
           </div>
         </div>
       </div>

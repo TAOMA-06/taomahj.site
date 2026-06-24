@@ -4,7 +4,7 @@ import { useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
-import { skills } from '@/data/projects';
+import { vocabularyGroups } from '@/data/siteContent';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -40,15 +40,22 @@ export default function Skills() {
   return (
     <section id="skills" ref={scope} className="bg-[#f5f5f7] px-6 py-28 text-ink sm:px-10 lg:px-16 lg:py-36">
       <div className="mx-auto max-w-[1180px]">
-        <p className="section-kicker">Skills</p>
+        <p className="section-kicker">Working Vocabulary</p>
         <h2 className="mt-5 max-w-4xl text-[clamp(44px,6vw,92px)] font-semibold leading-[0.95] tracking-[-0.065em]">
-          A practical stack for small, finished things.
+          技术栈不是标签，而是我组织问题的词汇。
         </h2>
-        <div className="mt-14 flex flex-wrap gap-3">
-          {skills.map((skill) => (
-            <span key={skill} className="skill-pill rounded-full bg-white px-5 py-3 text-sm font-semibold tracking-[-0.01em] text-graphite shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]">
-              {skill}
-            </span>
+        <div className="mt-14 grid gap-px overflow-hidden rounded-[28px] border border-black/10 bg-black/10 md:grid-cols-2">
+          {vocabularyGroups.map((group) => (
+            <section key={group.label} className="bg-white p-7 md:p-8">
+              <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-mist">{group.label}</h3>
+              <div className="mt-7 flex flex-wrap gap-3">
+                {group.items.map((item) => (
+                  <span key={item} className="skill-pill rounded-full bg-[#f5f5f7] px-5 py-3 text-sm font-semibold tracking-[-0.01em] text-graphite shadow-[inset_0_0_0_1px_rgba(0,0,0,0.08)]">
+                    {item}
+                  </span>
+                ))}
+              </div>
+            </section>
           ))}
         </div>
       </div>

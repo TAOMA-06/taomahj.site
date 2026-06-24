@@ -7,9 +7,12 @@ import { Flip } from 'gsap/Flip';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { projects } from '@/data/projects';
+import { projectArguments } from '@/data/siteContent';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 gsap.registerPlugin(useGSAP, Flip, ScrollTrigger);
+
+const argumentById = new Map(projectArguments.map((argument) => [argument.id, argument]));
 
 export default function ProjectCards() {
   const scope = useRef<HTMLElement>(null);
@@ -60,15 +63,19 @@ export default function ProjectCards() {
     <section ref={scope} className="bg-white px-6 py-28 text-ink sm:px-10 lg:px-16 lg:py-36">
       <div className="mx-auto max-w-[1180px]">
         <div className="cards-heading max-w-3xl">
-          <p className="section-kicker">Project Cards</p>
+          <p className="section-kicker">Artifacts</p>
           <h2 className="mt-5 text-[clamp(44px,6vw,88px)] font-semibold leading-[0.95] tracking-[-0.065em]">
-            Click once. Let the card breathe.
+            每个作品都是一个可打开的论点。
           </h2>
+          <p className="mt-7 text-xl leading-8 tracking-[-0.02em] text-graphite/64">
+            我不把它们看作项目清单，而是看作关于界面、系统和工具耐久性的具体实验。
+          </p>
         </div>
 
         <div className="mt-14 grid auto-rows-fr gap-4 md:grid-cols-2">
           {projects.map((project) => {
             const isActive = activeId === project.id;
+            const argument = argumentById.get(project.id);
 
             return (
               <button
@@ -87,14 +94,31 @@ export default function ProjectCards() {
                     <div>
                       <div className="flex items-center justify-between text-sm font-semibold text-mist">
                         <span>{project.index}</span>
-                        <span>{isActive ? 'Expanded' : 'Tap to expand'}</span>
+                        <span>{isActive ? 'Open note' : 'Tap to expand'}</span>
                       </div>
                       <h3 className="mt-5 text-[clamp(32px,4vw,64px)] font-semibold leading-[0.94] tracking-[-0.055em]">
                         {project.title}
                       </h3>
-                      <p className="mt-5 max-w-2xl text-lg leading-7 text-graphite/66">
-                        {isActive ? project.detail : project.description}
-                      </p>
+                      {isActive ? (
+                        <div className="mt-6 grid gap-5 text-left text-base leading-7 text-graphite/66 md:grid-cols-3">
+                          <div>
+                            <span className="evidence-label">问题</span>
+                            <p className="mt-2">{argument?.question ?? project.description}</p>
+                          </div>
+                          <div>
+                            <span className="evidence-label">方法</span>
+                            <p className="mt-2">{argument?.method ?? project.detail}</p>
+                          </div>
+                          <div>
+                            <span className="evidence-label">结果</span>
+                            <p className="mt-2">{argument?.argument ?? project.detail}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <p className="mt-5 max-w-2xl text-lg leading-7 text-graphite/66">
+                          {argument?.question ?? project.description}
+                        </p>
+                      )}
                     </div>
                     <div className="mt-8 flex flex-wrap gap-2">
                       {project.tags.map((tag) => (

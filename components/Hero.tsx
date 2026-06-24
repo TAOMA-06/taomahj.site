@@ -39,14 +39,14 @@ export default function Hero() {
             taomahj
           </a>
           <div className="hidden items-center gap-8 sm:flex">
-            <a className="nav-item" href="#about">
-              About
+            <a className="nav-item" href="#themes">
+              Method
             </a>
             <a className="nav-item" href="#featured">
               Work
             </a>
             <a className="nav-item" href="#skills">
-              Skills
+              Vocabulary
             </a>
             <a className="nav-item" href="#contact">
               Contact
@@ -57,43 +57,43 @@ export default function Hero() {
         <div className="grid items-end gap-12 pb-14 pt-24 lg:grid-cols-[minmax(0,1fr)_420px] lg:pb-20">
           <div className="max-w-5xl">
             <p className="hero-sequence mb-5 text-sm font-semibold uppercase tracking-[0.24em] text-mist">
-              Portfolio / 2026
+              taomahj / AI · Automation · Tools
             </p>
-            <h1 className="hero-sequence max-w-6xl text-[clamp(64px,12vw,180px)] font-semibold leading-[0.84] tracking-[-0.075em] text-ink">
-              Calm tools.
-              <br />
-              Clear systems.
+            <h1 className="hero-sequence max-w-6xl text-[clamp(56px,9.6vw,156px)] font-semibold leading-[0.98] tracking-[-0.075em] text-ink lg:leading-[0.92]">
+              <span className="block">把工具</span>
+              <span className="block">做成</span>
+              <span className="block">思考方式。</span>
             </h1>
             <p className="hero-sequence mt-8 max-w-2xl text-[clamp(20px,2.2vw,32px)] font-medium leading-[1.18] tracking-[-0.035em] text-graphite/72">
-              我是 taomahj，自动化专业本科生。把 Web 应用、AI 工作流和硬件思维，做成可以直接打开体验的作品。
+              我关注 AI 工作流、自动化系统与个人工具如何从“能用”走向“可解释、可长期维护、可形成判断”。
             </p>
             <div className="hero-sequence mt-10 flex flex-wrap items-center gap-4">
-              <a href="#featured" className="apple-button">
-                查看主打项目
+              <a href="#themes" className="apple-button">
+                阅读我的方法
               </a>
-              <a href="mailto:taomahj834225@outlook.com" className="text-link">
-                联系我
+              <a href="#featured" className="text-link">
+                查看作品
               </a>
             </div>
           </div>
 
-          <div className="hero-sequence hidden rounded-[28px] border border-black/10 bg-white/70 p-4 shadow-[0_40px_120px_rgba(0,0,0,0.08)] lg:block">
-            <img
-              src="/assets/projects/mixflow.jpg"
-              alt="MixFlow project preview"
-              className="aspect-[4/3] w-full rounded-[20px] object-cover"
-            />
-            <div className="flex items-center justify-between px-2 pb-1 pt-4 text-sm text-graphite/70">
-              <span>Featured work</span>
-              <span>01 / MixFlow</span>
+          <div className="hero-sequence hidden rounded-[28px] border border-black/10 bg-white/70 p-7 shadow-[0_40px_120px_rgba(0,0,0,0.08)] lg:block">
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-mist">working notes</p>
+            <div className="mt-14 space-y-8">
+              {['AI 不是替代判断，而是放大判断的系统。', '自动化的价值在于让复杂过程重新可见。', '个人工具应该轻到能进入日常，稳到能被长期使用。'].map((line, index) => (
+                <div key={line} className="border-t border-black/10 pt-5">
+                  <span className="text-sm font-semibold text-mist">{String(index + 1).padStart(2, '0')}</span>
+                  <p className="mt-3 text-2xl font-semibold leading-tight tracking-[-0.045em] text-graphite">{line}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
 
         <div className="hero-sequence flex flex-wrap gap-x-6 gap-y-2 border-t border-black/10 pt-5 text-xs font-medium uppercase tracking-[0.18em] text-mist">
           <span>Next.js</span>
-          <span>GSAP</span>
-          <span>Local-first</span>
+          <span>Automation</span>
+          <span>Local-first Tools</span>
           <span>AI Workflow</span>
         </div>
       </div>
