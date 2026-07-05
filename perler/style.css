@@ -3,28 +3,32 @@
    ======================================================== */
 
 :root {
-  --bg-deep: #050508;
-  --bg-base: #080810;
-  --bg-card: rgba(236, 72, 153, 0.04);
-  --bg-card-hover: rgba(236, 72, 153, 0.08);
-  --border-card: rgba(255, 255, 255, 0.06);
-  --border-card-hover: rgba(236, 72, 153, 0.35);
+  --bg-deep: #F2EFE8;
+  --bg-base: #FFFFFF;
+  --bg-card: rgba(0, 0, 0, 0.03);
+  --bg-card-hover: rgba(0, 0, 0, 0.06);
+  --border-card: rgba(0, 0, 0, 0.1);
+  --border-card-hover: rgba(0, 0, 0, 0.18);
 
-  --text-primary: #f5f5f7;
-  --text-secondary: #a1a1aa;
-  --text-muted: #6b6b7b;
+  --text-primary: #111111;
+  --text-secondary: rgba(17, 17, 17, 0.72);
+  --text-muted: #6b6b6b;
 
-  --accent: #002FA7;
-  --accent-glow: rgba(0, 47, 167, 0.35);
-  --accent2: #4A6ACC;
-  --gradient: linear-gradient(135deg, #002FA7 0%, #4A6ACC 100%);
+  --accent: #111111;
+  --accent-glow: rgba(17, 17, 17, 0.12);
+  --accent2: #6b6b6b;
+  --gradient: linear-gradient(135deg, #111111 0%, #333333 100%);
+  --cta: #111111;
+  --cta-foreground: #F2EFE8;
+  --mim-ink: #111111;
+  --mim-cream: #F2EFE8;
 
   --font-sans: 'Helvetica Neue', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
 
   --nav-height: 64px;
-  --radius: 0px;
-  --radius-sm: 0px;
+  --radius: 12px;
+  --radius-sm: 8px;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -48,10 +52,11 @@ body {
   top: 0; left: 0; right: 0;
   z-index: 100;
   height: var(--nav-height);
-  background: rgba(8, 8, 16, 0.88);
+  background: rgba(245, 245, 245, 0.92);
   backdrop-filter: blur(20px) saturate(120%);
   -webkit-backdrop-filter: blur(20px) saturate(120%);
-  box-shadow: 0 1px 0 rgba(255,255,255,0.04), 0 4px 24px rgba(0,0,0,0.4);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  border-bottom: 1px solid var(--border-card);
 }
 .nav-inner {
   max-width: 1200px;
@@ -292,13 +297,13 @@ body {
   font-family: var(--font-sans);
 }
 .btn-primary {
-  background: var(--gradient);
-  color: #fff;
-  box-shadow: 0 4px 20px rgba(236, 72, 153, 0.3);
+  background: var(--mim-ink);
+  color: var(--mim-cream);
+  box-shadow: 0 4px 20px rgba(17, 17, 17, 0.15);
 }
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 30px rgba(236, 72, 153, 0.4);
+  box-shadow: 0 8px 30px rgba(17, 17, 17, 0.2);
 }
 .btn-outline {
   background: transparent;
@@ -306,8 +311,8 @@ body {
   border: 1px solid var(--border-card);
 }
 .btn-outline:hover {
-  border-color: var(--accent);
-  background: rgba(236, 72, 153, 0.08);
+  border-color: var(--border-card-hover);
+  background: var(--bg-card-hover);
 }
 
 /* Color Stats */

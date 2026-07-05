@@ -19,22 +19,22 @@ export type VocabularyGroup = {
 
 export const themes: Theme[] = [
   {
-    title: 'AI 工作流',
-    question: '当模型越来越强，人的判断还应该留在哪里？',
-    stance: '我更关心可解释、可复用、可被人接管的 AI 流程，而不是一次性的炫技输出。',
-    related: 'Ollama / agents / memory / practical tooling'
+    title: '做能用的小工具',
+    question: '从一个真实的麻烦开始，而不是从一个很大的概念开始。',
+    stance: '我喜欢把问题缩小到可以使用的界面里：能搜索、能预览、能保存，最好还能让人愿意反复打开。',
+    related: 'web apps / browser tools / local-first'
   },
   {
-    title: '自动化与系统',
-    question: '怎样让复杂系统从“能跑”变成“能被理解”？',
-    stance: '自动化不是把人拿掉，而是把重复、脆弱和不可见的部分整理成稳定结构。',
-    related: 'control / Linux / hardware-minded engineering'
+    title: '整理复杂信息',
+    question: '很多信息不是缺少内容，而是缺少一个清楚的观看方式。',
+    stance: '我会把数据、图片、物品和记录重新组织成可浏览的结构，让页面先帮人建立方向感。',
+    related: 'data views / image tools / content systems'
   },
   {
-    title: '个人工具',
-    question: '一个小工具怎样避免变成又一个临时玩具？',
-    stance: '我偏好轻、清楚、长期可维护的界面，让工具在日常里安静地留下来。',
-    related: 'local-first apps / browser utilities / calm interfaces'
+    title: '保持界面安静',
+    question: '我希望工具解决问题，而不是制造新的注意力负担。',
+    stance: '所以我偏好克制的视觉、明确的操作路径和可维护的结构。高级感应该来自清楚，而不是堆满效果。',
+    related: 'calm UI / interaction / maintainability'
   }
 ];
 
@@ -42,26 +42,26 @@ export const projectArguments: ProjectArgument[] = [
   {
     id: 'mixflow',
     question: '配方数据怎样从列表变成可探索的知识界面？',
-    method: '用搜索、分类、收藏和克制的视觉节奏，把信息密度压进一个轻量浏览器工具。',
-    argument: 'MixFlow 不是为了展示一个花哨应用，而是在证明：好的工具应该让数据变得轻、清楚、可回到。'
+    method: '做了一个可以搜索、筛选、收藏鸡尾酒配方的浏览器应用，让配方不只是列表，而是可以慢慢探索的资料库。',
+    argument: '我想练习的是信息密度和轻量体验之间的平衡：东西很多，但页面不能让人累。'
   },
   {
     id: 'perler',
     question: '图像处理工具怎样保留材料感，而不是只输出结果？',
-    method: '把珠子、间隙、圆角和塑料光泽作为界面语言，让算法结果看起来仍然有物理质感。',
-    argument: 'Perler Bead 代表一种偏好：技术转换应该尊重媒介，而不是把所有东西压成同一种屏幕效果。'
+    method: '做了一个本地运行的图像转拼豆工具，把图片转换成带间隙、圆角和珠子质感的预览。',
+    argument: '我喜欢这种带一点手作感的工具：算法负责转换，界面负责让结果看起来仍然有材料的温度。'
   },
   {
     id: 'chiwu',
     question: '记录物品时，工具怎样承载时间而不是制造负担？',
-    method: '围绕长期陪伴、物品档案和本地优先的产品叙事，减少社交化和排行榜式的噪音。',
-    argument: '持物记录把工具放慢一点：不是催促用户输入更多，而是给记忆留下一个稳定容器。'
+    method: '设计了一个本地优先的物品记录应用页面，围绕物品档案、长期陪伴和个人记忆来组织内容。',
+    argument: '它不是鼓励人不断输入，而是给那些已经留在身边的东西一个安静的位置。'
   },
   {
     id: 'gallery',
     question: '媒体浏览怎样做到低干扰，同时仍然可维护？',
-    method: '用 manifest 驱动内容，把浏览、预览和下载拆成直接、可预测的路径。',
-    argument: 'Gallery 是一个小型内容系统实验：好的展示页应该让对象本身成为主角。'
+    method: '做了一个由 manifest 驱动的壁纸画廊，把预览、浏览和下载整理成很直接的路径。',
+    argument: '这个项目让我练习如何让展示页退后一步，把真正的主角留给图片本身。'
   }
 ];
 

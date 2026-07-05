@@ -10,10 +10,11 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: '#080808',
+        cream: '#F2EFE8',
+        ink: '#111111',
         graphite: '#1d1d1f',
-        fog: '#f5f5f7',
-        mist: '#86868b'
+        mist: '#6b6b6b',
+        warm: '#C4B8A8'
       },
       fontFamily: {
         sans: [
@@ -27,7 +28,7 @@ const config: Config = {
         ]
       },
       transitionTimingFunction: {
-        apple: 'cubic-bezier(0.16, 1, 0.3, 1)'
+        fluid: 'cubic-bezier(0.16, 1, 0.3, 1)'
       }
     }
   },

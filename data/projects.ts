@@ -14,9 +14,9 @@ export const projects: Project[] = [
     id: 'mixflow',
     index: '01',
     title: 'MixFlow',
-    description: 'AI cocktail recipe browser with search, discovery, and saved drinks.',
+    description: '一个围绕搜索、发现和收藏组织的鸡尾酒配方浏览器。',
     detail:
-      'A calm recipe surface that turns structured cocktail data into a fast, searchable, and collectible browsing experience.',
+      '把鸡尾酒配方整理成可以搜索、筛选和收藏的浏览体验。',
     image: '/assets/projects/mixflow.jpg',
     href: '/mixflow/index.html',
     tags: ['Web App', 'Recipe Data', 'Interaction']
@@ -25,9 +25,9 @@ export const projects: Project[] = [
     id: 'perler',
     index: '02',
     title: 'Perler Bead',
-    description: 'Image-to-bead conversion with rounded cells, grid gaps, and local processing.',
+    description: '一个本地运行的图像转拼豆工具，强调材料感和预览控制。',
     detail:
-      'A browser-based image tool focused on tactile output: bead previews, clean controls, and no server round trips.',
+      '在浏览器里完成图片转换，用珠子、间隙和圆角保留一点手作质感。',
     image: '/assets/projects/perler.jpg',
     href: '/perler/index.html',
     tags: ['Canvas', 'Local-first', 'Image Tool']
@@ -36,9 +36,9 @@ export const projects: Project[] = [
     id: 'chiwu',
     index: '03',
     title: '持物记录',
-    description: 'A product page for a local-first item archive app.',
+    description: '一个为长期物品记录而设计的本地优先应用概念。',
     detail:
-      'A slower, more personal utility for recording the objects that stay with you over time and why they matter.',
+      '为“身边物品”做一个更慢、更个人的记录入口。',
     image: '/assets/projects/chiwu.jpg',
     href: '/chiwu/index.html',
     tags: ['Product', 'Archive', 'Mobile']
@@ -47,9 +47,9 @@ export const projects: Project[] = [
     id: 'gallery',
     index: '04',
     title: 'Gallery',
-    description: 'A manifest-driven wallpaper gallery with preview and download flows.',
+    description: '一个由 manifest 驱动的低干扰壁纸画廊。',
     detail:
-      'A small gallery system that keeps the browsing surface quiet and lets the image collection do the work.',
+      '用简单的数据清单驱动图片展示，让浏览和下载路径保持直接。',
     image: '/assets/projects/gallery.jpg',
     href: '/gallery/index.html',
     tags: ['Gallery', 'Manifest', 'Media']

@@ -15,21 +15,47 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/mim-shared.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <filter id="mim-liquid-filter" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
   <nav class="nav">
     <div class="nav-inner">
-      <a href="../index.html" class="nav-logo">taomahj</a>
-      <div class="nav-links">
-        <a href="../index.html#projects">Projects</a>
-        <a href="../index.html#about">About</a>
-        <a href="../index.html#contact">Contact</a>
-      </div>
+      <a href="../index.html" class="nav-logo" data-mim-transition>← taomahj</a>
     </div>
   </nav>
 
-  <main class="main">
+  <section class="mim-work-hero mim-glass mim-glass--strong mim-section-frame">
+    <p class="mim-section-label">Made in taomahj · 2026</p>
+    <h1>Perler Bead</h1>
+    <div class="mim-work-meta">
+      <span>Canvas</span>
+      <span>Local-first</span>
+      <span>Image Tool</span>
+    </div>
+    <div class="mim-liquid-hero">
+      <img src="../assets/projects/perler.jpg" alt="Perler Bead preview">
+    </div>
+  </section>
+
+  <section class="mim-work-story mim-floor-tick">
+    <p class="label">问题</p>
+    <h2>图像处理工具怎样保留材料感，而不是只输出结果？</h2>
+    <p class="label">方法</p>
+    <p>把珠子、间隙、圆角和塑料光泽作为界面语言，让算法结果看起来仍然有物理质感。</p>
+    <p class="label">结果</p>
+    <p>Perler Bead 代表一种偏好：技术转换应该尊重媒介，而不是把所有东西压成同一种屏幕效果。</p>
+  </section>
+
+  <div class="mim-app-shell">
     <div class="container">
       <header class="page-header">
         <h1 class="page-title">🧩 <span data-i18n="title">拼豆工坊</span></h1>
@@ -148,12 +174,23 @@
         </div>
       </div>
     </div>
-  </main>
+  </div>
 
-  <footer class="footer">
-    <p>© 2026 taomahj — <span data-i18n="footer">纯本地处理，图片不会上传到任何服务器</span></p>
-  </footer>
+  <section class="mim-discover mim-glass">
+    <h2>Discover more projects</h2>
+    <div class="mim-discover__links">
+      <a href="../mixflow/index.html" data-mim-transition>MixFlow <span>→</span></a>
+      <a href="../chiwu/index.html" data-mim-transition>持物记录 <span>→</span></a>
+      <a href="../gallery/index.html" data-mim-transition>Gallery <span>→</span></a>
+    </div>
+  </section>
 
+  <div class="mim-contact-strip mim-glass">
+    <a href="mailto:taomahj834225@outlook.com">联系我</a>
+  </div>
+
+  <script src="../assets/mim-atmosphere.js"></script>
+  <script src="../assets/mim-transition.js"></script>
   <script src="../scripts/security.js"></script>
   <script src="app.js"></script>
 </body>

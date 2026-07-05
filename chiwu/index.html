@@ -12,6 +12,7 @@
   <meta name="description" content="持物记录 — 记录长期陪伴你的每一件物品。本地优先、隐私安全的物品档案 App。iPhone · Android · Apple Watch。watchOS 开发中，敬请期待。">
   <title>持物记录 — 你的私人物品博物馆</title>
   <link rel="icon" href="../assets/favicon-chiwu.png">
+  <link rel="stylesheet" href="../assets/mim-shared.css">
   <style>
     /* ============================================================
        持物记录 — Apple-style Product Page
@@ -23,8 +24,8 @@
     html { scroll-behavior: smooth; }
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
-      background: #0a0a0a;
-      color: #1C1C1E;
+      background: #F5F5F5;
+      color: #1A1A1A;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
       overflow-x: hidden;
@@ -37,9 +38,10 @@
       top: 0; left: 0; right: 0;
       z-index: 1000;
       height: 56px;
-      background: rgba(10, 10, 10, 0.82);
+      background: rgba(245, 245, 245, 0.92);
       backdrop-filter: saturate(180%) blur(20px);
       -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     }
     .nav-inner {
       max-width: 1200px;
@@ -53,7 +55,7 @@
     .nav-logo {
       font-size: 1.25rem;
       font-weight: 700;
-      color: #f5f5f7;
+      color: #1A1A1A;
       text-decoration: none;
       letter-spacing: -0.5px;
     }
@@ -61,24 +63,24 @@
     .nav-links a {
       padding: 6px 14px;
       border-radius: 8px;
-      color: #a1a1aa;
+      color: #86868b;
       font-size: 0.85rem;
       font-weight: 500;
       text-decoration: none;
       transition: color 0.2s, background 0.2s;
     }
-    .nav-links a:hover { color: #f5f5f7; background: rgba(255,255,255,0.06); }
+    .nav-links a:hover { color: #1A1A1A; background: rgba(0, 0, 0, 0.04); }
     .nav-cta {
-      background: #002FA7 !important;
-      color: #fff !important;
-      border-radius: 0 !important;
+      background: #F5E642 !important;
+      color: #1A1A1A !important;
+      border-radius: 8px !important;
       font-weight: 600 !important;
       padding: 6px 18px !important;
       transition: all 0.2s !important;
     }
     .nav-cta:hover {
-      background: #4A6ACC !important;
-      color: #fff !important;
+      background: #E6D630 !important;
+      color: #1A1A1A !important;
     }
 
     /* ---------- Hero ---------- */
@@ -93,19 +95,19 @@
       position: relative;
       overflow: hidden;
       background:
-        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(0,47,167,0.12) 0%, transparent 60%),
-        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(74,106,204,0.06) 0%, transparent 50%),
-        #0a0a0a;
+        radial-gradient(ellipse 80% 60% at 50% 30%, rgba(245, 230, 66, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 80% 60%, rgba(0, 0, 0, 0.03) 0%, transparent 50%),
+        #F5F5F5;
     }
     .hero-badge {
       display: inline-flex;
       align-items: center;
       gap: 6px;
       padding: 6px 16px;
-      border-radius: 0;
-      background: rgba(0,47,167,0.12);
-      border: 1px solid rgba(0,47,167,0.2);
-      color: #4A6ACC;
+      border-radius: 8px;
+      background: rgba(245, 230, 66, 0.25);
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      color: #1A1A1A;
       font-size: 0.82rem;
       font-weight: 500;
       margin-bottom: 28px;
@@ -114,7 +116,7 @@
     .hero-badge-dot {
       width: 6px; height: 6px;
       border-radius: 50%;
-      background: #002FA7;
+      background: #1A1A1A;
       animation: pulse 2s infinite;
     }
     @keyframes pulse {
@@ -126,7 +128,7 @@
       height: 80px;
       border-radius: 20px;
       margin-bottom: 32px;
-      box-shadow: 0 8px 40px rgba(59,130,246,0.25);
+      box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08);
       animation: fadeUp 0.8s ease-out 0.2s both;
     }
     .hero h1 {
@@ -135,7 +137,7 @@
       letter-spacing: -0.04em;
       line-height: 1.05;
       margin-bottom: 16px;
-      background: linear-gradient(180deg, #f5f5f7 0%, #a1a1aa 100%);
+      background: linear-gradient(180deg, #1A1A1A 0%, #86868b 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -144,14 +146,14 @@
     .hero h2 {
       font-size: clamp(1.1rem, 2vw, 1.35rem);
       font-weight: 400;
-      color: #a1a1aa;
+      color: rgba(29, 29, 31, 0.72);
       margin-bottom: 8px;
       letter-spacing: 0.02em;
       animation: fadeUp 0.8s ease-out 0.4s both;
     }
     .hero-sub {
       font-size: 0.9rem;
-      color: #6b6b7b;
+      color: #86868b;
       animation: fadeUp 0.8s ease-out 0.5s both;
     }
     .hero-cta-group {
@@ -167,35 +169,35 @@
       align-items: center;
       gap: 8px;
       padding: 14px 32px;
-      border-radius: 0;
+      border-radius: 8px;
       font-size: 0.95rem;
       font-weight: 600;
       text-decoration: none;
-      background: #002FA7;
-      color: #fff;
+      background: #F5E642;
+      color: #1A1A1A;
       transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     }
     .btn-primary:hover {
-      background: #4A6ACC;
+      background: #E6D630;
       transform: translateY(-1px);
-      box-shadow: 0 8px 32px rgba(0,47,167,0.35);
+      box-shadow: 0 8px 32px rgba(245, 230, 66, 0.35);
     }
     .btn-secondary {
       display: inline-flex;
       align-items: center;
       gap: 8px;
       padding: 14px 32px;
-      border-radius: 0;
+      border-radius: 8px;
       font-size: 0.95rem;
       font-weight: 500;
       text-decoration: none;
-      border: 1px solid rgba(255,255,255,0.15);
-      color: #f5f5f7;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      color: #1A1A1A;
       transition: all 0.3s;
     }
     .btn-secondary:hover {
-      border-color: rgba(0,47,167,0.5);
-      background: rgba(0,47,167,0.08);
+      border-color: rgba(0, 0, 0, 0.2);
+      background: rgba(0, 0, 0, 0.03);
     }
 
     /* Phone mockup in hero — matches real app UI */
@@ -539,7 +541,7 @@
       font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0.12em;
-      color: #002FA7;
+      color: #1A1A1A;
       margin-bottom: 16px;
     }
     .section-heading {
@@ -558,11 +560,11 @@
 
     /* ---------- Features Grid Section ---------- */
     .section-features {
-      background: #0a0a0a;
-      color: #f5f5f7;
+      background: #FFFFFF;
+      color: #1A1A1A;
     }
-    .section-features .section-heading { color: #f5f5f7; }
-    .section-features .section-body { color: #a1a1aa; }
+    .section-features .section-heading { color: #1A1A1A; }
+    .section-features .section-body { color: rgba(29, 29, 31, 0.72); }
     .features-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -570,9 +572,9 @@
       margin-top: 56px;
     }
     .feature-tile {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 20px;
+      background: #F5F5F5;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
       padding: 32px 28px;
       transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       position: relative;
@@ -583,12 +585,12 @@
       position: absolute;
       inset: 0;
       border-radius: inherit;
-      background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(0,47,167,0.08), transparent 50%);
+      background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(245, 230, 66, 0.12), transparent 50%);
       opacity: 0;
       transition: opacity 0.35s;
       pointer-events: none;
     }
-    .feature-tile:hover { border-color: rgba(0,47,167,0.3); transform: translateY(-3px); }
+    .feature-tile:hover { border-color: rgba(0, 0, 0, 0.16); transform: translateY(-3px); }
     .feature-tile:hover::after { opacity: 1; }
     .feature-icon {
       font-size: 28px;
@@ -1062,9 +1064,9 @@
     /* ---------- Stats Bar ---------- */
     .stats-bar {
       padding: 60px 24px;
-      background: #0a0a0a;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      border-bottom: 1px solid rgba(255,255,255,0.06);
+      background: #F5F5F5;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.08);
     }
     .stats-grid {
       max-width: 900px;
@@ -1078,7 +1080,7 @@
       font-size: 2.8rem;
       font-weight: 800;
       letter-spacing: -0.03em;
-      background: linear-gradient(180deg, #f5f5f7 0%, #3b82f6 100%);
+      background: linear-gradient(180deg, #1A1A1A 0%, #86868b 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -1086,17 +1088,17 @@
     }
     .stat-label {
       font-size: 0.85rem;
-      color: #a1a1aa;
+      color: #86868b;
     }
 
     /* ---------- Download Section ---------- */
     .section-download {
       padding: 100px 24px;
-      background: #0a0a0a;
-      color: #f5f5f7;
+      background: #FFFFFF;
+      color: #1A1A1A;
     }
-    .section-download .section-heading { color: #f5f5f7; }
-    .section-download .section-body { color: #a1a1aa; }
+    .section-download .section-heading { color: #1A1A1A; }
+    .section-download .section-body { color: rgba(29, 29, 31, 0.72); }
     .download-cards {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
@@ -1107,9 +1109,9 @@
       margin-right: auto;
     }
     .download-card {
-      background: rgba(255,255,255,0.03);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 24px;
+      background: #F5F5F5;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
       padding: 36px 32px;
       transition: all 0.35s;
       position: relative;
@@ -1193,19 +1195,19 @@
     .page-footer {
       padding: 48px 24px;
       text-align: center;
-      border-top: 1px solid rgba(255,255,255,0.06);
-      background: #0a0a0a;
+      border-top: 1px solid rgba(0, 0, 0, 0.08);
+      background: #F5F5F5;
     }
     .page-footer p {
       font-size: 0.82rem;
-      color: #6b6b7b;
+      color: #86868b;
     }
     .page-footer a {
-      color: #a1a1aa;
+      color: rgba(29, 29, 31, 0.72);
       text-decoration: none;
       transition: color 0.2s;
     }
-    .page-footer a:hover { color: #3b82f6; }
+    .page-footer a:hover { color: #1A1A1A; }
 
     /* ---------- Animations ---------- */
     @keyframes fadeUp {
@@ -1321,10 +1323,19 @@
 </head>
 <body>
 
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <filter id="mim-liquid-filter" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
   <!-- ==================== Nav ==================== -->
   <nav class="nav">
     <div class="nav-inner">
-      <a href="../index.html" class="nav-logo">taomahj</a>
+      <a href="../index.html" class="nav-logo" data-mim-transition>← taomahj</a>
       <div class="nav-links">
         <a href="../index.html" data-i18n="nav.home">Home</a>
         <a href="#features" data-i18n="nav.features">特性</a>
@@ -1338,6 +1349,28 @@
       </div>
     </div>
   </nav>
+
+  <section class="mim-work-hero mim-glass mim-glass--strong mim-section-frame">
+    <p class="mim-section-label">Made in taomahj · 2026</p>
+    <h1>持物记录</h1>
+    <div class="mim-work-meta">
+      <span>Product</span>
+      <span>Archive</span>
+      <span>Mobile</span>
+    </div>
+    <div class="mim-liquid-hero">
+      <img src="../assets/projects/chiwu.jpg" alt="持物记录 preview">
+    </div>
+  </section>
+
+  <section class="mim-work-story mim-floor-tick">
+    <p class="label">问题</p>
+    <h2>记录物品时，工具怎样承载时间而不是制造负担？</h2>
+    <p class="label">方法</p>
+    <p>围绕长期陪伴、物品档案和本地优先的产品叙事，减少社交化和排行榜式的噪音。</p>
+    <p class="label">结果</p>
+    <p>持物记录把工具放慢一点：不是催促用户输入更多，而是给记忆留下一个稳定容器。</p>
+  </section>
 
   <!-- ==================== Hero ==================== -->
   <section class="hero">
@@ -1820,6 +1853,19 @@
     </div>
   </section>
 
+  <section class="mim-discover mim-glass">
+    <h2>Discover more projects</h2>
+    <div class="mim-discover__links">
+      <a href="../mixflow/index.html" data-mim-transition>MixFlow <span>→</span></a>
+      <a href="../perler/index.html" data-mim-transition>Perler Bead <span>→</span></a>
+      <a href="../gallery/index.html" data-mim-transition>Gallery <span>→</span></a>
+    </div>
+  </section>
+
+  <div class="mim-contact-strip mim-glass">
+    <a href="mailto:taomahj834225@outlook.com">联系我</a>
+  </div>
+
   <!-- ==================== Footer ==================== -->
   <footer class="page-footer">
     <p>&copy; 2026 <a href="../index.html">taomahj</a> · <span data-i18n="footer">持物记录 — 记录与物品的羁绊</span></p>
@@ -1991,6 +2037,8 @@
       updateLangToggle();
     });
   </script>
+<script src="../assets/mim-atmosphere.js"></script>
+<script src="../assets/mim-transition.js"></script>
 <script src="../scripts/security.js"></script>
 </body>
 </html>

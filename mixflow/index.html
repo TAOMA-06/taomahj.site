@@ -15,17 +15,26 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/mim-shared.css">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Spotlight overlay -->
-  <div class="spotlight"></div>
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+    <defs>
+      <filter id="mim-liquid-filter" x="-20%" y="-20%" width="140%" height="140%">
+        <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="3" result="noise"/>
+        <feDisplacementMap in="SourceGraphic" in2="noise" scale="12" xChannelSelector="R" yChannelSelector="G"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- Atmosphere injected by mim-atmosphere.js -->
 
   <!-- Navigation -->
   <nav class="nav">
     <div class="nav-inner">
-      <a href="../index.html" class="nav-logo">← taomahj</a>
+      <a href="../index.html" class="nav-logo" data-mim-transition>← taomahj</a>
       <span class="nav-brand">🍸 MixFlow</span>
       <div class="nav-links">
         <button class="lang-toggle" id="langToggle" aria-label="Switch language">
@@ -40,7 +49,29 @@
     </div>
   </nav>
 
-  <!-- Hero / Header -->
+  <section class="mim-work-hero mim-glass mim-glass--strong mim-section-frame">
+    <p class="mim-section-label">Made in taomahj · 2026</p>
+    <h1>MixFlow</h1>
+    <div class="mim-work-meta">
+      <span>Web App</span>
+      <span>Recipe Data</span>
+      <span>Interaction</span>
+    </div>
+    <div class="mim-liquid-hero">
+      <img src="../assets/projects/mixflow.jpg" alt="MixFlow preview">
+    </div>
+  </section>
+
+  <section class="mim-work-story mim-floor-tick">
+    <p class="label">问题</p>
+    <h2>配方数据怎样从列表变成可探索的知识界面？</h2>
+    <p class="label">方法</p>
+    <p>用搜索、分类、收藏和克制的视觉节奏，把信息密度压进一个轻量浏览器工具。</p>
+    <p class="label">结果</p>
+    <p>MixFlow 不是为了展示一个花哨应用，而是在证明：好的工具应该让数据变得轻、清楚、可回到。</p>
+  </section>
+
+  <div class="mim-app-shell">
   <header class="page-header">
     <h1 class="page-title">MixFlow</h1>
     <p class="page-subtitle" data-i18n="hero.subtitle">AI 驱动的鸡尾酒配方浏览器</p>
@@ -128,6 +159,21 @@
     <button class="sort-option" data-sort="category" data-i18n="sort.category">按类别</button>
   </div>
 
+  </div>
+
+  <section class="mim-discover mim-glass">
+    <h2>Discover more projects</h2>
+    <div class="mim-discover__links">
+      <a href="../perler/index.html" data-mim-transition>Perler Bead <span>→</span></a>
+      <a href="../chiwu/index.html" data-mim-transition>持物记录 <span>→</span></a>
+      <a href="../gallery/index.html" data-mim-transition>Gallery <span>→</span></a>
+    </div>
+  </section>
+
+  <div class="mim-contact-strip mim-glass">
+    <a href="mailto:taomahj834225@outlook.com">联系我</a>
+  </div>
+
   <!-- Back to top -->
   <button class="back-to-top" id="backToTop" aria-label="Back to top">
     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -150,6 +196,8 @@
     <button class="mobile-fab-item" id="fabTop">回到顶部</button>
   </div>
 
+  <script src="../assets/mim-atmosphere.js"></script>
+  <script src="../assets/mim-transition.js"></script>
   <script src="../scripts/security.js"></script>
   <script src="app.js"></script>
 </body>

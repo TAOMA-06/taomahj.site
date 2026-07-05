@@ -5,29 +5,31 @@
 
 /* ---------- CSS Variables ---------- */
 :root {
-  --bg-deep: #0D0D0D;
-  --bg-base: #1A1A1A;
-  --bg-card: rgba(0, 47, 167, 0.06);
-  --bg-card-hover: rgba(0, 47, 167, 0.10);
-  --border-card: rgba(255, 255, 255, 0.06);
-  --border-card-hover: rgba(0, 47, 167, 0.40);
+  --bg-deep: #F2EFE8;
+  --bg-base: #FFFFFF;
+  --bg-card: rgba(0, 0, 0, 0.03);
+  --bg-card-hover: rgba(0, 0, 0, 0.06);
+  --border-card: rgba(0, 0, 0, 0.1);
+  --border-card-hover: rgba(0, 0, 0, 0.18);
 
-  --text-primary: #f5f5f7;
-  --text-secondary: #a1a1aa;
-  --text-muted: #6b6b7b;
+  --text-primary: #111111;
+  --text-secondary: rgba(17, 17, 17, 0.72);
+  --text-muted: #6b6b6b;
 
-  --accent: #002FA7;
-  --accent-glow: rgba(0, 47, 167, 0.35);
-  --accent2: #4A6ACC;
-  --accent2-glow: rgba(74, 106, 204, 0.25);
-  --gradient: linear-gradient(135deg, #002FA7 0%, #4A6ACC 100%);
+  --accent: #111111;
+  --accent-glow: rgba(17, 17, 17, 0.12);
+  --accent2: #6b6b6b;
+  --accent2-glow: rgba(107, 107, 107, 0.2);
+  --gradient: linear-gradient(135deg, #111111 0%, #333333 100%);
+  --cta: #111111;
+  --cta-foreground: #F2EFE8;
 
   --font-sans: 'Helvetica Neue', 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
 
   --nav-height: 56px;
-  --radius: 0px;
-  --radius-sm: 0px;
+  --radius: 12px;
+  --radius-sm: 8px;
 
   --spotlight-size: 500px;
 }
@@ -71,8 +73,8 @@ a:hover { color: var(--accent2); }
   opacity: 0.4;
   background: radial-gradient(
     var(--spotlight-size) circle at var(--mouse-x, 50vw) var(--mouse-y, 50vh),
-    rgba(59, 130, 246, 0.05),
-    rgba(249, 115, 22, 0.02) 40%,
+    rgba(245, 230, 66, 0.06),
+    rgba(0, 0, 0, 0.02) 40%,
     transparent 65%
   );
 }
@@ -85,7 +87,7 @@ a:hover { color: var(--accent2); }
   height: var(--nav-height);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
-  background: rgba(5, 5, 8, 0.75);
+  background: rgba(245, 245, 245, 0.92);
   border-bottom: 1px solid var(--border-card);
 }
 
@@ -142,9 +144,9 @@ a:hover { color: var(--accent2); }
 }
 
 .nav-btn.active {
-  color: var(--accent);
-  background: var(--bg-card);
-  border-color: rgba(59, 130, 246, 0.2);
+  color: var(--text-primary);
+  background: var(--bg-card-hover);
+  border-color: var(--border-card-hover);
 }
 
 /* Language toggle */
@@ -835,14 +837,14 @@ a:hover { color: var(--accent2); }
   height: 56px;
   border-radius: 18px;
   border: none;
-  background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
-  color: #fff;
+  background: var(--gradient);
+  color: var(--cta-foreground);
   cursor: pointer;
   align-items: center;
   justify-content: center;
   box-shadow:
-    0 6px 24px rgba(236, 72, 153, 0.45),
-    0 0 0 4px rgba(236, 72, 153, 0.08),
+    0 6px 24px rgba(245, 230, 66, 0.35),
+    0 0 0 4px rgba(245, 230, 66, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -859,8 +861,8 @@ a:hover { color: var(--accent2); }
 .mobile-fab:hover {
   transform: scale(1.08) translateY(-2px);
   box-shadow:
-    0 8px 32px rgba(236, 72, 153, 0.55),
-    0 0 0 4px rgba(236, 72, 153, 0.12),
+    0 8px 32px rgba(245, 230, 66, 0.45),
+    0 0 0 4px rgba(245, 230, 66, 0.12),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
