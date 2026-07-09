@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useEffect, useRef, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import Lenis from 'lenis';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -26,14 +26,17 @@ export function useSmoothScroll() {
 
 export default function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
-  const enteredRef = useRef(false);
+  const [entered, setEntered] = useState(false);
   const reducedMotion = usePrefersReducedMotion();
-  const setEntered = (value: boolean) => {
-    enteredRef.current = value;
-  };
 
   useEffect(() => {
-    if (reducedMotion) return;
+    if (reducedMotion) {
+      setEntered(true);
+    }
+  }, [reducedMotion]);
+
+  useEffect(() => {
+    if (reducedMotion || !entered) return;
 
     const lenis = new Lenis({
       duration: 1.2,
@@ -59,13 +62,13 @@ export default function SmoothScrollProvider({ children }: { children: ReactNode
       lenisRef.current = null;
       document.documentElement.classList.remove('lenis', 'lenis-smooth');
     };
-  }, [reducedMotion]);
+  }, [reducedMotion, entered]);
 
   return (
     <SmoothScrollContext.Provider
       value={{
         lenis: lenisRef.current,
-        entered: enteredRef.current,
+        entered,
         setEntered
       }}
     >

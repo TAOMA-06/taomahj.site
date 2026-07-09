@@ -11,9 +11,9 @@ import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const notes = [
-  'AI 不是替代判断，而是放大判断的系统。',
-  '自动化的价值在于让复杂过程重新可见。',
-  '个人工具应该轻到能进入日常，稳到能被长期使用。'
+  '好的工具，放大判断而非替代判断。',
+  '自动化的价值，在于让复杂过程重新可见。',
+  '个人产品应轻到能进入日常，稳到能被长期使用。'
 ];
 
 export default function StudioStory() {
@@ -42,10 +42,10 @@ export default function StudioStory() {
   );
 
   return (
-    <SectionFrame label="Studio" sectionCut floorTick className="border-t border-black/10 py-24 md:py-36">
+    <SectionFrame label="理念" sectionCut floorTick className="border-t border-black/10 py-24 md:py-36">
       <div ref={scope}>
-        <SectionLabel>The studio</SectionLabel>
-        <h2 className="mim-headline mt-6 max-w-3xl">Scroll to explore more</h2>
+        <SectionLabel>理念</SectionLabel>
+        <h2 className="mim-headline mt-6 max-w-3xl">我们相信的</h2>
         <div className="mt-16 space-y-12">
           {notes.map((note, index) => (
             <div key={note} className="story-note border-t border-black/10 pt-8">

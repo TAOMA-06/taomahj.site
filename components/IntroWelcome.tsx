@@ -39,10 +39,7 @@ export default function IntroWelcome() {
         </span>
         <div>
           <p className="welcome-copy text-[clamp(24px,4vw,42px)] font-semibold leading-tight tracking-[-0.03em]">
-            我喜欢做两类东西：一种能帮人更快理解信息，一种能让日常的小流程少一点摩擦。
-          </p>
-          <p className="welcome-copy mim-body mt-6 max-w-3xl">
-            所以这个网站不想把自己包装得很满。它更像一张工作台：放着几个完成度不同的项目、正在形成的偏好，以及我会继续打磨的方向。
+            让信息可浏览，让流程少摩擦。
           </p>
         </div>
       </div>

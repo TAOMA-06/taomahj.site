@@ -1,4 +1,5 @@
 import SmoothScrollProvider from '@/components/mim/SmoothScrollProvider';
+import EnterGateBridge from '@/components/mim/EnterGateBridge';
 import ArchitecturalBackdrop from '@/components/mim/ArchitecturalBackdrop';
 import ArchScrollProgress from '@/components/mim/ArchScrollProgress';
 import ArchScrollSync from '@/components/mim/ArchScrollSync';
@@ -8,6 +9,7 @@ import PageTransition from '@/components/mim/PageTransition';
 import SiteNav from '@/components/SiteNav';
 import HeroIdentity from '@/components/HeroIdentity';
 import IntroWelcome from '@/components/IntroWelcome';
+import ManifestoMarquee from '@/components/ManifestoMarquee';
 import ApproachSections from '@/components/ApproachSections';
 import WorkShowcase from '@/components/WorkShowcase';
 import SkillsStrip from '@/components/SkillsStrip';
@@ -16,6 +18,7 @@ import ContactFooter from '@/components/ContactFooter';
 export default function HomeShell() {
   return (
     <SmoothScrollProvider>
+      <EnterGateBridge />
       <LiquidFilter />
       <ArchitecturalBackdrop />
       <LightAtmosphere />
@@ -26,6 +29,7 @@ export default function HomeShell() {
       <main className="mim-main-content bg-cream text-ink">
         <HeroIdentity />
         <IntroWelcome />
+        <ManifestoMarquee />
         <ApproachSections />
         <WorkShowcase />
         <SkillsStrip />

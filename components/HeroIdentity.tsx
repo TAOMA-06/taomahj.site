@@ -38,21 +38,18 @@ export default function HeroIdentity() {
         <line x1="10" y1="60" x2="110" y2="60" stroke="currentColor" strokeWidth="1" />
       </svg>
       <div ref={scope}>
-        <SectionLabel className="hero-line">Personal website · tools · experiments</SectionLabel>
+        <SectionLabel className="hero-line">数字工具 · 界面设计</SectionLabel>
         <DisplayType className="hero-line mim-hero-shadow mt-8">
           <span className="block">taomahj</span>
         </DisplayType>
         <div className="hero-line mt-8 max-w-4xl">
           <p className="text-[clamp(24px,4vw,44px)] font-semibold leading-tight tracking-[-0.03em]">
-            我把喜欢的想法，做成能打开、能使用、能继续改进的小工具。
-          </p>
-          <p className="mt-5 max-w-3xl text-lg font-medium leading-relaxed text-mist md:text-xl">
-            这里记录我做过的一些网页、图像工具和本地优先应用，也记录我怎样思考 AI、自动化和日常界面。
+            把真实问题，做成值得打开的界面。
           </p>
         </div>
         <div className="hero-line mt-10 flex flex-wrap items-center gap-4 md:gap-6">
           <a href="#work" className="mim-btn">
-            看作品
+            浏览作品
           </a>
           <a href="https://github.com/TAOMA-06" target="_blank" rel="noreferrer" className="text-xs font-bold uppercase tracking-[0.16em] text-mist transition-opacity hover:opacity-70">
             GitHub

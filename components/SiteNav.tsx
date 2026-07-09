@@ -12,10 +12,10 @@ export default function SiteNav() {
           taomahj
         </a>
         <div className="mim-nav__links">
-          <a href="#approach">About</a>
-          <a href="#work">Work</a>
-          <a href="#stack">Stack</a>
-          <a href="#contact">Contact</a>
+          <a href="#approach">关于</a>
+          <a href="#work">作品</a>
+          <a href="#stack">技术</a>
+          <a href="#contact">联系</a>
         </div>
         <a
           href="https://github.com/TAOMA-06"
