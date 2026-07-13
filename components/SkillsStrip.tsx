@@ -1,24 +1,19 @@
 import SectionFrame from '@/components/mim/SectionFrame';
-import SectionLabel from '@/components/mim/SectionLabel';
 import { vocabularyGroups } from '@/data/siteContent';
 
 export default function SkillsStrip() {
   return (
-    <SectionFrame id="stack" label="Stack" floorTick className="border-t border-black/10 py-20 md:py-28">
-      <SectionLabel>技术</SectionLabel>
-      <h2 className="mim-headline mt-6 max-w-3xl">技术与工具</h2>
-      <div className="mt-12 grid gap-10 md:grid-cols-2">
-        {vocabularyGroups.map((group) => (
-          <div key={group.label} className="border-t border-black/10 pt-6">
-            <h3 className="mim-section-label">{group.label}</h3>
-            <div className="mim-skills-room mt-4">
-              {group.items.map((item) => (
-                <span key={item} className="mim-skills-room__cell">
-                  {item}
-                </span>
-              ))}
+    <SectionFrame id="stack" label="Material schedule" elevation="04 / 05" className="exhibit-stack">
+      <p className="exhibit-kicker">Tools &amp; systems</p>
+      <h2 className="mim-headline mt-5">技术与工具</h2>
+      <div className="exhibit-stack__grid">
+        {vocabularyGroups.map((group, index) => (
+          <section key={group.label} className="exhibit-stack__group">
+            <h3>0{index + 1} / {group.label}</h3>
+            <div className="mim-skills-room">
+              {group.items.map((item) => <span key={item} className="mim-skills-room__cell">{item}</span>)}
             </div>
-          </div>
+          </section>
         ))}
       </div>
     </SectionFrame>

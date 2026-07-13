@@ -60,29 +60,6 @@
 
   archLayer.appendChild(geometric);
 
-  const lightLayer = document.createElement('div');
-  lightLayer.className = 'mim-light-layer';
-  lightLayer.setAttribute('aria-hidden', 'true');
-
-  const ambient = document.createElement('div');
-  ambient.className = 'mim-light-ambient';
-  lightLayer.appendChild(ambient);
-
-  if (!reducedMotion && finePointer) {
-    const spotlight = document.createElement('div');
-    spotlight.className = 'mim-light-spotlight';
-    lightLayer.appendChild(spotlight);
-
-    document.addEventListener(
-      'pointermove',
-      (event) => {
-        lightLayer.style.setProperty('--mim-spot-x', `${event.clientX}px`);
-        lightLayer.style.setProperty('--mim-spot-y', `${event.clientY}px`);
-      },
-      { passive: true }
-    );
-  }
-
   const progressBar = document.createElement('div');
   progressBar.className = 'mim-arch-scroll-progress';
   progressBar.setAttribute('aria-hidden', 'true');
@@ -99,7 +76,6 @@
   updateProgress();
 
   document.body.insertBefore(progressBar, document.body.firstChild);
-  document.body.insertBefore(lightLayer, document.body.firstChild);
   document.body.insertBefore(archLayer, document.body.firstChild);
 
   document.querySelectorAll('.mim-work-hero.mim-section-frame').forEach((hero) => {

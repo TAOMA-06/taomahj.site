@@ -393,3 +393,15 @@ body {
     padding: 40px 20px;
   }
 }
+
+/* ── Concrete exhibition shell ── */
+:root { --bg-deep:#e0dcd3; --bg-base:#ebe7de; --bg-card:rgba(24,23,21,.06); --bg-card-hover:rgba(24,23,21,.11); --border-card:rgba(24,23,21,.18); --border-card-hover:#b45132; --text-primary:#191817; --text-secondary:#57544e; --text-muted:#777168; --accent:#b45132; --accent2:#6f655a; --gradient:linear-gradient(135deg,#191817,#57544e); --cta:#b45132; --cta-foreground:#e8e4db; --radius:0; --radius-sm:0; }
+.nav { background:#171716; border-bottom-color:rgba(232,228,219,.22); box-shadow:none; backdrop-filter:none; -webkit-backdrop-filter:none; }
+.nav-logo,.nav-links a { color:#e8e4db !important; }
+.nav-links a:hover { color:#d67855 !important; background:transparent; }
+.mim-app-shell { background:#e0dcd3; }
+.page-title { background:none; -webkit-text-fill-color:#191817; color:#191817; font-size:clamp(38px,6vw,68px); letter-spacing:-.06em; }
+.upload-zone { border-color:#b45132; border-radius:0; }
+.upload-zone:hover,.upload-zone.dragover { border-color:#191817; box-shadow:inset 4px 0 0 #b45132; }
+.preview-box,.control-group,.stat-item,.btn { border-radius:0 !important; }
+.btn-primary { background:#b45132; }

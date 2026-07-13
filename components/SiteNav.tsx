@@ -1,14 +1,8 @@
-import GlassPanel from '@/components/mim/GlassPanel';
-
 export default function SiteNav() {
   return (
-    <GlassPanel
-      as="nav"
-      variant="nav"
-      className="mim-nav mim-nav--visible fixed left-0 right-0 top-0 z-[100] px-[var(--section-pad)] py-5 [&>div]:w-full"
-    >
-      <div className="flex w-full items-center justify-between gap-6">
-        <a href="#" className="shrink-0 text-sm font-semibold uppercase tracking-[0.14em]">
+    <nav className="mim-nav" aria-label="主导航">
+      <div className="mim-nav__inside">
+        <a href="#hero" className="mim-nav__brand">
           taomahj
         </a>
         <div className="mim-nav__links">
@@ -21,11 +15,11 @@ export default function SiteNav() {
           href="https://github.com/TAOMA-06"
           target="_blank"
           rel="noreferrer"
-          className="shrink-0 text-xs font-semibold uppercase tracking-[0.12em] text-mist"
+          className="mim-nav__link mim-nav__link--out"
         >
           GitHub
         </a>
       </div>
-    </GlassPanel>
+    </nav>
   );
 }

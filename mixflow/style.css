@@ -986,3 +986,17 @@ a:hover { color: var(--accent2); }
     display: none;
   }
 }
+
+/* ── Concrete exhibition shell ── */
+:root { --bg-deep:#e0dcd3; --bg-base:#ebe7de; --bg-card:rgba(24,23,21,.06); --bg-card-hover:rgba(24,23,21,.11); --border-card:rgba(24,23,21,.18); --border-card-hover:#b45132; --text-primary:#191817; --text-secondary:#57544e; --text-muted:#777168; --accent:#b45132; --accent2:#6f655a; --gradient:linear-gradient(135deg,#191817,#57544e); --cta:#b45132; --cta-foreground:#e8e4db; --radius:0; --radius-sm:0; }
+.nav { background:#171716; border-bottom-color:rgba(232,228,219,.22); backdrop-filter:none; -webkit-backdrop-filter:none; }
+.nav-logo,.nav-btn,.lang-toggle { color:#e8e4db !important; }
+.nav-brand { background:none; -webkit-text-fill-color:#d67855; color:#d67855; letter-spacing:.1em; text-transform:uppercase; }
+.nav-btn { border-radius:0; }
+.nav-btn.active,.nav-btn:hover,.lang-toggle { background:rgba(232,228,219,.08); border-color:rgba(232,228,219,.25); }
+.page-header { padding-top:56px; text-align:left; }
+.page-title { background:none; -webkit-text-fill-color:#191817; color:#191817; font-size:clamp(44px,7vw,86px); letter-spacing:-.06em; text-transform:uppercase; }
+.search-bar-wrapper,.category-select,.modal,.sort-dropdown { border-radius:0; box-shadow:none; }
+.search-bar-wrapper:focus-within { border-color:#b45132; box-shadow:inset 3px 0 0 #b45132; }
+.cocktail-card,.modal,.sort-dropdown { border-radius:0 !important; }
+.action-btn,.random-btn,.back-to-top,.mobile-fab { border-radius:0 !important; }

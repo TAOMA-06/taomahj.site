@@ -11,6 +11,10 @@ export default function PageTransition() {
     if (!overlay) return;
 
     const playExit = (href: string) => {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        window.location.href = href;
+        return;
+      }
       overlay.classList.add('mim-page-transition--active');
       gsap.fromTo(
         overlay,
@@ -45,6 +49,10 @@ export default function PageTransition() {
   useEffect(() => {
     const overlay = overlayRef.current;
     if (!overlay) return;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      overlay.style.transform = 'scaleY(0)';
+      return;
+    }
 
     gsap.fromTo(
       overlay,

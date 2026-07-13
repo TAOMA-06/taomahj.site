@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'taomahj — 数字工具与界面设计',
-  description: '独立创作者 taomahj 的个人工作室。网页工具、图像应用与本地优先产品。'
+  title: 'taomahj — 数字工具展厅',
+  description: 'taomahj 的数字工具与界面设计展厅：将真实问题组织成清晰、可停留的产品体验。'
 };
 
 export default function RootLayout({

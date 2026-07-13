@@ -263,3 +263,15 @@ body {
   }
   .card-image-wrap { height: 140px; }
 }
+
+/* ── Concrete exhibition shell ── */
+:root { --bg:#e0dcd3; --bg-card:#ebe7de; --border:rgba(24,23,21,.18); --text:#191817; --text-secondary:#57544e; --text-dim:#777168; --accent:#b45132; --accent-foreground:#e8e4db; --accent-glow:rgba(180,81,50,.18); }
+.nav { background:#171716; border-bottom-color:rgba(232,228,219,.22); backdrop-filter:none; -webkit-backdrop-filter:none; }
+.nav-logo,.nav-links a { color:#e8e4db !important; }
+.nav-links a:hover { color:#d67855 !important; background:transparent; }
+.hero { min-height:46vh; align-items:flex-start; text-align:left; border-bottom:1px solid var(--border); background:linear-gradient(135deg,#e0dcd3 0 56%,#c6c0b4 56.2%); }
+.hero-badge { border-radius:0; background:#b45132; color:#e8e4db; }
+.hero h1 { font-size:clamp(48px,8vw,92px); letter-spacing:-.07em; text-transform:uppercase; }
+.wallpaper-card,.card-image-wrap,.btn-download { border-radius:0; }
+.wallpaper-card:hover { border-color:#b45132; transform:translateY(-3px); box-shadow:8px 8px 0 rgba(24,23,21,.14); }
+.btn-download { background:#b45132; }
