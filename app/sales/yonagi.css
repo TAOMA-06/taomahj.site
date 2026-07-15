@@ -262,6 +262,78 @@
 .p-map strong { font-size: 11px; letter-spacing: .13em; }
 .p-mobile-bar { display: none; }
 
+/* —— Plan P motion system (cinematic; not used on S) —— */
+.p-scroll-progress {
+  position: fixed;
+  z-index: 500;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.06);
+}
+.p-scroll-progress span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  transform: scaleX(0);
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--yo-copper), #e8a070);
+}
+.yonagi-p .yo-char {
+  display: inline-block;
+  will-change: transform, opacity;
+  transform-origin: 50% 100%;
+}
+.yonagi-p .yo-char--space { width: 0.28em; }
+.yonagi-p .p-hero-name {
+  display: inline-block;
+  perspective: 600px;
+}
+.yonagi-p .yo-line-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.yonagi-p .yo-line-inner {
+  display: block;
+  will-change: transform;
+}
+.yonagi-p .p-hero-media,
+.yonagi-p .p-story-photos figure,
+.yonagi-p .p-menu-highlight > div,
+.yonagi-p .p-space-card {
+  overflow: hidden;
+}
+.yonagi-p .p-hero-media img,
+.yonagi-p .p-story-photos img,
+.yonagi-p .p-menu-highlight img,
+.yonagi-p .p-space-card img {
+  will-change: transform;
+}
+.yonagi-p .yonagi-button--copper {
+  will-change: transform;
+  box-shadow: 0 0 0 0 rgba(185, 101, 62, 0);
+  transition: box-shadow 0.35s ease, background-color 0.18s ease, color 0.18s ease;
+}
+.yonagi-p .yonagi-button--copper:hover {
+  box-shadow: 0 10px 36px rgba(185, 101, 62, 0.35);
+}
+
+/* Landing: P card tilt host */
+.sales-plan--p {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+.sales-plan--p .sales-plan-media {
+  transform-style: preserve-3d;
+}
+.sales-plan--s:hover .sales-plan-media img {
+  transform: scale(1.02);
+}
+
+
 .yonagi-footer { display: grid; grid-template-columns: 1fr auto; gap: 32px; padding: 52px max(24px, calc((100% - 1160px) / 2)); color: var(--yo-ink); background: #d8cbb8; }
 .yonagi-footer-brand { display: flex; align-items: baseline; gap: 17px; }
 .yonagi-footer-brand strong { font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; font-size: 24px; letter-spacing: .14em; }
@@ -469,5 +541,30 @@
 
 @media (prefers-reduced-motion: reduce) {
   .yonagi *,
-  .sales-landing * { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+  .yonagi *::before,
+  .yonagi *::after,
+  .sales-landing *,
+  .sales-landing *::before,
+  .sales-landing *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+  .p-scroll-progress { display: none; }
+  .yonagi-p .yo-char,
+  .yonagi-p .yo-line-inner,
+  .yonagi-p .p-hero-media img,
+  .yonagi-p .p-story-photos img,
+  .yonagi-p .p-menu-highlight img,
+  .yonagi-p .p-space-card img {
+    transform: none !important;
+    opacity: 1 !important;
+    clip-path: none !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .p-scroll-progress { height: 1.5px; }
+  .yonagi-p .p-hero-name { perspective: none; }
 }
