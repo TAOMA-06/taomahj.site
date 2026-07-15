@@ -71,7 +71,7 @@ export function YonagiFooter({ pro = false }: { pro?: boolean }) {
       </div>
       <div className="yonagi-footer-links">
         <a href={yonagi.contact.mapHref} target="_blank" rel="noreferrer">Google Map ↗</a>
-        <a href={yonagi.contact.instagramHref} target="_blank" rel="noreferrer">Instagram ↗</a>
+        <a href={yonagi.contact.emailHref}>メール ↗</a>
         <a href="/sales/">S / P 比較へ</a>
       </div>
       <p>© 2026 Yonagi Shokudo</p>

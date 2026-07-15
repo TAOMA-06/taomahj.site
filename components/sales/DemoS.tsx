@@ -22,7 +22,7 @@ export default function DemoS() {
               <a className="yonagi-button yonagi-button--dark" href={yonagi.contact.phoneHref}>電話する <span aria-hidden="true">↗</span></a>
               <a className="yonagi-button yonagi-button--line" href={yonagi.contact.mapHref} target="_blank" rel="noreferrer">地図を開く <span aria-hidden="true">↗</span></a>
             </div>
-            <a className="s-instagram" href={yonagi.contact.instagramHref} target="_blank" rel="noreferrer">Instagram&nbsp; {yonagi.contact.instagram} <span aria-hidden="true">↗</span></a>
+            <a className="s-email" href={yonagi.contact.emailHref}>メール&nbsp; {yonagi.contact.email} <span aria-hidden="true">↗</span></a>
           </div>
         </section>
 
@@ -71,8 +71,8 @@ export default function DemoS() {
         </section>
 
         <section className="s-social yonagi-shell">
-          <div><p className="yonagi-eyebrow">FOLLOW THE SEASON</p><h2>仕入れと今夜の一皿は、<br />Instagramで。</h2></div>
-          <a href={yonagi.contact.instagramHref} target="_blank" rel="noreferrer">{yonagi.contact.instagram} <span aria-hidden="true">↗</span></a>
+          <div><p className="yonagi-eyebrow">CONTACT</p><h2>お問い合わせは、<br />メールで。</h2></div>
+          <a href={yonagi.contact.emailHref}>{yonagi.contact.email} <span aria-hidden="true">↗</span></a>
         </section>
       </main>
       <YonagiFooter />

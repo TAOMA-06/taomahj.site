@@ -115,7 +115,7 @@
 .s-reading { margin-top: 15px !important; color: var(--yo-muted); font-size: 9px; letter-spacing: .14em; }
 .s-tagline { margin-top: 28px !important; font-family: "Hiragino Mincho ProN", "Yu Mincho", serif; font-size: clamp(18px, 1.8vw, 23px); line-height: 1.65; letter-spacing: .09em; text-wrap: balance; }
 .s-hero-intro { max-width: 470px; margin: 14px 0 24px !important; color: var(--yo-muted); font-size: 11px; line-height: 1.85; letter-spacing: .07em; }
-.s-instagram { display: inline-flex; align-items: center; gap: 12px; width: fit-content; margin-top: 24px; padding-bottom: 5px; border-bottom: 1px solid var(--yo-line); color: var(--yo-muted); font-size: 9px; letter-spacing: .08em; }
+.s-email { display: inline-flex; align-items: center; gap: 12px; width: fit-content; margin-top: 24px; padding-bottom: 5px; border-bottom: 1px solid var(--yo-line); color: var(--yo-muted); font-size: 9px; letter-spacing: .08em; }
 
 .s-points { border-top: 1px solid var(--yo-line); border-bottom: 1px solid var(--yo-line); background: var(--yo-paper-light); }
 .s-points-track { display: grid; grid-template-columns: repeat(3, 1fr); }
@@ -364,7 +364,7 @@
   .s-reading { font-size: 8px; }
   .s-tagline { margin-top: 22px !important; font-size: 17px; }
   .s-hero-intro { margin: 14px 0 21px !important; font-size: 10px; line-height: 1.8; }
-  .s-instagram { margin-top: 17px; }
+  .s-email { margin-top: 17px; }
   .s-points-track { grid-template-columns: 1fr; }
   .s-points article { min-height: 145px; padding: 28px 18px; border-left: 1px solid var(--yo-line); border-bottom: 1px solid var(--yo-line); }
   .s-points article:last-child { border-bottom: 0; }

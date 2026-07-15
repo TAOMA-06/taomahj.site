@@ -128,8 +128,8 @@ export const yonagi = {
     closed: '月曜定休',
     mapHref:
       'https://www.google.com/maps/search/?api=1&query=%E5%A4%A7%E9%98%AA%E5%BA%9C%E5%A4%A7%E9%98%AA%E5%B8%82%E8%A5%BF%E5%8C%BA%E5%8D%97%E5%A0%80%E6%B1%9F',
-    instagram: '@yonagi_shokudo',
-    instagramHref: 'https://www.instagram.com/'
+    email: 'taomahj834225@outlook.com',
+    emailHref: 'mailto:taomahj834225@outlook.com'
   },
   sellingPoints: [
     { number: '一', title: '季節を焼く', text: '旬の魚と野菜を、香りまでおいしい火入れで。' },
