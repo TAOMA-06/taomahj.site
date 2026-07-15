@@ -154,11 +154,13 @@ button { font: inherit; }
   will-change: transform;
 }
 
-/* Headline line masks for GSAP reveals */
+/* Headline line masks for GSAP reveals — width must fit glyphs; only clip vertically */
 .mim-line-mask {
   display: block;
   overflow: hidden;
-  padding-bottom: 0.06em;
+  width: max-content;
+  max-width: 100%;
+  padding: 0.04em 0.06em 0.1em 0;
 }
 .mim-line-inner {
   display: block;
@@ -175,7 +177,14 @@ button { font: inherit; }
 .mim-section-frame__label { position: absolute; inset: 18px var(--section-pad) auto; display:flex; justify-content:space-between; color: var(--concrete-500); font-size: 10px; font-weight:700; letter-spacing:.18em; text-transform:uppercase; pointer-events:none; }
 .mim-section-frame__border { position: absolute; inset: 12px var(--section-pad); border: 1px solid var(--line-subtle); pointer-events: none; }
 .mim-section-label, .exhibit-kicker { color: var(--rust-soft); font-size: 11px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; }
-.mim-display { margin: 0; font-size: clamp(72px, 15.5vw, 230px); font-weight: 700; line-height: .78; letter-spacing: -.085em; text-transform: uppercase; }
+.mim-display {
+  margin: 0;
+  font-size: clamp(64px, 12.5vw, 210px);
+  font-weight: 700;
+  line-height: 0.86;
+  letter-spacing: -0.085em;
+  text-transform: uppercase;
+}
 .mim-headline { margin: 0; font-size: clamp(39px, 7vw, 104px); font-weight: 600; line-height: .88; letter-spacing: -.07em; }
 .mim-body { color: var(--concrete-300); font-size: clamp(17px, 2vw, 25px); line-height: 1.5; }
 .mim-btn {
@@ -193,8 +202,21 @@ button { font: inherit; }
 .mim-btn:active { transform: translateY(0); }
 
 .exhibit-hero { min-height: max(720px, 100vh); display:grid; align-items:end; padding-top: 140px; padding-bottom: clamp(40px, 6vw, 86px); }
-.exhibit-hero__layout { display:grid; gap: 42px; grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr); align-items:end; }
-.exhibit-hero__title { max-width: 11ch; grid-column:1; }
+.exhibit-hero__layout {
+  display: grid;
+  gap: 42px;
+  grid-template-columns: minmax(min(100%, 22rem), 1.35fr) minmax(240px, 0.75fr);
+  align-items: end;
+}
+.exhibit-hero__title {
+  grid-column: 1;
+  max-width: 100%;
+  min-width: 0;
+}
+.exhibit-hero__title .mim-display {
+  /* Keep wipe masks from being squeezed by the media column */
+  overflow: visible;
+}
 .exhibit-hero__copy { max-width: 410px; grid-column:1; padding-bottom: 10px; }
 .exhibit-hero__index { display:block; margin-bottom: 20px; color: var(--concrete-500); font-size: 11px; font-weight: 700; letter-spacing: .18em; }
 .material-void { position:relative; grid-column:2; grid-row:1 / span 2; align-self:stretch; overflow:hidden; min-height: clamp(430px, 45vw, 690px); border: 1px solid var(--line); background: #2c2a26; }
@@ -341,8 +363,10 @@ button { font: inherit; }
   .mim-nav__mobile.is-open { display: grid; }
   .exhibit-hero { min-height:720px; }
   .exhibit-hero__layout, .exhibit-intro, .exhibit-heading, .exhibit-contact__inside { grid-template-columns:1fr; gap:32px; }
+  .exhibit-hero__title { order: 1; }
+  .material-void { order: 2; grid-column:auto; grid-row:auto; min-height:260px; }
   .exhibit-hero__copy { order:3; }
-  .material-void { grid-column:auto; grid-row:auto; min-height:260px; }
+  .mim-display { font-size: clamp(56px, 18vw, 96px); line-height: 0.88; }
   .mim-approach-plan, .exhibit-stack__grid { grid-template-columns:1fr; }
   .mim-approach-panel { min-height:290px; border-right:0; }
   .exhibit-work__top, .exhibit-work-card { display:block; }

@@ -7,7 +7,9 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true
-  }
+  },
+  // Hide the default Next.js "N" badge during local preview.
+  devIndicators: false
 };
 
 export default nextConfig;

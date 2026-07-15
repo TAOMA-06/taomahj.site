@@ -52,14 +52,9 @@ export default function SalesLanding() {
               <span>PLAN S / SIMPLE</span>
               <strong>49,800円相当</strong>
             </div>
-            <div>
-              <p>先有一张正式的手机官网门面。</p>
-              <h2>
-                清楚、干净，
-                <br />
-                客人马上能来店。
-              </h2>
-            </div>
+            <h2 className="sales-plan-position">
+              经济简单型网页设计
+            </h2>
             <ul>
               <li>一页完成</li>
               <li>六项菜单</li>
@@ -85,14 +80,9 @@ export default function SalesLanding() {
               <span>PLAN P / PRO</span>
               <strong>98,000円相当</strong>
             </div>
-            <div>
-              <p>把店的气质，变成预约的理由。</p>
-              <h2>
-                故事、空间与炭火，
-                <br />
-                共同完成转化。
-              </h2>
-            </div>
+            <h2 className="sales-plan-position">
+              深度定制
+            </h2>
             <ul>
               <li>品牌叙事</li>
               <li>分类菜单 · 导航下拉</li>
@@ -105,15 +95,7 @@ export default function SalesLanding() {
         </a>
       </section>
 
-      <section className="sales-difference" aria-labelledby="difference-title">
-        <div className="sales-difference-heading">
-          <p>WHY THE PRICE CHANGES</p>
-          <h2 id="difference-title">
-            差价不在“多几个区块”，
-            <br />
-            而在信息如何变成信任。
-          </h2>
-        </div>
+      <section className="sales-difference" aria-label="S与P方案对照">
         <div className="sales-difference-list">
           {differences.map((item, index) => (
             <article key={item.label}>
@@ -131,23 +113,6 @@ export default function SalesLanding() {
           ))}
         </div>
       </section>
-
-      <section className="sales-final-cta">
-        <p>SMALL RESTAURANT, CLEARER PRESENCE.</p>
-        <h2>
-          不需要变成大品牌。
-          <br />
-          只需要让客人更相信你。
-        </h2>
-        <a href="mailto:taomahj834225@outlook.com">
-          讨论你的网站 <span aria-hidden="true">↗</span>
-        </a>
-      </section>
-
-      <footer className="sales-landing-footer">
-        <p>夜凪食堂为虚构店铺。本页仅用于展示网站制作方案。</p>
-        <p>© 2026 taomahj · Osaka demo</p>
-      </footer>
     </main>
   );
 }

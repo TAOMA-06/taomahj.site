@@ -56,16 +56,6 @@ export function useSalesLandingMotion(
         });
       }
 
-      const cta = root.querySelector('.sales-final-cta');
-      if (cta) {
-        simpleRevealGroup(cta, cta.querySelectorAll('p, h2, a'), {
-          y: 16,
-          duration: 0.5,
-          stagger: 0.07,
-          start: 'top 88%'
-        });
-      }
-
       // P card: light 3D tilt. S card: only image scale via CSS.
       if (isFinePointer()) {
         const pCard = root.querySelector<HTMLElement>('.sales-plan--p');
