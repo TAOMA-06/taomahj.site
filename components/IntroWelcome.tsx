@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import SectionFrame from '@/components/mim/SectionFrame';
+import DraftingMotif from '@/components/mim/DraftingMotifs';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { HOME_EASE, revealLines, revealOnce } from '@/components/mim/homeMotion';
 
@@ -49,6 +50,8 @@ export default function IntroWelcome() {
   return (
     <div ref={scope}>
       <SectionFrame label="Statement" elevation="+0.00" className="exhibit-intro">
+        <DraftingMotif variant="wave" />
+        <DraftingMotif variant="mobius" />
         <span className="exhibit-intro__number">02 / POSITION</span>
         <div>
           <p className="mim-headline">

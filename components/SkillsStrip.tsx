@@ -5,6 +5,7 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import SectionFrame from '@/components/mim/SectionFrame';
+import DraftingMotif from '@/components/mim/DraftingMotifs';
 import { vocabularyGroups } from '@/data/siteContent';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { HOME_EASE, revealOnce } from '@/components/mim/homeMotion';
@@ -64,6 +65,7 @@ export default function SkillsStrip() {
   return (
     <div ref={scope}>
       <SectionFrame id="stack" label="Material schedule" elevation="04 / 05" className="exhibit-stack">
+        <DraftingMotif variant="gear" />
         <p className="exhibit-kicker">Tools &amp; systems</p>
         <h2 className="mim-headline mt-5">技术与工具</h2>
         <div className="exhibit-stack__grid">

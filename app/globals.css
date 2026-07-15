@@ -50,21 +50,91 @@ button { font: inherit; }
     radial-gradient(circle at 84% 5%, rgba(180,81,50,.17), transparent 25rem),
     linear-gradient(120deg, #181817, #25231f 48%, #161615);
 }
-.mim-center-axis {
+.mim-drafting-motif {
   position: absolute;
-  inset: 0 auto;
-  left: 50%;
-  z-index: -2;
-  width: 1px;
-  background: rgba(232, 228, 219, 0.12);
   pointer-events: none;
-  opacity: 1;
+  opacity: 0.45;
+  color: var(--paper);
   transition: opacity 0.35s var(--ease-architect);
 }
+.mim-drafting-motif__svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform-origin: 50% 50%;
+}
+.mim-drafting-motif__edge {
+  stroke: rgba(232, 228, 219, 0.48);
+  stroke-width: 1.35;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  fill: none;
+}
+.mim-drafting-motif__spine {
+  stroke: rgba(232, 228, 219, 0.26);
+  stroke-width: 1;
+  fill: none;
+}
+.mim-drafting-motif__tick {
+  stroke: rgba(232, 228, 219, 0.34);
+  stroke-width: 1.1;
+  fill: none;
+}
+.mim-drafting-motif__guide {
+  stroke: rgba(232, 228, 219, 0.18);
+  stroke-width: 0.9;
+  fill: none;
+}
+.mim-drafting-motif__node {
+  fill: var(--rust-soft);
+  stroke: none;
+}
+.mim-drafting-motif--mobius .mim-drafting-motif__edge { stroke-width: 0.018; }
+.mim-drafting-motif--mobius .mim-drafting-motif__spine { stroke-width: 0.01; stroke-dasharray: 0.06 0.05; }
+.mim-drafting-motif--mobius .mim-drafting-motif__tick { stroke-width: 0.012; }
+.mim-drafting-motif--mobius .mim-drafting-motif__guide { stroke-width: 0.008; }
+.mim-drafting-motif--wave {
+  left: 4%;
+  bottom: 12%;
+  width: clamp(140px, 18vw, 200px);
+  height: auto;
+  aspect-ratio: 2 / 1;
+}
+.mim-drafting-motif--mobius {
+  right: 6%;
+  top: 18%;
+  width: clamp(150px, 16vw, 210px);
+  height: clamp(150px, 16vw, 210px);
+}
+.mim-drafting-motif--beam {
+  right: 5%;
+  bottom: 8%;
+  width: clamp(160px, 20vw, 230px);
+  height: auto;
+  aspect-ratio: 2 / 1;
+}
+.mim-drafting-motif--gear {
+  right: 4%;
+  top: 12%;
+  width: clamp(120px, 14vw, 180px);
+  height: clamp(120px, 14vw, 180px);
+}
+@keyframes mim-mobius-spin {
+  to { transform: rotate(360deg); }
+}
 @media (hover: hover) and (pointer: fine) {
-  .mim-main-content:has(.exhibit-work-card:hover) .mim-center-axis {
+  .mim-drafting-motif--mobius .mim-drafting-motif__svg--spin {
+    animation: mim-mobius-spin 48s linear infinite;
+  }
+  .mim-main-content:has(.exhibit-work-card:hover) .mim-drafting-motif {
     opacity: 0;
   }
+}
+@media (max-width: 980px) {
+  .mim-drafting-motif--wave { left: 2%; bottom: 6%; width: 120px; }
+  .mim-drafting-motif--mobius { right: 2%; top: auto; bottom: 8%; width: 110px; height: 110px; }
+  .mim-drafting-motif--beam { right: 2%; width: 140px; }
+  .mim-drafting-motif--gear { right: 2%; top: 8%; width: 96px; height: 96px; }
 }
 .mim-main-content::after {
   content: "";
@@ -224,6 +294,8 @@ button { font: inherit; }
   align-items: end;
 }
 .exhibit-hero__title {
+  position: relative;
+  z-index: 20;
   grid-column: 1;
   max-width: 100%;
   min-width: 0;
@@ -232,13 +304,48 @@ button { font: inherit; }
   /* Keep wipe masks from being squeezed by the media column */
   overflow: visible;
 }
-.exhibit-hero__copy { max-width: 410px; grid-column:1; padding-bottom: 10px; }
+.exhibit-hero__copy {
+  position: relative;
+  z-index: 20;
+  max-width: 410px;
+  grid-column: 1;
+  padding-bottom: 10px;
+}
 .exhibit-hero__index { display:block; margin-bottom: 20px; color: var(--concrete-500); font-size: 11px; font-weight: 700; letter-spacing: .18em; }
-.material-void { position:relative; grid-column:2; grid-row:1 / span 2; align-self:stretch; overflow:hidden; min-height: clamp(430px, 45vw, 690px); border: 1px solid var(--line); background: #2c2a26; }
+.material-void-slot {
+  position: relative;
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  align-self: stretch;
+  min-height: clamp(430px, 45vw, 690px);
+}
+.material-void {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: #2c2a26;
+  will-change: top, left, width, height, opacity;
+}
 .material-void img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; object-position:56% center; will-change: transform; }
 .material-void::before, .material-void::after { content:""; position:absolute; z-index:1; pointer-events:none; }
 .material-void::before { inset: 0; background: linear-gradient(140deg, transparent 20%, rgba(232,228,219,.09) 20.1% 42%, transparent 42.1%), linear-gradient(90deg, rgba(0,0,0,.42), transparent 68%); }
-.material-void::after { inset: 12% 10%; border: 1px solid rgba(232,228,219,.28); box-shadow: 2.2rem 2.2rem 0 rgba(0,0,0,.16); }
+.material-void::after {
+  inset: 12% 10%;
+  border: 1px solid rgba(232,228,219,.28);
+  box-shadow: 2.2rem 2.2rem 0 rgba(0,0,0,.16);
+  opacity: 1;
+  transition: opacity 0.35s var(--ease-architect);
+}
+.material-void.is-expanded {
+  border-color: transparent;
+}
+.material-void.is-expanded::after {
+  opacity: 0;
+}
+.material-void.is-expanded::before {
+  background: linear-gradient(90deg, rgba(0,0,0,.48), rgba(0,0,0,.18) 45%, transparent 72%);
+}
 .material-void__caption { position:absolute; right:18px; bottom:16px; z-index:1; color: var(--concrete-300); font-size:10px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; writing-mode:vertical-rl; }
 
 .exhibit-intro { display:grid; grid-template-columns: minmax(0, .4fr) minmax(0, 1fr); gap: 48px; padding-top: clamp(100px, 16vw, 240px); padding-bottom: clamp(100px, 16vw, 240px); }
@@ -379,7 +486,17 @@ button { font: inherit; }
   .exhibit-hero { min-height:720px; }
   .exhibit-hero__layout, .exhibit-intro, .exhibit-heading, .exhibit-contact__inside { grid-template-columns:1fr; gap:32px; }
   .exhibit-hero__title { order: 1; }
-  .material-void { order: 2; grid-column:auto; grid-row:auto; min-height:260px; }
+  .material-void-slot {
+    order: 2;
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 260px;
+  }
+  .material-void {
+    position: absolute;
+    inset: 0;
+    will-change: auto;
+  }
   .exhibit-hero__copy { order:3; }
   .mim-display { font-size: clamp(56px, 18vw, 96px); line-height: 0.88; }
   .mim-approach-plan, .exhibit-stack__grid { grid-template-columns:1fr; }
@@ -401,10 +518,29 @@ button { font: inherit; }
     scroll-behavior: auto !important;
   }
   .mim-scroll-progress { display: none; }
-  .mim-center-axis { transition: none; }
+  .mim-drafting-motif {
+    opacity: 0.28;
+    transition: none;
+  }
+  .mim-drafting-motif__svg--spin { animation: none !important; }
   .mim-line-inner,
   .material-void img,
   .project-specimen img {
     transform: none !important;
+  }
+  .material-void {
+    position: absolute !important;
+    inset: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    top: 0 !important;
+    left: 0 !important;
+    opacity: 1 !important;
+  }
+  .material-void.is-expanded {
+    border-color: var(--line);
+  }
+  .material-void.is-expanded::after {
+    opacity: 1;
   }
 }

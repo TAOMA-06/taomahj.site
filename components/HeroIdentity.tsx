@@ -6,9 +6,18 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import SectionFrame from '@/components/mim/SectionFrame';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
-import { HOME_EASE, isMobileHome, scrubImage, splitHeadlineLines } from '@/components/mim/homeMotion';
+import {
+  HOME_EASE,
+  applyHeroVoidFrame,
+  isMobileHome,
+  scrubHeroVoidExpand,
+  splitHeadlineLines
+} from '@/components/mim/homeMotion';
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
+
+/** Matches PageTransition enter: delay 0.1 + duration 0.65 */
+const CURTAIN_CLEAR = 0.75;
 
 export default function HeroIdentity() {
   const scope = useRef<HTMLDivElement>(null);
@@ -24,9 +33,12 @@ export default function HeroIdentity() {
       const index = root.querySelector('.exhibit-hero__index');
       const body = root.querySelector('.exhibit-hero__copy .mim-body');
       const buttons = root.querySelectorAll('.exhibit-hero__copy .mim-btn');
-      const voidEl = root.querySelector('.material-void');
+      const slotEl = root.querySelector<HTMLElement>('.material-void-slot');
+      const voidEl = root.querySelector<HTMLElement>('.material-void');
       const voidImg = root.querySelector<HTMLElement>('.material-void img');
-      const caption = root.querySelector('.material-void__caption');
+      const caption = root.querySelector<HTMLElement>('.material-void__caption');
+      const mobius = document.querySelector<HTMLElement>('.mim-mobius-axis');
+      const hero = document.getElementById('hero') ?? undefined;
 
       const tl = gsap.timeline({ defaults: { ease: HOME_EASE.out }, delay: 0.12 });
 
@@ -55,25 +67,68 @@ export default function HeroIdentity() {
         );
       }
 
-      if (voidEl) {
+      const desktopMorph = !isMobileHome() && slotEl && voidEl;
+
+      if (desktopMorph) {
+        const proxy = { t: 0 };
+        const extras = { caption };
+
+        applyHeroVoidFrame(voidEl, slotEl, 0, extras);
+        gsap.set(voidEl, { opacity: 0.35 });
+        if (caption) gsap.set(caption, { opacity: 0 });
+
+        const morphDelay = Math.max(0, CURTAIN_CLEAR - 0.12);
+
+        tl.to(
+          proxy,
+          {
+            t: 1,
+            duration: 1.25,
+            ease: HOME_EASE.expo,
+            onUpdate: () => applyHeroVoidFrame(voidEl, slotEl, proxy.t, extras)
+          },
+          morphDelay
+        );
+        tl.to(voidEl, { opacity: 1, duration: 1, ease: HOME_EASE.soft }, morphDelay);
+
+        if (voidImg) {
+          tl.fromTo(
+            voidImg,
+            { scale: 1.1 },
+            { scale: 1, duration: 1.45, ease: HOME_EASE.soft },
+            morphDelay
+          );
+        }
+
+        tl.add(() => {
+          scrubHeroVoidExpand(voidEl, slotEl, {
+            trigger: hero ?? '#hero',
+            caption
+          });
+          if (voidImg) {
+            ScrollTrigger.create({
+              trigger: hero ?? '#hero',
+              start: 'top top',
+              end: 'bottom top',
+              scrub: 0.7,
+              onUpdate: (self) => {
+                gsap.set(voidImg, {
+                  scale: gsap.utils.interpolate(1, 1.06, self.progress)
+                });
+              }
+            });
+          }
+        });
+      } else if (voidEl) {
         tl.fromTo(
           voidEl,
           { clipPath: 'inset(8% 8% 8% 8%)', opacity: 0.4 },
           { clipPath: 'inset(0% 0% 0% 0%)', opacity: 1, duration: 1.15, ease: HOME_EASE.expo },
           0.2
         );
-      }
-      if (voidImg && !isMobileHome()) {
-        tl.fromTo(
-          voidImg,
-          { scale: 1.12 },
-          { scale: 1.02, duration: 1.6, ease: HOME_EASE.soft },
-          0.2
-        );
-        scrubImage(voidImg, voidEl ?? root, { fromScale: 1.02, toScale: 1.1, yPercent: 10 });
-      }
-      if (caption) {
-        tl.fromTo(caption, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.9);
+        if (caption) {
+          tl.fromTo(caption, { opacity: 0 }, { opacity: 1, duration: 0.5 }, 0.9);
+        }
       }
     },
     { scope, dependencies: [reducedMotion] }
@@ -107,9 +162,11 @@ export default function HeroIdentity() {
             </a>
           </div>
         </div>
-        <div className="material-void" aria-label="首页主视觉图片占位区域">
-          <img src="/assets/exhibition/hero-atrium.png" alt="天光照亮的混凝土中庭" />
-          <span className="material-void__caption">atrium / 2026</span>
+        <div className="material-void-slot">
+          <div className="material-void" aria-label="首页主视觉图片占位区域">
+            <img src="/assets/exhibition/hero-atrium.png" alt="天光照亮的混凝土中庭" />
+            <span className="material-void__caption">atrium / 2026</span>
+          </div>
         </div>
       </div>
     </SectionFrame>

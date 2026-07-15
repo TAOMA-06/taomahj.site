@@ -6,6 +6,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 import { themes } from '@/data/siteContent';
 import SectionFrame from '@/components/mim/SectionFrame';
+import DraftingMotif from '@/components/mim/DraftingMotifs';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { HOME_EASE, revealOnce } from '@/components/mim/homeMotion';
 
@@ -73,6 +74,7 @@ export default function ApproachSections() {
   return (
     <section id="approach" ref={scope}>
       <SectionFrame label="Programme" elevation="03 / 05" className="exhibit-heading">
+        <DraftingMotif variant="beam" />
         <div className="exhibit-heading__note">
           以功能为基底，把每个项目视为一次关于使用、信息与克制的空间研究。
         </div>

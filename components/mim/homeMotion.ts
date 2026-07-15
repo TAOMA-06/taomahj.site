@@ -121,3 +121,74 @@ export function scrubImage(
     }
   );
 }
+
+/** t: 0 = slot/boxed, 1 = full viewport. Applies fixed geometry onto voidEl. */
+export function applyHeroVoidFrame(
+  voidEl: HTMLElement,
+  slotEl: HTMLElement,
+  t: number,
+  extras?: {
+    caption?: HTMLElement | null;
+  }
+) {
+  const slot = slotEl.getBoundingClientRect();
+  const vw = window.innerWidth;
+  const vh = window.innerHeight;
+  const clamped = gsap.utils.clamp(0, 1, t);
+
+  gsap.set(voidEl, {
+    position: 'fixed',
+    top: gsap.utils.interpolate(slot.top, 0, clamped),
+    left: gsap.utils.interpolate(slot.left, 0, clamped),
+    width: gsap.utils.interpolate(slot.width, vw, clamped),
+    height: gsap.utils.interpolate(slot.height, vh, clamped),
+    x: 0,
+    y: 0,
+    margin: 0,
+    zIndex: 5
+  });
+
+  voidEl.classList.toggle('is-expanded', clamped > 0.12);
+
+  if (extras?.caption) {
+    gsap.set(extras.caption, { opacity: gsap.utils.clamp(0, 1, 1 - clamped * 1.35) });
+  }
+}
+
+/**
+ * Scrub hero void from full-bleed (progress 0) back to the measured slot (progress 1).
+ * Call after the enter morph has reached full-bleed.
+ */
+export function scrubHeroVoidExpand(
+  voidEl: HTMLElement,
+  slotEl: HTMLElement,
+  options: {
+    trigger?: Element | string;
+    start?: string;
+    end?: string;
+    scrub?: number;
+    caption?: HTMLElement | null;
+  } = {}
+) {
+  const {
+    trigger = '#hero',
+    start = 'top top',
+    end = 'bottom top',
+    scrub = 0.7,
+    caption = null
+  } = options;
+
+  const paint = (scrollProgress: number) => {
+    applyHeroVoidFrame(voidEl, slotEl, 1 - scrollProgress, { caption });
+  };
+
+  return ScrollTrigger.create({
+    trigger,
+    start,
+    end,
+    scrub,
+    invalidateOnRefresh: true,
+    onUpdate: (self) => paint(self.progress),
+    onRefresh: (self) => paint(self.progress)
+  });
+}
