@@ -1,5 +1,6 @@
 'use client';
 
+import type { RefObject } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -8,10 +9,7 @@ import { simpleRevealGroup } from './yoMotion';
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /** S-tier only: short once fade-ups. No Lenis / pin / scrub / split text. */
-export function useDemoSMotion(
-  scope: React.RefObject<HTMLElement | null>,
-  reducedMotion: boolean
-) {
+export function useDemoSMotion(scope: RefObject<HTMLElement | null>, reducedMotion: boolean) {
   useGSAP(
     () => {
       if (reducedMotion || !scope.current) return;

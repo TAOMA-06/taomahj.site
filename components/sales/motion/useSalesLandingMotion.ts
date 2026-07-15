@@ -1,5 +1,6 @@
 'use client';
 
+import type { RefObject } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -9,7 +10,7 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /** Landing: medium motion. P plan card gets tilt; S card stays simple. */
 export function useSalesLandingMotion(
-  scope: React.RefObject<HTMLElement | null>,
+  scope: RefObject<HTMLElement | null>,
   reducedMotion: boolean
 ) {
   useGSAP(

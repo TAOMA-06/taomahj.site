@@ -1,5 +1,6 @@
 'use client';
 
+import type { RefObject } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -17,10 +18,7 @@ import {
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /** P-tier cinematic motion. Do not reuse on S. */
-export function useDemoPMotion(
-  scope: React.RefObject<HTMLElement | null>,
-  reducedMotion: boolean
-) {
+export function useDemoPMotion(scope: RefObject<HTMLElement | null>, reducedMotion: boolean) {
   useGSAP(
     () => {
       if (reducedMotion || !scope.current) return;
