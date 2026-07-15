@@ -17,6 +17,7 @@ export default function HomeShell() {
       <HomeScrollProgress />
       <SiteNav />
       <main className="mim-main-content">
+        <div className="mim-center-axis" aria-hidden="true" />
         <HeroIdentity />
         <IntroWelcome />
         <ManifestoMarquee />
