@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { yonagi, yonagiImages } from '@/data/yonagi';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { AssetImage, DemoRibbon, InfoRows, YonagiFooter, YonagiHeader } from './YonagiShared';
@@ -8,8 +8,39 @@ import { useDemoSMotion } from './motion/useDemoSMotion';
 
 export default function DemoS() {
   const scope = useRef<HTMLDivElement>(null);
+  const detailRef = useRef<HTMLElement>(null);
   const reducedMotion = usePrefersReducedMotion();
   useDemoSMotion(scope, reducedMotion);
+
+  const dishes = yonagi.sMenu.filter((item) => item.image && item.id);
+  const [activeId, setActiveId] = useState(dishes[0]?.id ?? 'yaki');
+  const activeDish = dishes.find((item) => item.id === activeId) ?? dishes[0];
+
+  const selectDish = (id: string, scrollDetail = true) => {
+    setActiveId(id);
+    if (!scrollDetail) return;
+    requestAnimationFrame(() => {
+      detailRef.current?.scrollIntoView({
+        behavior: reducedMotion ? 'auto' : 'smooth',
+        block: 'nearest'
+      });
+    });
+  };
+
+  useEffect(() => {
+    const syncHash = () => {
+      const hash = window.location.hash.replace(/^#/, '');
+      const match = hash.match(/^dish-(.+)$/);
+      if (!match?.[1]) return;
+      if (dishes.some((dish) => dish.id === match[1])) {
+        selectDish(match[1], true);
+      }
+    };
+    syncHash();
+    window.addEventListener('hashchange', syncHash);
+    return () => window.removeEventListener('hashchange', syncHash);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reducedMotion]);
 
   return (
     <div className="yonagi yonagi-s" id="top" lang="ja" ref={scope}>
@@ -77,22 +108,58 @@ export default function DemoS() {
               表示価格は税込です。
             </p>
           </div>
+
+          <nav className="s-menu-sub" aria-label="おすすめ料理一覧">
+            {dishes.map((item, index) => (
+              <button
+                type="button"
+                key={item.id}
+                className={item.id === activeId ? 'is-active' : undefined}
+                onClick={() => selectDish(item.id!)}
+              >
+                <span>0{index + 1}</span>
+                {item.name}
+              </button>
+            ))}
+          </nav>
+
+          {activeDish?.image && (
+            <aside className="s-menu-detail" ref={detailRef} aria-live="polite">
+              <div className="s-menu-detail-photo">
+                <AssetImage asset={activeDish.image} />
+              </div>
+              <div className="s-menu-detail-copy">
+                <p className="yonagi-eyebrow">SELECTED DISH</p>
+                <h3>{activeDish.name}</h3>
+                <p className="s-menu-detail-price">{activeDish.price}</p>
+                <p className="s-menu-detail-note">{activeDish.note}</p>
+                <a className="yonagi-button yonagi-button--dark" href={yonagi.contact.phoneHref}>
+                  この料理について聞く <span aria-hidden="true">↗</span>
+                </a>
+              </div>
+            </aside>
+          )}
+
           <div className="s-menu-grid">
-            {yonagi.sMenu.map(
-              (item, index) =>
-                item.image && (
-                  <article className={`s-menu-item s-menu-item--${index + 1}`} key={item.name}>
-                    <div className="s-menu-photo">
-                      <AssetImage asset={item.image} />
-                    </div>
-                    <div className="s-menu-meta">
-                      <span>0{index + 1}</span>
-                      <h3>{item.name}</h3>
-                      <p>{item.price}</p>
-                    </div>
-                  </article>
-                )
-            )}
+            {dishes.map((item, index) => (
+              <button
+                type="button"
+                className={`s-menu-item s-menu-item--${index + 1}${item.id === activeId ? ' is-active' : ''}`}
+                key={item.id}
+                id={`dish-${item.id}`}
+                aria-pressed={item.id === activeId}
+                onClick={() => selectDish(item.id!)}
+              >
+                <div className="s-menu-photo">
+                  <AssetImage asset={item.image!} />
+                </div>
+                <div className="s-menu-meta">
+                  <span>0{index + 1}</span>
+                  <h3>{item.name}</h3>
+                  <p>{item.price}</p>
+                </div>
+              </button>
+            ))}
           </div>
         </section>
 
@@ -136,7 +203,7 @@ export default function DemoS() {
           </div>
         </section>
 
-        <section className="s-social yonagi-shell">
+        <section className="s-social yonagi-shell" id="contact">
           <div>
             <p className="yonagi-eyebrow">CONTACT</p>
             <h2>

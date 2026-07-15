@@ -26,7 +26,9 @@ export function useSmoothScroll() {
 
 export default function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
-  const [entered, setEntered] = useState(false);
+  // Default true so home Lenis runs without EnterGate; gate can still call setEntered.
+  const [entered, setEntered] = useState(true);
+  const [lenis, setLenis] = useState<Lenis | null>(null);
   const reducedMotion = usePrefersReducedMotion();
 
   useEffect(() => {
@@ -36,21 +38,25 @@ export default function SmoothScrollProvider({ children }: { children: ReactNode
   }, [reducedMotion]);
 
   useEffect(() => {
-    if (reducedMotion || !entered) return;
+    if (reducedMotion || !entered) {
+      setLenis(null);
+      return;
+    }
 
-    const lenis = new Lenis({
-      duration: 1.2,
+    const instance = new Lenis({
+      duration: 1.15,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true
     });
 
-    lenisRef.current = lenis;
+    lenisRef.current = instance;
+    setLenis(instance);
     document.documentElement.classList.add('lenis', 'lenis-smooth');
 
-    lenis.on('scroll', ScrollTrigger.update);
+    instance.on('scroll', ScrollTrigger.update);
 
     const tick = (time: number) => {
-      lenis.raf(time * 1000);
+      instance.raf(time * 1000);
     };
 
     gsap.ticker.add(tick);
@@ -58,8 +64,9 @@ export default function SmoothScrollProvider({ children }: { children: ReactNode
 
     return () => {
       gsap.ticker.remove(tick);
-      lenis.destroy();
+      instance.destroy();
       lenisRef.current = null;
+      setLenis(null);
       document.documentElement.classList.remove('lenis', 'lenis-smooth');
     };
   }, [reducedMotion, entered]);
@@ -67,7 +74,7 @@ export default function SmoothScrollProvider({ children }: { children: ReactNode
   return (
     <SmoothScrollContext.Provider
       value={{
-        lenis: lenisRef.current,
+        lenis,
         entered,
         setEntered
       }}

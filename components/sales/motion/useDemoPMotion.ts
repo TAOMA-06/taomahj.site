@@ -256,7 +256,7 @@ export function useDemoPMotion(scope: RefObject<HTMLElement | null>, reducedMoti
         });
 
         menu.querySelectorAll('.p-menu-category').forEach((cat) => {
-          onceCascade(cat.querySelectorAll('header, .p-menu-list > div'), {
+          onceCascade(cat.querySelectorAll('header > *'), {
             trigger: cat,
             y: 18,
             duration: 0.55,

@@ -1,5 +1,6 @@
 import SmoothScrollProvider from '@/components/mim/SmoothScrollProvider';
 import PageTransition from '@/components/mim/PageTransition';
+import HomeScrollProgress from '@/components/mim/HomeScrollProgress';
 import SiteNav from '@/components/SiteNav';
 import HeroIdentity from '@/components/HeroIdentity';
 import IntroWelcome from '@/components/IntroWelcome';
@@ -13,6 +14,7 @@ export default function HomeShell() {
   return (
     <SmoothScrollProvider>
       <PageTransition />
+      <HomeScrollProgress />
       <SiteNav />
       <main className="mim-main-content">
         <HeroIdentity />

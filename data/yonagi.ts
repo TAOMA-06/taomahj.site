@@ -9,6 +9,7 @@ export type ImageAsset = {
 };
 
 export type MenuItem = {
+  id?: string;
   name: string;
   english?: string;
   price: string;
@@ -16,12 +17,31 @@ export type MenuItem = {
   image?: ImageAsset;
 };
 
+export type MenuGroup = {
+  id: string;
+  name: string;
+  english?: string;
+  items: MenuItem[];
+};
+
 export type MenuCategory = {
   id: string;
   name: string;
   english: string;
   note?: string;
-  items: MenuItem[];
+  items?: MenuItem[];
+  groups?: MenuGroup[];
+};
+
+export type NavChild = {
+  label: string;
+  href: string;
+};
+
+export type NavItem = {
+  label: string;
+  href: string;
+  children?: NavChild[];
 };
 
 export const yonagiImages = {
@@ -136,52 +156,172 @@ export const yonagi = {
     { number: '二', title: '十二席だけ', text: 'カウンター八席、テーブル四席。静かな距離感です。' },
     { number: '三', title: '迷わず来店', text: '電話・地図・営業時間を、すぐ見つけられるご案内。' }
   ],
+  nav: {
+    s: [
+      {
+        label: 'お品書き',
+        href: '#menu',
+        children: [
+          { label: '本日の焼き魚', href: '#dish-yaki' },
+          { label: '季節のお造り', href: '#dish-sashimi' },
+          { label: '鮪の山葵醤油', href: '#dish-tuna' },
+          { label: '炙りサーモン', href: '#dish-salmon' },
+          { label: '季節の天ぷら', href: '#dish-tempura' },
+          { label: '海鮮小丼', href: '#dish-don' }
+        ]
+      },
+      {
+        label: '店舗情報',
+        href: '#access',
+        children: [
+          { label: 'ご来店・アクセス', href: '#access' },
+          { label: '営業のご案内', href: '#access' },
+          { label: 'お問い合わせ', href: '#contact' }
+        ]
+      }
+    ] satisfies NavItem[],
+    p: [
+      { label: 'お店の話', href: '#story' },
+      {
+        label: 'お品書き',
+        href: '#menu',
+        children: [
+          { label: 'おまかせ', href: '#menu-omakase' },
+          { label: '焼き物', href: '#menu-grill' },
+          { label: '一品', href: '#menu-small' },
+          { label: 'お飲み物', href: '#menu-drink' }
+        ]
+      },
+      { label: '空間', href: '#space' },
+      { label: 'ご予約', href: '#reservation' },
+      { label: 'アクセス', href: '#access' }
+    ] satisfies NavItem[]
+  },
   sMenu: [
-    { name: '本日の焼き魚', price: '¥1,380〜', image: yonagiImages.fish },
-    { name: '季節のお造り', price: '¥1,480', image: yonagiImages.sashimi },
-    { name: '鮪の山葵醤油', price: '¥1,180', image: yonagiImages.tuna },
-    { name: '炙りサーモン 香味野菜', price: '¥1,280', image: yonagiImages.salmon },
-    { name: '季節の天ぷら', price: '¥1,100', image: yonagiImages.tempura },
-    { name: '締めの海鮮小丼', price: '¥980', image: yonagiImages.riceBowl }
+    {
+      id: 'yaki',
+      name: '本日の焼き魚',
+      price: '¥1,380〜',
+      note: 'その日の旬魚を、炭の火入れで香ばしく。柑橘と香草で締めます。',
+      image: yonagiImages.fish
+    },
+    {
+      id: 'sashimi',
+      name: '季節のお造り',
+      price: '¥1,480',
+      note: '仕入れたての刺身を、大葉と薬味とともに。食感が立つ切り方で。',
+      image: yonagiImages.sashimi
+    },
+    {
+      id: 'tuna',
+      name: '鮪の山葵醤油',
+      price: '¥1,180',
+      note: '濃い赤身に、すりおろし山葵の醤油を合わせた一皿。',
+      image: yonagiImages.tuna
+    },
+    {
+      id: 'salmon',
+      name: '炙りサーモン 香味野菜',
+      price: '¥1,280',
+      note: '表面だけ火を通したサーモンに、香味野菜のアクセント。',
+      image: yonagiImages.salmon
+    },
+    {
+      id: 'tempura',
+      name: '季節の天ぷら',
+      price: '¥1,100',
+      note: '野菜と魚を軽やかに揚げた盛り合わせ。塩でもお召しあがりください。',
+      image: yonagiImages.tempura
+    },
+    {
+      id: 'don',
+      name: '締めの海鮮小丼',
+      price: '¥980',
+      note: '夜の締めに、彩りのよい小さな海鮮丼。お茶漬けにも。',
+      image: yonagiImages.riceBowl
+    }
   ] satisfies MenuItem[],
   pMenu: [
     {
-      id: 'omakase', name: 'おまかせ', english: 'OMAKASE', note: '前日までのご予約をおすすめします。',
+      id: 'omakase',
+      name: 'おまかせ',
+      english: 'OMAKASE',
+      note: '前日までのご予約をおすすめします。仕入れに合わせてその日のご案内です。',
       items: [
-        { name: '季節のおまかせ　五品', english: 'Seasonal tasting, 5 courses', price: '¥4,500' },
-        { name: '季節のおまかせ　七品', english: 'Seasonal tasting, 7 courses', price: '¥6,000' },
-        { name: '夜凪の特別コース', english: 'Yonagi special course', price: '¥7,500' }
+        { name: '季節のおまかせ　五品', english: 'Seasonal tasting, 5 courses', price: '¥4,500', note: '前菜・造里・焼き物・一品・飯物' },
+        { name: '季節のおまかせ　七品', english: 'Seasonal tasting, 7 courses', price: '¥6,000', note: '五品に加えて酒肴と甘味' },
+        { name: '夜凪の特別コース', english: 'Yonagi special course', price: '¥7,500', note: '炭火の旬魚を中心にした特別構成' }
       ]
     },
     {
-      id: 'grill', name: '焼き物', english: 'FROM THE CHARCOAL GRILL',
+      id: 'grill',
+      name: '焼き物',
+      english: 'FROM THE CHARCOAL GRILL',
+      note: '炭の火加減で、その日の魚と野菜を焼きます。',
       items: [
         { name: '本日の鮮魚　炭火焼き', price: '¥1,380〜' },
         { name: '河内鴨の山椒焼き', price: '¥1,680' },
+        { name: '秋刀魚の塩焼き', price: '¥1,280' },
         { name: '蓮根と九条ねぎ', price: '¥880' },
+        { name: '季節の野菜串', price: '¥780' },
         { name: '厚揚げ　麦味噌添え', price: '¥720' }
       ]
     },
     {
-      id: 'small', name: '一品', english: 'SMALL PLATES',
+      id: 'small',
+      name: '一品',
+      english: 'SMALL PLATES',
       items: [
         { name: '季節のお造り', price: '¥1,480' },
+        { name: '鮪の山葵醤油', price: '¥1,180' },
         { name: 'だし巻きたまご', price: '¥780' },
         { name: '白味噌クリームチーズ', price: '¥650' },
+        { name: '季節の天ぷら', price: '¥1,100' },
         { name: '鶏と生姜の土鍋ごはん', price: '¥1,600' },
         { name: '自家製ほうじ茶プリン', price: '¥580' }
       ]
     },
     {
-      id: 'drink', name: 'お飲み物', english: 'DRINKS',
-      items: [
-        { name: '日本酒　季節の一杯', price: '¥900〜' },
-        { name: '生ビール', price: '¥680' },
-        { name: '自家製山椒サワー', price: '¥750' },
-        { name: '奈良県産ぶどうジュース', price: '¥600' }
+      id: 'drink',
+      name: 'お飲み物',
+      english: 'DRINKS',
+      note: '料理に合わせて日本酒・ビール・ソフトをご用意しています。',
+      groups: [
+        {
+          id: 'sake',
+          name: '日本酒',
+          english: 'SAKE',
+          items: [
+            { name: '季節の一杯　冷', price: '¥900〜' },
+            { name: '季節の一杯　燗', price: '¥950〜' },
+            { name: '大阪・地元銘柄', price: '¥1,100〜' },
+            { name: '日本酒飲み比べ　二種', price: '¥1,600' }
+          ]
+        },
+        {
+          id: 'beer',
+          name: 'ビール・その他',
+          english: 'BEER & HIGHBALL',
+          items: [
+            { name: '生ビール', price: '¥680' },
+            { name: '瓶ビール', price: '¥720' },
+            { name: '自家製山椒サワー', price: '¥750' },
+            { name: 'ウィスキーハイボール', price: '¥780' }
+          ]
+        },
+        {
+          id: 'soft',
+          name: 'ソフトドリンク',
+          english: 'SOFT DRINKS',
+          items: [
+            { name: '奈良県産ぶどうジュース', price: '¥600' },
+            { name: '自家製ほうじ茶', price: '¥450' },
+            { name: '季節の柑橘ソーダ', price: '¥550' }
+          ]
+        }
       ]
     }
-  ] satisfies MenuCategory[],
+  ] as MenuCategory[],
   menuHighlights: [yonagiImages.fish, yonagiImages.tuna, yonagiImages.riceBowl],
   space: [
     { title: 'カウンター', english: 'COUNTER / 8 SEATS', text: '料理人の手元と炭の音を、目の前で。', image: yonagiImages.interior },

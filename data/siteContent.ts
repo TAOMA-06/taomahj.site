@@ -34,11 +34,11 @@ export const themes: Theme[] = [
 export const vocabularyGroups: VocabularyGroup[] = [
   {
     label: '语言',
-    items: ['Python', 'C', 'MATLAB', 'TypeScript', 'LaTeX']
+    items: ['Swift', 'Python', 'TypeScript', 'C', 'MATLAB']
   },
   {
     label: '系统',
-    items: ['Linux', 'Git', 'Automation', 'Control Systems', 'Local-first']
+    items: ['macOS', 'Linux', 'Git', 'ACP', 'Local-first']
   },
   {
     label: 'AI 工作流',
@@ -46,6 +46,6 @@ export const vocabularyGroups: VocabularyGroup[] = [
   },
   {
     label: '界面',
-    items: ['Next.js', 'React', 'Tailwind CSS', 'GSAP', 'Canvas']
+    items: ['SwiftUI', 'Next.js', 'React', 'GSAP', 'Canvas']
   }
 ];

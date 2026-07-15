@@ -4,6 +4,7 @@ import { useRef } from 'react';
 import { yonagi, yonagiImages } from '@/data/yonagi';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 import { AssetImage, DemoRibbon, InfoRows, YonagiFooter, YonagiHeader } from './YonagiShared';
+import PMenuInteractive from './PMenuInteractive';
 import PSmoothScroll from './PSmoothScroll';
 import { useDemoPMotion } from './motion/useDemoPMotion';
 
@@ -116,30 +117,7 @@ export default function DemoP() {
                 </div>
               ))}
             </div>
-            <div className="yonagi-pro-shell p-menu-categories">
-              {yonagi.pMenu.map((category) => (
-                <section className="p-menu-category" key={category.id} aria-labelledby={`cat-${category.id}`}>
-                  <header>
-                    <span>{category.english}</span>
-                    <h3 id={`cat-${category.id}`}>{category.name}</h3>
-                    {category.note && <p>{category.note}</p>}
-                  </header>
-                  <div className="p-menu-list">
-                    {category.items.map((item) => (
-                      <div key={item.name}>
-                        <span>
-                          <b>{item.name}</b>
-                          {'english' in item && item.english && (
-                            <small lang="en">{item.english}</small>
-                          )}
-                        </span>
-                        <strong>{item.price}</strong>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              ))}
-            </div>
+            <PMenuInteractive />
             <p className="p-menu-note">
               ※ 食材の仕入れにより内容・価格が変わる場合がございます。表示価格は税込です。
             </p>
