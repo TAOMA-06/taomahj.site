@@ -49,6 +49,16 @@ export const projects: Project[] = [
     image: '/assets/projects/gallery.jpg',
     href: '/gallery/index.html',
     tags: ['Gallery', 'Manifest', 'Media']
+  },
+  {
+    id: 'yonagi',
+    index: '05',
+    title: '夜凪食堂',
+    description: '小微餐饮官网销售样板。',
+    detail: '同一家虚构餐厅的 Simple / Pro 两档官网交付对照。',
+    image: '/assets/yonagi/counter.webp',
+    href: '/sales/',
+    tags: ['Restaurant', 'Sales Demo', 'Mobile-first']
   }
 ];
 

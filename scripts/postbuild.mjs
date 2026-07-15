@@ -37,3 +37,12 @@ console.log('synced out/_next/ → _next/');
 
 cpSync(join(outDir, 'index.html'), join(root, 'index.html'));
 console.log('synced out/index.html → index.html');
+
+rmSync(join(root, 'sales'), { recursive: true, force: true });
+copyRecursive(join(outDir, 'sales'), join(root, 'sales'));
+console.log('synced out/sales/ → sales/');
+
+// Keep Next public assets available when the repository root itself is served
+// as the static site. Merge rather than replace so legacy portfolio assets stay.
+copyRecursive(join(outDir, 'assets'), join(root, 'assets'));
+console.log('synced out/assets/ → assets/');

@@ -5,7 +5,8 @@ const exhibitionImages: Record<string, { src: string; alt: string }> = {
   mixflow: { src: '/assets/exhibition/mixflow-bar.png', alt: '暗色石材酒吧空间' },
   perler: { src: '/assets/exhibition/perler-materials.png', alt: '混凝土与彩色骨料材料样本' },
   chiwu: { src: '/assets/exhibition/chiwu-archive.png', alt: '嵌入式混凝土陈列墙' },
-  gallery: { src: '/assets/exhibition/gallery-room.png', alt: '光影中的极简展厅' }
+  gallery: { src: '/assets/exhibition/gallery-room.png', alt: '光影中的极简展厅' },
+  yonagi: { src: '/assets/yonagi/counter.webp', alt: '夜凪食堂深色吧台空间网站样板' }
 };
 
 export default function WorkShowcase() {
@@ -21,7 +22,7 @@ export default function WorkShowcase() {
       <div className="exhibit-work-list">
         {projects.map((project, index) => (
           <a key={project.id} href={project.href} data-mim-transition className="exhibit-work-card">
-            <span className="exhibit-work-card__index">{String(index + 1).padStart(2, '0')} / 04</span>
+              <span className="exhibit-work-card__index">{String(index + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}</span>
             <div>
               <h3>{project.title}</h3>
               <p>{project.detail}</p>
