@@ -147,10 +147,10 @@ export default function HeroIdentity() {
         </div>
         <div className="exhibit-hero__copy">
           <span className="exhibit-hero__index">01 / INTRODUCTION</span>
-          <p className="mim-body">为日常场景做本机优先的工具与界面。</p>
+          <p className="mim-body">工具与界面。为本机与日常场景而作。</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a href="#work" className="mim-btn">
-              看作品
+              主要展示
             </a>
             <a
               href="https://github.com/TAOMA-06"

@@ -55,12 +55,12 @@ export default function IntroWelcome() {
         <span className="exhibit-intro__number">02 / POSITION</span>
         <div>
           <p className="mim-headline">
-            先把信息摆清楚，
+            信息可览。
             <br />
-            再让操作少绕路。
+            流程克制。
           </p>
           <p className="mim-body mt-8 max-w-2xl">
-            我做可公开试用的小工具与桌面控制面：数据留在本机，界面少干扰，打开就能继续用。
+            将数据与工具组织为可停留的结构。少增饰，重使用。
           </p>
         </div>
       </SectionFrame>

@@ -123,10 +123,10 @@ export default function WorkShowcase() {
         <div className="exhibit-work__top">
           <div>
             <p className="exhibit-kicker">Selected work</p>
-            <h2 className="mim-headline mt-5">三条公开主线</h2>
+            <h2 className="mim-headline mt-5">三件展品</h2>
           </div>
           <p>
-            这里只放 GitHub 上公开的三条线：拼豆创作、本机 Agent 调度、YouTube 双语字幕。
+            公开于 GitHub 的三条主线：拼豆、本机 Agent、双语字幕。
           </p>
         </div>
 

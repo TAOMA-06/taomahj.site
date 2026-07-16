@@ -7,11 +7,11 @@ import { AssetImage } from './YonagiShared';
 import { useSalesLandingMotion } from './motion/useSalesLandingMotion';
 
 const differences = [
-  { label: '网站结构', s: '一页说完店是谁、吃什么、怎么去', p: '故事、空间、预约分段讲清楚' },
-  { label: '菜单呈现', s: '六项重点菜，扫一眼就懂', p: '完整分类菜单，点分类就能跳转' },
-  { label: '到店转化', s: '电话、地图、邮件都能点', p: '预约规则 + 固定按钮，随时能订席' },
-  { label: '语言', s: '日文界面', p: '日文为主，英文要点给外国客' },
-  { label: '浏览体验', s: '淡入淡出，不抢信息', p: '滚动带动画面，像翻一本店册' }
+  { label: '网站结构', s: '单页，信息完备', p: '故事、空间、预约分节' },
+  { label: '菜单呈现', s: '六项要点', p: '分类完备，可索引' },
+  { label: '到店转化', s: '电话、地图、邮件', p: '预约规则与固定入口' },
+  { label: '语言', s: '日文', p: '日文为主，英文要点' },
+  { label: '浏览体验', s: '淡入', p: '滚动编排' }
 ];
 
 export default function SalesLanding() {
@@ -39,9 +39,9 @@ export default function SalesLanding() {
         <div className="sales-hero-note">
           <strong>夜凪食堂 / YONAGI SHOKUDO</strong>
           <p>
-            虚构的大阪南堀江小餐厅。用同一家店对照 49,800 円与 98,000 円两档官网。
+            虚构餐厅：大阪南堀江。两档官网对照——49,800 円 / 98,000 円。
           </p>
-          <span>先看 S，再看 P。约 3 分钟。</span>
+          <span>S 先行，再 P。约三分钟。</span>
         </div>
       </section>
 
@@ -52,14 +52,14 @@ export default function SalesLanding() {
               <span>PLAN S / SIMPLE</span>
               <strong>49,800円相当</strong>
             </div>
-            <h2 className="sales-plan-position">够用的一页</h2>
+            <h2 className="sales-plan-position">单页 · 简明</h2>
             <ul>
               <li>一页说完</li>
               <li>六项重点菜</li>
               <li>电话 · 地图 · 邮件</li>
             </ul>
             <span className="sales-plan-link">
-              打开 S <b aria-hidden="true">↗</b>
+              查阅 S <b aria-hidden="true">↗</b>
             </span>
           </div>
           <div className="sales-plan-media">
@@ -78,14 +78,14 @@ export default function SalesLanding() {
               <span>PLAN P / PRO</span>
               <strong>98,000円相当</strong>
             </div>
-            <h2 className="sales-plan-position">完整到店叙事</h2>
+            <h2 className="sales-plan-position">全案 · 叙事</h2>
             <ul>
               <li>品牌故事</li>
               <li>分类菜单 · 可跳转导航</li>
               <li>预约 · 英文要点</li>
             </ul>
             <span className="sales-plan-link">
-              打开 P <b aria-hidden="true">↗</b>
+              查阅 P <b aria-hidden="true">↗</b>
             </span>
           </div>
         </a>

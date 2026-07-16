@@ -13,19 +13,19 @@ export type VocabularyGroup = {
 export const themes: Theme[] = [
   {
     title: '实用工具',
-    question: '从具体场景动手，做完就能立刻用。',
+    question: '功能自场景生。用毕即可。',
     stance: '',
     related: 'web apps / browser tools / local-first'
   },
   {
     title: '信息组织',
-    question: '把散乱数据收成可浏览、可检索的结构。',
+    question: '重组数据。建立可览的秩序。',
     stance: '',
     related: 'data views / image tools / content systems'
   },
   {
     title: '克制界面',
-    question: '界面只服务任务，不抢注意力。',
+    question: '服务任务。不制造噪音。',
     stance: '',
     related: 'calm UI / interaction / maintainability'
   }
