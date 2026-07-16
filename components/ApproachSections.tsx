@@ -76,7 +76,7 @@ export default function ApproachSections() {
       <SectionFrame label="Programme" elevation="03 / 05" className="exhibit-heading">
         <DraftingMotif variant="beam" />
         <div className="exhibit-heading__note">
-          以功能为基底，把每个项目视为一次关于使用、信息与克制的空间研究。
+          每个项目从真实使用出发：先解决一件事，再谈形式。
         </div>
         <div>
           <p className="exhibit-kicker">Creative direction</p>

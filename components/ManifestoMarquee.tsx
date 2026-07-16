@@ -35,7 +35,7 @@ export default function ManifestoMarquee() {
 
   return (
     <section className="mim-manifesto" aria-label="创作关键词" ref={scope}>
-      <Marquee text="数字工具 · 界面设计 · 本地优先 · 信息结构 · " />
+      <Marquee text="实用工具 · 信息组织 · 克制界面 · 本地优先 · " />
     </section>
   );
 }

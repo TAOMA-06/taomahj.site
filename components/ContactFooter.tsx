@@ -69,16 +69,16 @@ export default function ContactFooter() {
           <div>
             <p className="mim-section-label">Contact / appointment</p>
             <h2 className="mim-headline mt-6">
-              下一次对话，
+              有想法或合作，
               <br />
-              从这里开始。
+              写信过来。
             </h2>
             <a href="mailto:taomahj834225@outlook.com" className="mim-btn mt-10">
               发送邮件
             </a>
           </div>
           <div className="exhibit-contact__meta">
-            <span>taomahj 是一个专注数字工具与界面结构的独立实践。</span>
+            <span>独立实践：数字工具、界面结构、本机优先。</span>
             <a href="https://github.com/TAOMA-06" target="_blank" rel="noreferrer">
               GitHub ↗
             </a>

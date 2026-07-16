@@ -3,8 +3,9 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://taomahj.site'),
-  title: 'taomahj — 数字工具展厅',
-  description: 'taomahj 的数字工具与界面设计展厅：将真实问题组织成清晰、可停留的产品体验。'
+  title: 'taomahj — 本机优先的数字工具',
+  description:
+    'taomahj：为日常场景做本机优先的工具与界面。公开项目包括拼豆手游、macOS Agent 控制平面与 YouTube 双语字幕。'
 };
 
 export default function RootLayout({

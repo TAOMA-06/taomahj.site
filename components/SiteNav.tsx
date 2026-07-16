@@ -159,7 +159,7 @@ export default function SiteNav() {
               <span className="mim-nav__caret" aria-hidden="true" />
             </button>
             <div id={menuId} className="mim-nav__menu" role="menu" hidden={!worksOpen}>
-              <p className="mim-nav__menu-kicker">主要展示</p>
+              <p className="mim-nav__menu-kicker">看作品</p>
               {workLinks.map((link) => (
                 <a
                   key={link.href}
